@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1019816056508",
+    "project_id": "wite-firebase",
+    "storage_bucket": "wite-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019816056508:android:f90708a9e0249c556c62b9",
+        "android_client_info": {
+          "package_name": "com.angga.wisata_tenjolaya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019816056508-fnlvo26jaam173vv10njia38eom6pqr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBbwOPzPdGiJiQ3zhCOj88GHDYhJmBy3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019816056508-fnlvo26jaam173vv10njia38eom6pqr5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
