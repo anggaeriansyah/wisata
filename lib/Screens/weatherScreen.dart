@@ -423,7 +423,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
             // const SizedBox(height: 20),
 
             Container(
-              // color: Colors.green,
               height: 170,
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.only(left: 5),
@@ -453,7 +452,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 blurRadius: 7,
                               ),
                             ],
-                            // color: Theme.of(context).primaryColor,
                             color: Colors.white,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
