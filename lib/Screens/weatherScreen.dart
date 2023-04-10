@@ -189,8 +189,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             'Min $nmrMin\u00B0C  |  Max $nmrMax\u00B0C',
-                            // DateFormat('EEEE, d MMMM yyyy')
-                            //     .format(DateTime.now()),
                             style: const TextStyle(
                               color: Colors.black54,
                               fontSize: 14,
@@ -247,7 +245,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,
-                              // fontWeight: FontWeight.w500
                             ),
                           ),
                         ),

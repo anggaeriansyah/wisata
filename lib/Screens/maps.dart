@@ -492,7 +492,6 @@ class _MapsState extends State<Maps> {
                                             style: const TextStyle(
                                               color: Colors.black54,
                                               fontSize: 13,
-                                              // fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                   ],
@@ -526,14 +525,7 @@ class _MapsState extends State<Maps> {
             }),
       );
 
-      setState(() {
-        // stAddress = locations.last.longitude.toString() +
-        //     ", " +
-        //     locations.last.latitude.toString();
-        // stAdd = placemarks.reversed.last.subLocality.toString() +
-        //     ", " +
-        //     placemarks.reversed.last.locality.toString();
-      });
+      setState(() {});
     }
   }
 
@@ -767,7 +759,6 @@ class _MapsState extends State<Maps> {
                         child: Text(
                           'All',
                           style: TextStyle(
-                              // fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: _isAll ? Colors.white : Colors.black),
                         )),

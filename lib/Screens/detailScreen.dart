@@ -311,111 +311,37 @@ class _DetailScreenState extends State<DetailScreen> {
                 Positioned(
                   right: 30,
                   bottom: 10,
-                  child: GestureDetector(
-                    onTap: () {
-                      _marker.add(Marker(
-                        markerId: const MarkerId('value'),
-                        position: LatLng(widget.wisata.lat, widget.wisata.long),
-                      ));
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Maps'),
-                          content: SizedBox(
-                            height: MediaQuery.of(context).size.height / 1.9,
-                            width: MediaQuery.of(context).size.width,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: GoogleMap(
-                                initialCameraPosition: _kGooglePlex,
-                                markers: Set<Marker>.of(_marker),
-                                onMapCreated: (GoogleMapController controller) {
-                                  // _infoWindowController.googleMapController = controller;
-                                  controller.setMapStyle(mapTheme);
-                                  // _controller.complete(controller);
-                                },
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, top: 5, bottom: 5, right: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                widget.wisata.alamat,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
                               ),
-                            ),
-                          ),
-                          actions: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 15),
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  primary: Colors.white,
-                                  // padding: const EdgeInsets.all(16.0),
-                                  textStyle: const TextStyle(fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Maps()),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text('Lihat Semua Wisata'),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 15),
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  primary: Colors.white,
-                                  // padding: const EdgeInsets.all(16.0),
-                                  textStyle: const TextStyle(fontSize: 20),
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  _marker.remove(_marker[0]);
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text('kembali'),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15, top: 5, bottom: 5, right: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  widget.wisata.alamat,
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                ),
-                                const SizedBox(width: 7),
-                                const Icon(
-                                  Icons.place_rounded,
-                                  // FontAwesomeIcons.locationDot,
+                              const SizedBox(width: 7),
+                              const Icon(
+                                Icons.place_rounded,
+                                // FontAwesomeIcons.locationDot,
 
-                                  color: Colors.white,
-                                  // size: 32,
-                                ),
-                              ],
-                            ),
+                                color: Colors.white,
+                                // size: 32,
+                              ),
+                            ],
                           ),
-                        ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
-                      ],
-                    ),
+                        ),
+                      ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
+                    ],
                   ),
                 ),
               ],
