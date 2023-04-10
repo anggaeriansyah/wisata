@@ -137,7 +137,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   listItemOnSearch[i].long)
               .toStringAsFixed(2));
         }
-        // listItemOnSearch.sort((a, b) => a.distance.compareTo(b.distance));
         _isActive = true;
       }).catchError((e) {
         debugPrint(e);
@@ -197,8 +196,6 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-        // toolbarHeight: 80,
-        // titleSpacing: 0.0,
         centerTitle: true,
         leading: InkWell(
           onTap: () => Get.back(),

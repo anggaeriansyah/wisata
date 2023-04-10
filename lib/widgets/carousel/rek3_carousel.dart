@@ -38,7 +38,7 @@ class _Rek3CarouselState extends State<Rek3Carousel> {
             },
             child: Container(
               decoration: BoxDecoration(
-                // color: Colors.blue,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: const [
                   BoxShadow(

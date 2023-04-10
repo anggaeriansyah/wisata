@@ -39,7 +39,7 @@ class _Rek2CarouselState extends State<Rek2Carousel> {
             },
             child: Container(
               decoration: BoxDecoration(
-                // color: Colors.blue,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: const [
                   BoxShadow(

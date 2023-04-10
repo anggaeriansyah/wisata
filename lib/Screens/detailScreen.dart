@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:glass/glass.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:wisata_tenjolaya/Screens/maps.dart';
 
 class DetailScreen extends StatefulWidget {
   // const DetailScreen({Key? key}) : super(key: key);
@@ -223,8 +222,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
                                           setState(() {
                                             _polylines.add(Polyline(
-                                                polylineId:
-                                                    PolylineId('polyLine'),
+                                                polylineId: const PolylineId(
+                                                    'polyLine'),
                                                 width: 10,
                                                 points: polylineCoordinates,
                                                 color: Theme.of(context)
@@ -432,7 +431,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                         selected == true
                                             ? FontAwesomeIcons.xmark
                                             : FontAwesomeIcons.angleDown,
-                                        // Icons.arrow_drop_down_circle_outlined,
                                         size: 22,
                                         color: Colors.white,
                                       )),

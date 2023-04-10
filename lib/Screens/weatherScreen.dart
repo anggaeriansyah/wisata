@@ -140,7 +140,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
           child: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.black,
-            // size: 30,
           ),
         ),
         centerTitle: true,

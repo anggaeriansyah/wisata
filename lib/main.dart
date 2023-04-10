@@ -4,15 +4,8 @@ import 'Screens/homeScreen.dart';
 import 'package:get/get.dart';
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   systemNavigationBarColor: Colors.black, // navigation bar color
-  //   statusBarColor: Colors.white, // status bar color
-  // ));
-
   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   // await MongoDatabase.connect();
 
   SystemChrome.setPreferredOrientations(
@@ -45,7 +38,7 @@ class MyApp extends StatelessWidget {
 
 class HexColor extends Color {
   static int _getColor(String hex) {
-    String formattedHex = "FF" + hex.toUpperCase().replaceAll("#", "");
+    String formattedHex = "FF${hex.toUpperCase().replaceAll("#", "")}";
     return int.parse(formattedHex, radix: 16);
   }
 
