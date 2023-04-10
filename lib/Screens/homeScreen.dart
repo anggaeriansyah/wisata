@@ -144,37 +144,6 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ],
               ),
-              // actions: [
-              //   Visibility(
-              //     visible: !_isActive,
-              //     child: Container(
-              //       margin:
-              //           const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              //       child: TextButton(
-              //         style: TextButton.styleFrom(
-              //           primary: Theme.of(context).primaryColor,
-              //           minimumSize: const Size(44, 44),
-              //           padding: const EdgeInsets.symmetric(horizontal: 14),
-              //           shape: const RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.all(Radius.circular(5)),
-              //           ),
-              //           backgroundColor: Colors.white,
-              //         ),
-              //         onPressed: () {
-              //           setState(() {
-              //             _getCurrentPosition();
-              //           });
-              //         },
-              //         child: Text(
-              //           _isLoad ? 'Loading' : 'Aktifkan',
-              //           style: TextStyle(
-              //               fontSize: 12,
-              //               color: Theme.of(context).primaryColor),
-              //         ),
-              //       ),
-              //     ),
-              //   )
-              // ],
             )
           : AppBar(
               elevation: 0,
@@ -193,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen>
               Iconsax.wind,
               // FontAwesomeIcons.cloudBolt,
               size: 30,
-              // color: Colors.black54,
               color: Colors.black,
             ),
           ),
@@ -208,9 +176,7 @@ class _HomeScreenState extends State<HomeScreen>
                   height: 50,
                   child: Icon(
                     Iconsax.search_normal,
-                    // FontAwesomeIcons.magnifyingGlass,
                     size: 30,
-                    // color: Colors.black54,
                     color: Colors.black,
                   ),
                 ),
@@ -227,9 +193,7 @@ class _HomeScreenState extends State<HomeScreen>
                   padding: EdgeInsets.only(right: 20),
                   child: Icon(
                     Iconsax.map,
-                    // FontAwesomeIcons.mapLocationDot,
                     size: 30,
-                    // color: Colors.black54,
                     color: Colors.black,
                   ),
                 )),
