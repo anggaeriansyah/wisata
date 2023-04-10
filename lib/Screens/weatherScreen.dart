@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:iconsax/iconsax.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
@@ -85,9 +84,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   Widget _cuacaIcons(int value) {
     if (cuaca[value] == 'Rain') {
-      return const Icon(FontAwesomeIcons.cloudRain, color: Colors.white);
+      return const Icon(FontAwesomeIcons.cloudRain, color: Colors.black);
     } else if (cuaca[value] == 'Clouds') {
-      return const Icon(FontAwesomeIcons.cloud, color: Colors.white);
+      return const Icon(FontAwesomeIcons.cloud, color: Colors.black);
     } else {
       return const CircularProgressIndicator();
     }
@@ -117,19 +116,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
       setState(() {});
     }
   }
-
-  // Future getWeather5Days() async {
-  //   http.Response response = await http.get(Uri.parse(
-  //       "http://api.openweathermap.org/data/2.5/forecast?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
-  //   var results = jsonDecode(response.body);
-  //   // for (var i = 0; i < 6; i++) {
-  //   // temp = results['list'][0]['main']['temp'];
-  //   dt.add(results['list'][0]['dt_txt']);
-  //   desc5.add(results['list'][0]['weather'][0]['description']);
-  //   windSpeed5.add(results['list'][0]['wind']['speed']);
-  //   setState(() {});
-  //   // }
-  // }
 
   @override
   void initState() {
@@ -435,66 +421,135 @@ class _WeatherScreenState extends State<WeatherScreen> {
             //   ),
             // ),
             // const SizedBox(height: 20),
-            ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: 5,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20))),
-                            child: ListTile(
-                              leading: cuaca.isEmpty
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.white54),
-                                      ),
-                                    )
-                                  : _cuacaIcons(index),
-                              title: Text(
-                                cuaca.isEmpty
-                                    ? 'loading'
-                                    // : '${DateFormat('EEEE').format(DateTime.parse(dt[index]))} ⋅ ${cuaca[index]}',
-                                    : '${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))} ⋅ ${_cuacaId[index]}',
-                                style: const TextStyle(color: Colors.white),
+
+            Container(
+              // color: Colors.green,
+              height: 170,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.only(left: 5),
+              child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: dt.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Center(
+                      child: Container(
+                        width: 80,
+                        height: 140,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        margin: const EdgeInsets.only(
+                          left: 15,
+                          right: 5,
+                        ),
+                        decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 2),
+                                blurRadius: 7,
                               ),
-                              trailing: temp5.isEmpty
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.white54),
-                                      ),
-                                    )
-                                  : Text(
-                                      '${temp5[index].toString().substring(0, 2)}\u00B0'
-                                      'C',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
+                            ],
+                            // color: Theme.of(context).primaryColor,
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              cuaca.isEmpty ? 'loading' : '${_hari[index]}',
+                              style: const TextStyle(color: Colors.black),
                             ),
-                          )
-                        ],
-                      ));
-                })
+                            Text(
+                              cuaca.isEmpty
+                                  ? 'loading'
+                                  : DateFormat('HH:mm')
+                                      .format(DateTime.parse(dt[index])),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            cuaca.isEmpty
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.black),
+                                    ),
+                                  )
+                                : _cuacaIcons(index),
+                            Text(
+                              cuaca.isEmpty ? 'loading' : '${_cuacaId[index]}',
+                              style: const TextStyle(color: Colors.black),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+            // ListView.builder(
+            //     physics: const NeverScrollableScrollPhysics(),
+            //     scrollDirection: Axis.vertical,
+            //     itemCount: 5,
+            //     shrinkWrap: true,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       return Padding(
+            //           padding: const EdgeInsets.symmetric(horizontal: 20),
+            //           child: Column(
+            //             children: [
+            //               Container(
+            //                 margin: const EdgeInsets.only(bottom: 10),
+            //                 decoration: BoxDecoration(
+            //                     color: Theme.of(context).primaryColor,
+            //                     borderRadius: const BorderRadius.all(
+            //                         Radius.circular(20))),
+            //                 child: ListTile(
+            //                   leading: cuaca.isEmpty
+            //                       ? const SizedBox(
+            //                           height: 20,
+            //                           width: 20,
+            //                           child: CircularProgressIndicator(
+            //                             valueColor:
+            //                                 AlwaysStoppedAnimation<Color>(
+            //                                     Colors.white54),
+            //                           ),
+            //                         )
+            //                       : _cuacaIcons(index),
+            //                   title: Text(
+            //                     cuaca.isEmpty
+            //                         ? 'loading'
+            //                         // : '${DateFormat('EEEE').format(DateTime.parse(dt[index]))} ⋅ ${cuaca[index]}',
+            //                         : '${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))} ⋅ ${_cuacaId[index]}',
+            //                     style: const TextStyle(color: Colors.white),
+            //                   ),
+            //                   trailing: temp5.isEmpty
+            //                       ? const SizedBox(
+            //                           height: 20,
+            //                           width: 20,
+            //                           child: CircularProgressIndicator(
+            //                             valueColor:
+            //                                 AlwaysStoppedAnimation<Color>(
+            //                                     Colors.white54),
+            //                           ),
+            //                         )
+            //                       : Text(
+            //                           '${temp5[index].toString().substring(0, 2)}\u00B0'
+            //                           'C',
+            //                           style:
+            //                               const TextStyle(color: Colors.white),
+            //                         ),
+            //                 ),
+            //               )
+            //             ],
+            //           ));
+            //     })
           ],
         ),
       ),
     );
   }
 }
-// http://api.openweathermap.org/data/2.5/forecast?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87
