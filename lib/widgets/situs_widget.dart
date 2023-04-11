@@ -24,14 +24,6 @@ class SitusWidget extends StatelessWidget {
             onTap: () {
               Get.to(DetailScreen(wisata: situs[i]),
                   transition: Transition.downToUp);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (_) => situsScreen(
-              //       situs: situs[i],
-              //     ),
-              //   ),
-              // );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

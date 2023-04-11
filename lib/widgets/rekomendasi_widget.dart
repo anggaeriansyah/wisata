@@ -40,8 +40,8 @@ class _RekomendasiWidgetState extends State<RekomendasiWidget>
         children: <Widget>[
           TabBarView(
             physics: const BouncingScrollPhysics(),
-            children: widgets,
             controller: _controller,
+            children: widgets,
           ),
           Align(
             alignment: Alignment.bottomCenter,

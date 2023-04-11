@@ -112,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  @override
   Widget build(BuildContext context) {
     // int _selectedDestination = 0;
     // TabController _tabController = TabController(length: 4, vsync: this);
@@ -227,7 +228,6 @@ class _HomeScreenState extends State<HomeScreen>
           body: SafeArea(
             child: ListView(
               physics: const BouncingScrollPhysics(),
-              // padding: EdgeInsets.only(bottom: 20),
               children: [
                 Container(
                     padding: const EdgeInsets.only(left: 20, top: 5),
@@ -240,7 +240,6 @@ class _HomeScreenState extends State<HomeScreen>
                   height: 260,
                   child: RekomendasiWidget(),
                 ),
-                // const RekomendasiCarousel(),
                 const SizedBox(
                   height: 10,
                 ),

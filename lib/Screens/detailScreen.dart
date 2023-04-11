@@ -29,14 +29,26 @@ String mapTheme = '';
 
 class _DetailScreenState extends State<DetailScreen> {
   bool selected = false;
-  Set<Polyline> _polylines = Set<Polyline>();
-  List<LatLng> polylineCoordinates = [];
+  final Set<Polyline> _polylines = {};
   PolylinePoints polylinePoints = PolylinePoints();
+  late LatLng source = const LatLng(-6.6273324, 106.6875046);
+  late LatLng destination = LatLng(widget.wisata.lat, widget.wisata.long);
 
   @override
   void initState() {
     polylinePoints = PolylinePoints();
+    drawPolyline(widget.wisata.lat.toString());
     super.initState();
+  }
+
+  void drawPolyline(String placeId) {
+    _polylines.clear();
+    _polylines.add(Polyline(
+        polylineId: PolylineId(placeId),
+        visible: true,
+        points: [source, destination],
+        color: Colors.green,
+        width: 5));
   }
 
   Future<void> _dialogBuilder(BuildContext context) {
@@ -77,7 +89,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     int now = DateTime.now().weekday.toInt() - 1;
     CameraPosition _kGooglePlex = CameraPosition(
-        target: LatLng(widget.wisata.lat, widget.wisata.long), zoom: 13);
+        target: LatLng(widget.wisata.lat, widget.wisata.long), zoom: 10.5);
     DefaultAssetBundle.of(context)
         .loadString('assets/maptheme/standard_theme.json')
         .then((value) {
@@ -111,6 +123,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 markerId: const MarkerId('value'),
                 position: LatLng(widget.wisata.lat, widget.wisata.long),
               ));
+              _marker.add(Marker(
+                markerId: const MarkerId('value2'),
+                position: source,
+              ));
               showModalBottomSheet(
                   enableDrag: true,
                   shape: const RoundedRectangleBorder(
@@ -130,8 +146,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               child: Container(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                // margin: const EdgeInsets.symmetric(
-                                //     horizontal: 20, vertical: 15),
                                 margin: const EdgeInsets.only(
                                     top: 20, left: 20, right: 20, bottom: 15),
                                 decoration: BoxDecoration(
@@ -203,33 +217,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                           controller) async {
                                         // _infoWindowController.googleMapController = controller;
                                         controller.setMapStyle(mapTheme);
-                                        // setPolylines();
-                                        PolylineResult result = await polylinePoints
-                                            .getRouteBetweenCoordinates(
-                                                "AIzaSyDl4Fhbf1GCIKOEbkyGkwsy5pZdX9JHZ28",
-                                                const PointLatLng(
-                                                  -6.67139,
-                                                  106.70989,
-                                                ),
-                                                PointLatLng(widget.wisata.lat,
-                                                    widget.wisata.long));
-                                        if (result.status == 'OK') {
-                                          for (var point in result.points) {
-                                            polylineCoordinates.add(LatLng(
-                                                point.latitude,
-                                                point.longitude));
-                                          }
-
-                                          setState(() {
-                                            _polylines.add(Polyline(
-                                                polylineId: const PolylineId(
-                                                    'polyLine'),
-                                                width: 10,
-                                                points: polylineCoordinates,
-                                                color: Theme.of(context)
-                                                    .primaryColor));
-                                          });
-                                        }
                                         // _controller.complete(controller);
                                       },
                                     ),
@@ -284,7 +271,6 @@ class _DetailScreenState extends State<DetailScreen> {
                   padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
                   child: Container(
                     height: MediaQuery.of(context).size.width / 1.2,
-                    // width: MediaQuery.of(context).size.width / 1.2,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
@@ -331,8 +317,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               const SizedBox(width: 7),
                               const Icon(
                                 Icons.place_rounded,
-                                // FontAwesomeIcons.locationDot,
-
                                 color: Colors.white,
                                 // size: 32,
                               ),
