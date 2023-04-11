@@ -1,7 +1,10 @@
 // import 'dart:html';
 
 import 'dart:async';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -47,8 +50,24 @@ class _DetailScreenState extends State<DetailScreen> {
         polylineId: PolylineId(placeId),
         visible: true,
         points: [source, destination],
-        color: Colors.green,
+        color: Colors.amber,
         width: 5));
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  Future<BitmapDescriptor> getBitmapDescriptorFromAssetBytes(
+      String path, int width) async {
+    final Uint8List imageData = await getBytesFromAsset(path, width);
+    return BitmapDescriptor.fromBytes(imageData);
   }
 
   Future<void> _dialogBuilder(BuildContext context) {
@@ -120,11 +139,13 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         actions: [
           InkWell(
-            onTap: () {
+            onTap: () async {
               _marker.clear();
               _marker.add(Marker(
                 markerId: const MarkerId('value'),
                 position: LatLng(widget.wisata.lat, widget.wisata.long),
+                icon: await getBitmapDescriptorFromAssetBytes(
+                    "assets/images/marker.png", 95),
               ));
               _marker.add(Marker(
                 markerId: const MarkerId('value2'),
