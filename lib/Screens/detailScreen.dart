@@ -50,7 +50,7 @@ class _DetailScreenState extends State<DetailScreen> {
         polylineId: PolylineId(placeId),
         visible: true,
         points: [source, destination],
-        color: Colors.amber,
+        color: Colors.green,
         width: 5));
   }
 
@@ -148,11 +148,12 @@ class _DetailScreenState extends State<DetailScreen> {
                     "assets/images/marker.png", 95),
               ));
               _marker.add(Marker(
-                markerId: const MarkerId('value2'),
-                position: source,
-              ));
+                  markerId: const MarkerId('value2'),
+                  position: source,
+                  infoWindow: const InfoWindow(title: 'Lokasi saat ini')));
               showModalBottomSheet(
-                  enableDrag: true,
+                  // enableDrag: true,
+
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -241,7 +242,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           controller) async {
                                         // _infoWindowController.googleMapController = controller;
                                         controller.setMapStyle(mapTheme);
-                                        // _controller.complete(controller);
+                                        _controller.complete(controller);
                                       },
                                     ),
                                   ),
@@ -253,8 +254,15 @@ class _DetailScreenState extends State<DetailScreen> {
                                 child: SizedBox(
                                   // height: 50,
                                   child: TextButton(
-                                      onPressed: () {},
-                                      child: const Text('Lihat Rute')),
+                                      onPressed: () async {
+                                        GoogleMapController controller =
+                                            await _controller.future;
+                                        controller.animateCamera(
+                                          CameraUpdate.newCameraPosition(
+                                              _kGooglePlex),
+                                        );
+                                      },
+                                      child: const Text('Semula')),
                                 ))
                           ],
                         ));
