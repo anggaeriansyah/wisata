@@ -89,7 +89,10 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     int now = DateTime.now().weekday.toInt() - 1;
     CameraPosition _kGooglePlex = CameraPosition(
-        target: LatLng(widget.wisata.lat, widget.wisata.long), zoom: 10.5);
+      target: LatLng((source.latitude + destination.latitude) / 2,
+          (source.longitude + destination.longitude) / 2),
+      zoom: 12,
+    );
     DefaultAssetBundle.of(context)
         .loadString('assets/maptheme/standard_theme.json')
         .then((value) {
