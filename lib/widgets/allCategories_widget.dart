@@ -50,7 +50,8 @@ class AllCategoriesWidget extends StatelessWidget {
                       child: Image(
                         image: AssetImage(wisata[i].image),
                         fit: BoxFit.cover,
-                        height: 150,
+                        // height: 150,
+                        height: MediaQuery.of(context).size.width * 0.38,
                         width: MediaQuery.of(context).size.width * 0.5,
                       ),
                     ),

@@ -354,8 +354,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             right: 20,
                             bottom: 15,
                           ),
-                          // margin: const EdgeInsets.symmetric(
-                          //     horizontal: 20, vertical: 10),
                           height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -450,7 +448,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                               const EdgeInsets.only(top: 5),
                                           child: Icon(
                                             Icons.keyboard_arrow_right_rounded,
-                                            // color: Colors.black,
                                             color:
                                                 Theme.of(context).primaryColor,
                                             size: 30.0,

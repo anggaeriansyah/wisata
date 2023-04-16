@@ -9,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-// ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:glass/glass.dart';
 import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
@@ -27,10 +26,10 @@ class _MapsState extends State<Maps> {
 
   @override
   void initState() {
+    kategori();
     loadData();
-    super.initState();
     _cekLokasi();
-    kategori;
+    super.initState();
 
     DefaultAssetBundle.of(context)
         .loadString('assets/maptheme/standard_theme.json')
@@ -39,7 +38,6 @@ class _MapsState extends State<Maps> {
     });
   }
 
-  // double lt = 0.0, lg = 0.0;
   Position? _currentPosition;
   String? _currentAddress;
   bool _isActive = false;
@@ -53,6 +51,8 @@ class _MapsState extends State<Maps> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (serviceEnabled) {
       getLocation();
+    } else {
+      loadData();
     }
   }
 
@@ -152,7 +152,7 @@ class _MapsState extends State<Maps> {
   bool _isSitusActive = false;
   bool _isAll = true;
 
-  List get kategori {
+  List kategori() {
     List listW;
     List airTerjun = listWisata
         .where((element) => element.kategori == 'Air Terjun')
@@ -161,7 +161,7 @@ class _MapsState extends State<Maps> {
         listWisata.where((element) => element.kategori == 'Rekreasi').toList();
     List situs =
         listWisata.where((element) => element.kategori == 'Situs').toList();
-
+    setState(() {});
     if (_isAirTerjun && _isRekreasi && _isSitus) {
       listW = listWisata;
       _isAll = true;
@@ -297,51 +297,7 @@ class _MapsState extends State<Maps> {
       mapTheme = value;
     });
 
-    // LatLong
-    // for (int i = 0; i < categories.first.airTerjun.length; i++) {
-    //   lat.add(categories.first.airTerjun[i].lat);
-    //   long.add(categories.first.airTerjun[i].long);
-    //   img.add(categories.first.airTerjun[i].image);
-    //   nama.add(categories.first.airTerjun[i].nama);
-    // }
-    // for (int i = 0; i < categories.first.airTerjun.length; i++) {
-    // }
-
-    // for (int i = 0; i < categories.first.rekreasi.length; i++) {
-    //   lat.add(categories.first.rekreasi[i].lat);
-    //   long.add(categories.first.rekreasi[i].long);
-    //   img.add(categories.first.rekreasi[i].image);
-    //   nama.add(categories.first.rekreasi[i].nama);
-    // }
-    // for (int i = 0; i < categories.first.rekreasi.length; i++) {
-    // }
-
-    // Gambar
-    // for (int i = 0; i < categories.first.airTerjun.length; i++) {
-    //   img.add(categories.first.airTerjun[i].image);
-    // }
-    // for (int i = 0; i < categories.first.rekreasi.length; i++) {
-    //   img.add(categories.first.rekreasi[i].image);
-    // }
-
-    // Nama Depan
-    // for (int i = 0; i < categories.first.airTerjun.length; i++) {
-    //   namaDepan.add(categories.first.airTerjun[i].namaDepan);
-    // }
-    // for (int i = 0; i < categories.first.rekreasi.length; i++) {
-    //   namaDepan.add(categories.first.rekreasi[i].namaDepan);
-    // }
-    // Nama
-    // for (int i = 0; i < categories.first.airTerjun.length; i++) {
-    //   nama.add(categories.first.airTerjun[i].nama);
-    // }
-    // for (int i = 0; i < categories.first.rekreasi.length; i++) {
-    //   nama.add(categories.first.rekreasi[i].nama);
-    // }
-
-    // bool _isAirterjun = false;
-
-    List wisata = kategori;
+    List wisata = kategori();
 
     final icon =
         await getBitmapDescriptorFromAssetBytes("assets/images/marker.png", 88);

@@ -51,6 +51,8 @@ class _DetailScreenState extends State<DetailScreen> {
         visible: true,
         points: [source, destination],
         color: Colors.green,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
         width: 5));
   }
 
