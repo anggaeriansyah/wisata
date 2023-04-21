@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:wisata_tenjolaya/Screens/weatherForecastScreen.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({Key? key}) : super(key: key);
@@ -108,7 +109,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     http.Response response2 = await http.get(Uri.parse(
         "http://api.openweathermap.org/data/2.5/forecast?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
     var results2 = jsonDecode(response2.body);
-    for (var i = 3; i < 9; i++) {
+    for (var i = 3; i < results2['list'].length - 20; i++) {
       temp5.add(results2['list'][i]['main']['temp']);
       dt.add(results2['list'][i]['dt_txt']);
       windSpeed5.add(results2['list'][i]['wind']['speed']);
@@ -352,9 +353,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             height: 5,
                           ),
                           Text(
-                              windSpeed != null
-                                  ? '$windSpeed km/jam'
-                                  : 'loading',
+                              windSpeed != null ? '$windSpeed km/j' : 'loading',
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -367,13 +366,28 @@ class _WeatherScreenState extends State<WeatherScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-              child: Center(
-                child: Text(
-                  'Prediksi Cuaca',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Prediksi Cuaca',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  InkWell(
+                    onTap: () => Get.to(const WeatherForecastScreen()),
+                    child: Container(
+                      color: Colors.white,
+                      child: const Text(
+                        'Selengkapnya',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             // SizedBox(
