@@ -15,7 +15,7 @@ class AllCategoriesWidget extends StatelessWidget {
       crossAxisCount: 2,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      childAspectRatio: (150 / 195),
+      childAspectRatio: (150 / (MediaQuery.of(context).size.width * 0.5)),
       children: [
         for (int i = 0; i < wisata.length; i++)
           GestureDetector(

@@ -497,7 +497,7 @@ class _MapsState extends State<Maps> {
           strokeWidth: 1,
           strokeColor: Theme.of(context).primaryColor.withOpacity(0.8)),
     );
-    List<PopupMenuEntry> _popupMenuList = [
+    List<PopupMenuEntry> popupMenuList = [
       PopupMenuItem(
         child: Text('Standard',
             style: TextStyle(
@@ -626,7 +626,7 @@ class _MapsState extends State<Maps> {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              itemBuilder: (context) => _popupMenuList)
+              itemBuilder: (context) => popupMenuList)
         ],
       ),
       body: Stack(

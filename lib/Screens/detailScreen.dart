@@ -678,43 +678,47 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20, right: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Tiket',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
-                                        color: Theme.of(context).accentColor),
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        _dialogBuilder(context);
-                                      },
-                                      child: Icon(
-                                        Icons.info_outline_rounded,
-                                        color: Theme.of(context).accentColor,
-                                        size: 20,
-                                      ))
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                widget.wisata.tiket == 'Gratis'
-                                    ? widget.wisata.tiket
-                                    : 'Rp. ${widget.wisata.tiket}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
+                          child: Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Tiket',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Theme.of(context).accentColor),
+                                    ),
+                                    InkWell(
+                                        onTap: () {
+                                          _dialogBuilder(context);
+                                        },
+                                        child: Icon(
+                                          Icons.info_outline_rounded,
+                                          color: Theme.of(context).accentColor,
+                                          size: 20,
+                                        ))
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 4),
+                                Text(
+                                  widget.wisata.tiket == 'Gratis'
+                                      ? widget.wisata.tiket
+                                      : 'Rp. ${widget.wisata.tiket}',
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      overflow: TextOverflow.fade),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -744,54 +748,42 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.wisata.kategori == 'Rekreasi'
-                                        ? 'Penginapan'
-                                        : 'Camping',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
-                                        color: Theme.of(context).accentColor),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  widget.wisata.kategori == 'Air Terjun'
-                                      ? Text(
-                                          widget.wisata.camping == true
-                                              ? 'Tersedia'
-                                              : 'Tidak Tersedia',
-                                          style: const TextStyle(
-                                              // color: widget.wisata.camping ==
-                                              //             'Tersedia' ||
-                                              //         widget.wisata.camping ==
-                                              //             'tersedia'
-                                              //     ? Colors.green
-                                              //     : Theme.of(context).primaryColor,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                              overflow: TextOverflow.fade),
-                                        )
-                                      : Text(
-                                          widget.wisata.camping == true
-                                              ? 'Tersedia'
-                                              : 'Tidak Tersedia',
-                                          style: const TextStyle(
-                                              // color: widget.wisata.camping ==
-                                              //             'Tersedia' ||
-                                              //         widget.wisata.camping ==
-                                              //             'tersedia'
-                                              //     ? Colors.green
-                                              //     : Theme.of(context).primaryColor,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                              overflow: TextOverflow.fade),
-                                        ),
-                                ],
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      widget.wisata.kategori == 'Rekreasi'
+                                          ? 'Penginapan'
+                                          : 'Camping',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Theme.of(context).accentColor),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      widget.wisata.camping == true
+                                          ? 'Tersedia'
+                                          : 'Tidak Tersedia',
+                                      softWrap: false,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      style: const TextStyle(
+                                          // color: widget.wisata.camping ==
+                                          //             'Tersedia' ||
+                                          //         widget.wisata.camping ==
+                                          //             'tersedia'
+                                          //     ? Colors.green
+                                          //     : Theme.of(context).primaryColor,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                          overflow: TextOverflow.fade),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
