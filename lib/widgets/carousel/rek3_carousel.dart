@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
-import 'package:wisata_tenjolaya/models/categories_model.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
 
 class Rek3Carousel extends StatefulWidget {

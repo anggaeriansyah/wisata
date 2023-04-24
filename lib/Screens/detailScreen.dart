@@ -352,7 +352,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               const Icon(
                                 Icons.place_rounded,
                                 color: Colors.white,
-                                // size: 32,
                               ),
                             ],
                           ),
