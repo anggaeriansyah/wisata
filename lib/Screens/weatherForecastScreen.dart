@@ -79,7 +79,11 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
     if (cuaca[value] == 'Rain') {
       return const Icon(FontAwesomeIcons.cloudRain, color: Colors.white);
     } else if (cuaca[value] == 'Clouds') {
-      return const Icon(FontAwesomeIcons.cloud, color: Colors.white);
+      return const Icon(
+        FontAwesomeIcons.cloud,
+        color: Colors.white,
+        size: 22,
+      );
     } else {
       return const CircularProgressIndicator();
     }
@@ -129,7 +133,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
       ),
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.only(top: 10),
         child: ListView.builder(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,

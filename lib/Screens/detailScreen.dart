@@ -459,53 +459,46 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       ),
                     )
-                  : InkWell(
-                      onTap: () {
-                        setState(() {
-                          selected = !selected;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(
-                              spreadRadius: -2,
-                              color: Colors.black26,
-                              offset: Offset(0, 2),
-                              blurRadius: 7,
+                  : Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            spreadRadius: -2,
+                            color: Colors.black26,
+                            offset: Offset(0, 2),
+                            blurRadius: 7,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Tutup Sementara',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 19,
+                              fontWeight: FontWeight.w700,
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Tutup Sementara',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
+                          ),
+                          Container(
+                              padding: const EdgeInsets.all(5),
+                              margin: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                // color: Colors.red,
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                            Container(
-                                padding: const EdgeInsets.all(5),
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                  // color: Colors.red,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Icon(
-                                  FontAwesomeIcons.solidCalendarXmark,
-                                  // FontAwesomeIcons.hourglass,
-                                  size: 22,
-                                  color: Colors.white,
-                                )),
-                          ],
-                        ),
+                              child: const Icon(
+                                FontAwesomeIcons.solidCalendarXmark,
+                                // FontAwesomeIcons.hourglass,
+                                size: 22,
+                                color: Colors.white,
+                              )),
+                        ],
                       ),
                     ),
               selected == true
@@ -678,35 +671,36 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20, right: 15),
-                          child: Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Tiket',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          color: Theme.of(context).accentColor),
-                                    ),
-                                    InkWell(
-                                        onTap: () {
-                                          _dialogBuilder(context);
-                                        },
-                                        child: Icon(
-                                          Icons.info_outline_rounded,
-                                          color: Theme.of(context).accentColor,
-                                          size: 20,
-                                        ))
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Tiket',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Theme.of(context).accentColor),
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        _dialogBuilder(context);
+                                      },
+                                      child: Icon(
+                                        Icons.info_outline_rounded,
+                                        color: Theme.of(context).accentColor,
+                                        size: 20,
+                                      ))
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Flexible(
+                                flex: 0,
+                                child: Text(
                                   widget.wisata.tiket == 'Gratis'
                                       ? widget.wisata.tiket
                                       : 'Rp. ${widget.wisata.tiket}',
@@ -717,8 +711,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                       fontSize: 18,
                                       overflow: TextOverflow.fade),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -749,6 +743,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Flexible(
+                                flex: 0,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
