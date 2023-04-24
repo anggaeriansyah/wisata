@@ -13,15 +13,8 @@ class WeatherForecastScreen extends StatefulWidget {
 }
 
 class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
-  var temp;
-  var desc;
-  var currently;
-  var humidity;
-  var windSpeed;
-  var press;
-  var tempMin;
-  var tempMax;
-
+  var tempMin = [];
+  var tempMax = [];
   var temp5 = [];
   var desc5 = [];
   var windSpeed5 = [];
@@ -93,18 +86,6 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   }
 
   Future getWeather() async {
-    http.Response response = await http.get(Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
-    var results = jsonDecode(response.body);
-    temp = results['main']['temp'];
-    desc = results['weather'][0]['description'];
-    currently = results['weather'][0]['main'];
-    humidity = results['main']['humidity'];
-    press = results['main']['pressure'];
-    windSpeed = results['wind']['speed'];
-    tempMin = results['main']['temp_min'];
-    tempMax = results['main']['temp_max'];
-
     http.Response response2 = await http.get(Uri.parse(
         "http://api.openweathermap.org/data/2.5/forecast?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
     var results2 = jsonDecode(response2.body);
@@ -113,6 +94,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
       dt.add(results2['list'][i]['dt_txt']);
       windSpeed5.add(results2['list'][i]['wind']['speed']);
       cuaca.add(results2['list'][i]['weather'][0]['main']);
+      desc5.add(results2['list'][i]['weather'][0]['description']);
       setState(() {});
     }
   }
@@ -125,10 +107,6 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String nmr = temp.toString().substring(0, 2);
-    String nmrMin = tempMin.toString().substring(0, 2);
-    String nmrMax = tempMax.toString().substring(0, 2);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -160,49 +138,46 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20))),
-                        child: ListTile(
-                          leading: cuaca.isEmpty
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white54),
-                                  ),
-                                )
-                              : _cuacaIcons(index),
-                          title: Text(
-                            cuaca.isEmpty
-                                ? 'loading'
-                                // : '${DateFormat('EEEE').format(DateTime.parse(dt[index]))} ⋅ ${cuaca[index]}',
-                                : '${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))} ⋅ ${_cuacaId[index]}',
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          trailing: temp5.isEmpty
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white54),
-                                  ),
-                                )
-                              : Text(
-                                  '${temp5[index].toString().substring(0, 2)}\u00B0'
-                                  'C',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                        ),
-                      )
-                    ],
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 13),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20))),
+                    child: ListTile(
+                      leading: cuaca.isEmpty
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white54),
+                              ),
+                            )
+                          : _cuacaIcons(index),
+                      title: Text(
+                        cuaca.isEmpty
+                            ? 'loading'
+                            : '''${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))}
+${desc5[index]}''',
+                        style: const TextStyle(
+                            color: Colors.white, overflow: TextOverflow.fade),
+                      ),
+                      trailing: temp5.isEmpty
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white54),
+                              ),
+                            )
+                          : Text(
+                              '${temp5[index].toString().substring(0, 2)}\u00B0'
+                              'C',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                    ),
                   ));
             }),
       )),
