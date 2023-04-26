@@ -92,10 +92,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
     _getCurrentPosition();
-    super.initState();
   }
 
   _handleTabSelection() {
@@ -106,8 +106,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    _tabController.dispose();
     super.dispose();
+    _tabController.dispose();
   }
 
   // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -235,7 +235,6 @@ class _HomeScreenState extends State<HomeScreen>
                 const SizedBox(
                   height: 10,
                 ),
-
                 const SizedBox(
                   height: 260,
                   child: RekomendasiWidget(),

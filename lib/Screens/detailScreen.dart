@@ -49,9 +49,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
     super.initState();
-    _cekLokasi();
     polylinePoints = PolylinePoints();
-    // drawPolyline(widget.wisata.lat.toString());
   }
 
   void _cekLokasi() async {
@@ -243,7 +241,8 @@ class _DetailScreenState extends State<DetailScreen> {
                     flex: 11,
                     child: SizedBox(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 20),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: GoogleMap(
@@ -260,20 +259,20 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                   ),
-                  Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        // height: 50,
-                        child: TextButton(
-                            onPressed: () async {
-                              GoogleMapController controller =
-                                  await _controller.future;
-                              controller.animateCamera(
-                                CameraUpdate.newCameraPosition(_kGooglePlex),
-                              );
-                            },
-                            child: const Text('Semula')),
-                      ))
+                  // Expanded(
+                  //     flex: 2,
+                  //     child: SizedBox(
+                  //       // height: 50,
+                  //       child: TextButton(
+                  //           onPressed: () async {
+                  //             GoogleMapController controller =
+                  //                 await _controller.future;
+                  //             controller.animateCamera(
+                  //               CameraUpdate.newCameraPosition(_kGooglePlex),
+                  //             );
+                  //           },
+                  //           child: const Text('Semula')),
+                  //     ))
                 ],
               ));
         });
