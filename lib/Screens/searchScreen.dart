@@ -197,7 +197,7 @@ class _SearchScreenState extends State<SearchScreen> {
         automaticallyImplyLeading: false,
         elevation: 0,
         centerTitle: true,
-        leading: InkWell(
+        leading: GestureDetector(
           onTap: () => Get.back(),
           child: const Icon(
             Icons.arrow_back_ios_rounded,
@@ -213,62 +213,62 @@ class _SearchScreenState extends State<SearchScreen> {
           overflow: TextOverflow.fade,
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: PopupMenuButton(
-              elevation: 3,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
+          PopupMenuButton(
+            elevation: 3,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            position: PopupMenuPosition.under,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                height: kMinInteractiveDimension * 0.7,
+                child: const Text('A-Z',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    )),
+                onTap: () {
+                  listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
+                  setState(() {});
+                },
               ),
-              position: PopupMenuPosition.under,
-              itemBuilder: (context) => [
-                PopupMenuItem(
+              PopupMenuItem(
+                height: kMinInteractiveDimension * 0.7,
+                child: const Text('Z-A',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    )),
+                onTap: () {
+                  listItemOnSearch.sort((a, b) => b.nama.compareTo(a.nama));
+                  setState(() {});
+                },
+              ),
+              PopupMenuItem(
                   height: kMinInteractiveDimension * 0.7,
-                  child: const Text('A-Z',
+                  child: const Text('Jarak',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       )),
                   onTap: () {
-                    listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
-                    setState(() {});
-                  },
-                ),
-                PopupMenuItem(
-                  height: kMinInteractiveDimension * 0.7,
-                  child: const Text('Z-A',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      )),
-                  onTap: () {
-                    listItemOnSearch.sort((a, b) => b.nama.compareTo(a.nama));
-                    setState(() {});
-                  },
-                ),
-                PopupMenuItem(
-                    height: kMinInteractiveDimension * 0.7,
-                    child: const Text('Jarak',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        )),
-                    onTap: () {
-                      if (_isActive) {
-                        setState(() {
-                          listItemOnSearch
-                              .sort((a, b) => a.distance.compareTo(b.distance));
-                        });
-                      } else {
-                        _listTerdekat();
-                      }
-                    }),
-              ],
-              //
-              child: const Icon(
+                    if (_isActive) {
+                      setState(() {
+                        listItemOnSearch
+                            .sort((a, b) => a.distance.compareTo(b.distance));
+                      });
+                    } else {
+                      _listTerdekat();
+                    }
+                  }),
+            ],
+            //
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Icon(
                 Iconsax.filter,
                 color: Colors.black,
                 size: 26,

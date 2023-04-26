@@ -598,7 +598,7 @@ class _MapsState extends State<Maps> {
       appBar: AppBar(
         elevation: 4,
         automaticallyImplyLeading: false,
-        leading: InkWell(
+        leading: GestureDetector(
           onTap: () {
             Get.back();
           },
@@ -879,6 +879,7 @@ class _MapsState extends State<Maps> {
               heroTag: '2',
               backgroundColor: Colors.white70,
               elevation: 0,
+              tooltip: 'Show current position',
               onPressed: () async {
                 if (_isActive) {
                   GoogleMapController controller = await _controller.future;
@@ -936,6 +937,7 @@ class _MapsState extends State<Maps> {
               mini: true,
               backgroundColor: Colors.white70,
               elevation: 0,
+              tooltip: 'Kembali ke posisi semula',
               onPressed: () async {
                 GoogleMapController controller = await _controller.future;
                 controller.animateCamera(

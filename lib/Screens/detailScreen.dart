@@ -33,7 +33,8 @@ final List<Marker> _marker = [];
 String mapTheme = '';
 
 class _DetailScreenState extends State<DetailScreen> {
-  String? _currentAddressDesa, _currentAddressKec;
+  String? _currentAddressDesa;
+  String? _currentAddressKec;
   Position? _currentPosition;
   double? _cLat;
   double? _cLong;
@@ -233,7 +234,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                           color: Colors.grey,
                                         ),
                                         Text(
-                                          _currentAddressDesa!,
+                                          _currentAddressDesa == null
+                                              ? 'loading'
+                                              : _currentAddressDesa!,
                                           style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -273,7 +276,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           widget.wisata.nama,
@@ -411,7 +414,7 @@ class _DetailScreenState extends State<DetailScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        leading: InkWell(
+        leading: GestureDetector(
           onTap: () {
             Get.back();
           },
@@ -497,8 +500,14 @@ class _DetailScreenState extends State<DetailScreen> {
                   bottom: 10,
                   child: Stack(
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
+                      InkWell(
+                        onTap: () {
+                          if (_isActive) {
+                            _getPopup();
+                          } else {
+                            _getCurrentPosition();
+                          }
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.3),
@@ -538,7 +547,7 @@ class _DetailScreenState extends State<DetailScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               widget.wisata.tempClosed == false
-                  ? InkWell(
+                  ? GestureDetector(
                       onTap: () {
                         setState(() {
                           selected = !selected;
