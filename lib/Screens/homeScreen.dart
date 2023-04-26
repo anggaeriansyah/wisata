@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen>
               Get.to(const WeatherScreen(), transition: Transition.downToUp);
             },
             child: const Icon(
-              Iconsax.wind,
+              Iconsax.cloud,
               // FontAwesomeIcons.cloudBolt,
               size: 30,
               color: Colors.black,
@@ -173,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen>
             },
             child: const SizedBox(
               height: 50,
+              width: 50,
               child: Icon(
                 Iconsax.search_normal,
                 size: 30,
@@ -187,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen>
                   setState(() {});
                 },
                 child: const Padding(
-                  padding: EdgeInsets.only(right: 20),
+                  padding: EdgeInsets.only(right: 20, left: 20),
                   child: Icon(
                     Iconsax.map,
                     size: 30,
