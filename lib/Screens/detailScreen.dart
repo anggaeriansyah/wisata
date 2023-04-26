@@ -33,7 +33,7 @@ final List<Marker> _marker = [];
 String mapTheme = '';
 
 class _DetailScreenState extends State<DetailScreen> {
-  String? _currentAddress;
+  String? _currentAddressDesa, _currentAddressKec;
   Position? _currentPosition;
   double? _cLat;
   double? _cLong;
@@ -118,7 +118,8 @@ class _DetailScreenState extends State<DetailScreen> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = '${place.subLocality}, ${place.locality}';
+        _currentAddressDesa = place.subLocality.toString();
+        _currentAddressKec = place.locality.toString();
       });
     }).catchError((e) {
       debugPrint(e);
@@ -182,63 +183,136 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: [
                   Expanded(
                     flex: 4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      margin: const EdgeInsets.only(
-                          top: 20, left: 20, right: 20, bottom: 15),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              // widget.wisata.nama,
-                              _currentAddress!,
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                              maxLines: 1,
-                              softWrap: false,
-                              overflow: TextOverflow.fade,
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                top: 20, left: 20, right: 20, bottom: 20),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  widget.wisata.alamat,
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  overflow: TextOverflow.fade,
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          spreadRadius: -2,
+                                          color: Colors.black12,
+                                          offset: Offset(0, 2),
+                                          blurRadius: 7,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Lokasi Saat ini',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                        const Divider(
+                                          thickness: 0.5,
+                                          height: 8,
+                                          color: Colors.grey,
+                                        ),
+                                        Text(
+                                          _currentAddressDesa!,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  widget.wisata.alamatKec,
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  overflow: TextOverflow.fade,
-                                ),
+                                Expanded(
+                                    flex: 1,
+                                    child: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      color: Theme.of(context).primaryColor,
+                                    )),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          spreadRadius: -2,
+                                          color: Colors.white12,
+                                          offset: Offset(0, 2),
+                                          blurRadius: 7,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          widget.wisata.nama,
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                        const Divider(
+                                          thickness: 0.5,
+                                          height: 8,
+                                          color: Colors.grey,
+                                        ),
+                                        Text(
+                                          widget.wisata.alamat,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
-                    flex: 11,
+                    flex: 12,
                     child: SizedBox(
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -353,7 +427,7 @@ class _DetailScreenState extends State<DetailScreen> {
           widget.wisata.nama, style: const TextStyle(color: Colors.black),
         ),
         actions: [
-          InkWell(
+          GestureDetector(
             onTap: () {
               if (_isActive) {
                 _getPopup();
@@ -362,7 +436,7 @@ class _DetailScreenState extends State<DetailScreen> {
               }
             },
             child: const Padding(
-              padding: EdgeInsets.only(right: 18),
+              padding: EdgeInsets.only(right: 20, left: 20),
               child: Icon(
                 FontAwesomeIcons.route,
                 // Icons.place_rounded,
@@ -924,7 +998,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Container(
-                    padding: const EdgeInsets.only(left: 20, bottom: 10),
+                    padding: const EdgeInsets.only(left: 20, bottom: 20),
                     height: 150,
                     child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
