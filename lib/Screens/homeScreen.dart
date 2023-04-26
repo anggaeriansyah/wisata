@@ -167,22 +167,18 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           centerTitle: true,
-          title: Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Get.to(const SearchScreen(), transition: Transition.downToUp);
-                },
-                child: const SizedBox(
-                  height: 50,
-                  child: Icon(
-                    Iconsax.search_normal,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                ),
+          title: GestureDetector(
+            onTap: () {
+              Get.to(const SearchScreen(), transition: Transition.downToUp);
+            },
+            child: const SizedBox(
+              height: 50,
+              child: Icon(
+                Iconsax.search_normal,
+                size: 30,
+                color: Colors.black,
               ),
-            ],
+            ),
           ),
           actions: [
             GestureDetector(

@@ -167,7 +167,7 @@ class _DetailScreenState extends State<DetailScreen> {
             LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
         infoWindow: const InfoWindow(title: 'Lokasi saat ini')));
     showModalBottomSheet(
-        enableDrag: true,
+        enableDrag: false,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
