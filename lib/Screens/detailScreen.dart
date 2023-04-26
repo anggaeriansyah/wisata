@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:glass/glass.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,17 +33,98 @@ final List<Marker> _marker = [];
 String mapTheme = '';
 
 class _DetailScreenState extends State<DetailScreen> {
+  String? _currentAddress;
+  Position? _currentPosition;
+  double? _cLat;
+  double? _cLong;
+  bool _isActive = false;
+
   bool selected = false;
   final Set<Polyline> _polylines = {};
   PolylinePoints polylinePoints = PolylinePoints();
-  late LatLng source = const LatLng(-6.6273324, 106.6875046);
+  // late LatLng source =
+  // LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
   late LatLng destination = LatLng(widget.wisata.lat, widget.wisata.long);
 
   @override
   void initState() {
-    polylinePoints = PolylinePoints();
-    drawPolyline(widget.wisata.lat.toString());
     super.initState();
+    _cekLokasi();
+    polylinePoints = PolylinePoints();
+    // drawPolyline(widget.wisata.lat.toString());
+  }
+
+  void _cekLokasi() async {
+    bool serviceEnabled;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (serviceEnabled) {
+      // _getCurrentPosition();
+    }
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    LocationPermission permission;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+      return false;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      setState(() {
+        _isActive = false;
+      });
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    Geolocator.getLastKnownPosition;
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) {
+      await Geolocator.checkPermission();
+      setState(() {
+        _isActive = false;
+      });
+    } else {
+      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium)
+          .then((Position position) {
+        setState(
+          () => _currentPosition = position,
+        );
+        _getAddressFromLatLng(_currentPosition!);
+        _getPopup();
+        _isActive = true;
+      }).catchError((e) {
+        debugPrint(e);
+      });
+    }
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress = '${place.subLocality}, ${place.locality}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   void drawPolyline(String placeId) {
@@ -49,11 +132,151 @@ class _DetailScreenState extends State<DetailScreen> {
     _polylines.add(Polyline(
         polylineId: PolylineId(placeId),
         visible: true,
-        points: [source, destination],
+        points: [
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          destination
+        ],
         color: Colors.green,
         startCap: Cap.roundCap,
         endCap: Cap.roundCap,
         width: 5));
+  }
+
+  Future<void> _getPopup() async {
+    drawPolyline(widget.wisata.lat.toString());
+
+    CameraPosition _kGooglePlex = CameraPosition(
+      target: LatLng((_currentPosition!.latitude + destination.latitude) / 2,
+          (_currentPosition!.longitude + destination.longitude) / 2),
+      zoom: 12,
+    );
+    DefaultAssetBundle.of(context)
+        .loadString('assets/maptheme/standard_theme.json')
+        .then((value) {
+      mapTheme = value;
+    });
+
+    _marker.clear();
+    _marker.add(Marker(
+      markerId: const MarkerId('value'),
+      position: LatLng(widget.wisata.lat, widget.wisata.long),
+      icon: await getBitmapDescriptorFromAssetBytes(
+          "assets/images/marker.png", 95),
+    ));
+    _marker.add(Marker(
+        markerId: const MarkerId('value2'),
+        position:
+            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+        infoWindow: const InfoWindow(title: 'Lokasi saat ini')));
+    showModalBottomSheet(
+        enableDrag: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+              height: 400,
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.only(
+                          top: 20, left: 20, right: 20, bottom: 15),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              // widget.wisata.nama,
+                              _currentAddress!,
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.fade,
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  widget.wisata.alamat,
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
+                                ),
+                                Text(
+                                  widget.wisata.alamatKec,
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 11,
+                    child: SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: GoogleMap(
+                            initialCameraPosition: _kGooglePlex,
+                            polylines: _polylines,
+                            markers: Set<Marker>.of(_marker),
+                            onMapCreated: (GoogleMapController controller) {
+                              // _infoWindowController.googleMapController = controller;
+                              controller.setMapStyle(mapTheme);
+                              // _controller.complete(controller);
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        // height: 50,
+                        child: TextButton(
+                            onPressed: () async {
+                              GoogleMapController controller =
+                                  await _controller.future;
+                              controller.animateCamera(
+                                CameraUpdate.newCameraPosition(_kGooglePlex),
+                              );
+                            },
+                            child: const Text('Semula')),
+                      ))
+                ],
+              ));
+        });
   }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -109,16 +332,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     int now = DateTime.now().weekday.toInt() - 1;
-    CameraPosition _kGooglePlex = CameraPosition(
-      target: LatLng((source.latitude + destination.latitude) / 2,
-          (source.longitude + destination.longitude) / 2),
-      zoom: 12,
-    );
-    DefaultAssetBundle.of(context)
-        .loadString('assets/maptheme/standard_theme.json')
-        .then((value) {
-      mapTheme = value;
-    });
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -141,134 +355,12 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         actions: [
           InkWell(
-            onTap: () async {
-              _marker.clear();
-              _marker.add(Marker(
-                markerId: const MarkerId('value'),
-                position: LatLng(widget.wisata.lat, widget.wisata.long),
-                icon: await getBitmapDescriptorFromAssetBytes(
-                    "assets/images/marker.png", 95),
-              ));
-              _marker.add(Marker(
-                  markerId: const MarkerId('value2'),
-                  position: source,
-                  infoWindow: const InfoWindow(title: 'Lokasi saat ini')));
-              showModalBottomSheet(
-                  // enableDrag: true,
-
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SizedBox(
-                        height: 400,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                margin: const EdgeInsets.only(
-                                    top: 20, left: 20, right: 20, bottom: 15),
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        widget.wisata.nama,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500),
-                                        maxLines: 1,
-                                        softWrap: false,
-                                        overflow: TextOverflow.fade,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            widget.wisata.alamat,
-                                            style: const TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500),
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
-                                          ),
-                                          Text(
-                                            widget.wisata.alamatKec,
-                                            style: const TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500),
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 11,
-                              child: SizedBox(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: GoogleMap(
-                                      initialCameraPosition: _kGooglePlex,
-                                      polylines: _polylines,
-                                      markers: Set<Marker>.of(_marker),
-                                      onMapCreated: (GoogleMapController
-                                          controller) async {
-                                        // _infoWindowController.googleMapController = controller;
-                                        controller.setMapStyle(mapTheme);
-                                        _controller.complete(controller);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                                flex: 2,
-                                child: SizedBox(
-                                  // height: 50,
-                                  child: TextButton(
-                                      onPressed: () async {
-                                        GoogleMapController controller =
-                                            await _controller.future;
-                                        controller.animateCamera(
-                                          CameraUpdate.newCameraPosition(
-                                              _kGooglePlex),
-                                        );
-                                      },
-                                      child: const Text('Semula')),
-                                ))
-                          ],
-                        ));
-                  });
+            onTap: () {
+              if (_isActive) {
+                _getPopup();
+              } else {
+                _getCurrentPosition();
+              }
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 18),
@@ -332,41 +424,40 @@ class _DetailScreenState extends State<DetailScreen> {
                   bottom: 10,
                   child: Stack(
                     children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, top: 5, bottom: 5, right: 10),
-                          child: Row(
-                            children: [
-                              Text(
-                                widget.wisata.alamat,
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(width: 7),
-                              const Icon(
-                                Icons.place_rounded,
-                                color: Colors.white,
-                              ),
-                            ],
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, top: 5, bottom: 5, right: 10),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.wisata.alamat,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                                const SizedBox(width: 7),
+                                const Icon(
+                                  Icons.place_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
+                        ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          // SizedBox(
-          //   height: 10,
-          // ),
-
           const SizedBox(
             height: 20,
           ),
