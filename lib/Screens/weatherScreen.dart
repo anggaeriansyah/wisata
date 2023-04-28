@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:wisata_tenjolaya/Screens/weatherForecastScreen.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  bool? internetConn;
+
   var temp;
   var desc;
   var currently;
@@ -121,7 +124,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   void initState() {
     super.initState();
-    getWeather();
+    internetChecked();
+  }
+
+  void internetChecked() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      getWeather();
+      internetConn = true;
+    } else {
+      internetConn = false;
+      _showSnackBar();
+    }
+  }
+
+  void _showSnackBar() {
+    final snackBar = SnackBar(
+      content: const Text('Tidak ada koneksi internet'),
+    );
   }
 
   @override
@@ -372,18 +392,27 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Prediksi Cuaca',
+                  Text(
+                    internetConn == true ? 'Prediksi Cuaca' : '',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   InkWell(
-                    onTap: () => Get.to(const WeatherForecastScreen()),
-                    child: Container(
-                      color: Colors.white,
-                      child: const Text(
-                        'Selengkapnya',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400),
+                    onTap: () {
+                      internetConn == true
+                          ? Get.to(const WeatherForecastScreen())
+                          : const SnackBar(
+                              content: Text('Tidak ada koneksi internet'),
+                            );
+                    },
+                    child: Visibility(
+                      visible: internetConn == true ? true : false,
+                      child: Container(
+                        color: Colors.white,
+                        child: const Text(
+                          'Selengkapnya',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                        ),
                       ),
                     ),
                   ),
