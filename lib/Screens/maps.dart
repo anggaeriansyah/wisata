@@ -145,11 +145,11 @@ class _MapsState extends State<Maps> {
   String mapTheme = '';
 
   bool _isAirTerjun = false;
-  bool _isAirTerjunActive = false;
+  // bool _isAirTerjunActive = false;
   bool _isRekreasi = false;
-  bool _isRekreasiActive = false;
+  // bool _isRekreasiActive = false;
   bool _isSitus = false;
-  bool _isSitusActive = false;
+  // bool _isSitusActive = false;
   bool _isAll = true;
 
   List kategori() {
@@ -677,11 +677,8 @@ class _MapsState extends State<Maps> {
                       _infoWindowController.hideInfoWindow!();
                       _isAll = true;
                       _isAirTerjun = false;
-                      _isAirTerjunActive = false;
                       _isRekreasi = false;
-                      _isRekreasiActive = false;
                       _isSitus = false;
-                      _isSitusActive = false;
 
                       setState(() {
                         if (_isActive) {
@@ -727,7 +724,9 @@ class _MapsState extends State<Maps> {
                         CameraUpdate.newCameraPosition(_kGooglePlex),
                       );
                       _infoWindowController.hideInfoWindow!();
-                      _isAirTerjunActive = !_isAirTerjunActive;
+                      _isAll = false;
+                      _isRekreasi = false;
+                      _isSitus = false;
                       _isAirTerjun = !_isAirTerjun;
                       setState(() {
                         if (_isActive) {
@@ -746,7 +745,7 @@ class _MapsState extends State<Maps> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 7),
                         decoration: BoxDecoration(
-                            color: _isAirTerjunActive
+                            color: _isAirTerjun
                                 ? Theme.of(context).primaryColor
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -763,9 +762,8 @@ class _MapsState extends State<Maps> {
                           style: TextStyle(
                               // fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: _isAirTerjunActive
-                                  ? Colors.white
-                                  : Colors.black),
+                              color:
+                                  _isAirTerjun ? Colors.white : Colors.black),
                         )),
                   ),
                   InkWell(
@@ -777,7 +775,9 @@ class _MapsState extends State<Maps> {
                         CameraUpdate.newCameraPosition(_kGooglePlex),
                       );
                       _infoWindowController.hideInfoWindow!();
-                      _isRekreasiActive = !_isRekreasiActive;
+                      _isAll = false;
+                      _isAirTerjun = false;
+                      _isSitus = false;
                       _isRekreasi = !_isRekreasi;
 
                       setState(() {
@@ -797,7 +797,7 @@ class _MapsState extends State<Maps> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 7),
                         decoration: BoxDecoration(
-                            color: _isRekreasiActive
+                            color: _isRekreasi
                                 ? Theme.of(context).primaryColor
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -814,9 +814,7 @@ class _MapsState extends State<Maps> {
                           style: TextStyle(
                               // fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: _isRekreasiActive
-                                  ? Colors.white
-                                  : Colors.black),
+                              color: _isRekreasi ? Colors.white : Colors.black),
                         )),
                   ),
                   InkWell(
@@ -827,7 +825,9 @@ class _MapsState extends State<Maps> {
                         CameraUpdate.newCameraPosition(_kGooglePlex),
                       );
                       _infoWindowController.hideInfoWindow!();
-                      _isSitusActive = !_isSitusActive;
+                      _isAll = false;
+                      _isAirTerjun = false;
+                      _isRekreasi = false;
                       _isSitus = !_isSitus;
                       setState(() {
                         if (_isActive) {
@@ -846,7 +846,7 @@ class _MapsState extends State<Maps> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 7),
                         decoration: BoxDecoration(
-                            color: _isSitusActive
+                            color: _isSitus
                                 ? Theme.of(context).primaryColor
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -863,8 +863,7 @@ class _MapsState extends State<Maps> {
                           style: TextStyle(
                               // fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color:
-                                  _isSitusActive ? Colors.white : Colors.black),
+                              color: _isSitus ? Colors.white : Colors.black),
                         )),
                   ),
                 ],
