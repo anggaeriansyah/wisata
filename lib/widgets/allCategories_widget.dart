@@ -16,7 +16,13 @@ class AllCategoriesWidget extends StatefulWidget {
 class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
   // List wisata = listWisata;
 
-  bool circular = true;
+  // bool circular = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   Future<Wisata2?> getData() async {
     var res = await http.get(Uri.parse(
@@ -36,155 +42,133 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
     return FutureBuilder<Wisata2?>(
       future: getData(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        }
-        return GridView.count(
-          crossAxisCount: 2,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          childAspectRatio: (150 / (MediaQuery.of(context).size.width * 0.5)),
-          children: [
-            for (int i = 0; i < snapshot.data!.data.length; i++)
-              GestureDetector(
-                onTap: () {
-                  // Get.to(DetailScreen(wisata: snapshot.data!.data[i].id),
-                  //     arguments: {
-                  //       'nama': snapshot.data!.data[i].nama,
-                  //       'desa': snapshot.data!.data[i].alamat.desa,
-                  //       'kec': snapshot.data!.data[i].alamat.kec,
-                  //       'lat': snapshot.data!.data[i].alamat.latitude,
-                  //       'long': snapshot.data!.data[i].alamat.longitude,
-                  //       'tiket': snapshot.data!['data'][i]['info']['tiket'],
-                  //       'desc': snapshot.data!['data'][i]['info']['deskripsi'],
-                  //       'tempClosed': snapshot.data!['data'][i]['tempClosed'],
-                  //       'distance': snapshot.data!['data'][i]['distance'],
-                  //       'hSenin': snapshot.data!['data'][i]['hariOp']['senin'],
-                  //       'hSelasa': snapshot.data!['data'][i]['hariOp']
-                  //           ['selasa'],
-                  //       'hRabu': snapshot.data!['data'][i]['hariOp']['rabu'],
-                  //       'hKamis': snapshot.data!['data'][i]['hariOp']['kamis'],
-                  //       'hJumat': snapshot.data!['data'][i]['hariOp']['jumat'],
-                  //       'hSabtu': snapshot.data!['data'][i]['hariOp']['sabtu'],
-                  //       'hMinggu': snapshot.data!['data'][i]['hariOp']
-                  //           ['minggu'],
-                  //       'jSenin': snapshot.data!['data'][i]['jamOp']['senin'],
-                  //       'jSelasa': snapshot.data!['data'][i]['jamOp']['selasa'],
-                  //       'jRabu': snapshot.data!['data'][i]['jamOp']['rabu'],
-                  //       'jKamis': snapshot.data!['data'][i]['jamOp']['kamis'],
-                  //       'jJumat': snapshot.data!['data'][i]['jamOp']['jumat'],
-                  //       'jSabtu': snapshot.data!['data'][i]['jamOp']['sabtu'],
-                  //       'jMinggu': snapshot.data!['data'][i]['jamOp']['minggu']
-                  //     },
-                  //     transition: Transition.downToUp);
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  margin: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0, 2),
-                        blurRadius: 7,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          // Get.to(
-                          //     DetailScreen(
-                          //         wisata: snapshot.data!['data'][i]['_id']),
-                          //     arguments: {
-                          //       'nama': snapshot.data!['data'][i]['nama']
-                          //           .toString(),
-                          //       'desa': snapshot.data!['data'][i]['alamat']
-                          //           ['desa'],
-                          //       'kec': snapshot.data!['data'][i]['alamat']
-                          //           ['kec'],
-                          //       'lat': snapshot.data!['data'][i]['alamat']
-                          //           ['latitude'],
-                          //       'long': snapshot.data!['data'][i]['alamat']
-                          //           ['longitude'],
-                          //       'tiket': snapshot.data!['data'][i]['info']
-                          //           ['tiket'],
-                          //       'desc': snapshot.data!['data'][i]['info']
-                          //           ['deskripsi'],
-                          //       'tempClosed': snapshot.data!['data'][i]
-                          //           ['tempClosed'],
-                          //       'distance': snapshot.data!['data'][i]
-                          //           ['distance'],
-                          //       'hSenin': snapshot.data!['data'][i]['hariOp']
-                          //           ['senin'],
-                          //       'hSelasa': snapshot.data!['data'][i]['hariOp']
-                          //           ['selasa'],
-                          //       'hRabu': snapshot.data!['data'][i]['hariOp']
-                          //           ['rabu'],
-                          //       'hKamis': snapshot.data!['data'][i]['hariOp']
-                          //           ['kamis'],
-                          //       'hJumat': snapshot.data!['data'][i]['hariOp']
-                          //           ['jumat'],
-                          //       'hSabtu': snapshot.data!['data'][i]['hariOp']
-                          //           ['sabtu'],
-                          //       'hMinggu': snapshot.data!['data'][i]['hariOp']
-                          //           ['minggu'],
-                          //       'jSenin': snapshot.data!['data'][i]['jamOp']
-                          //           ['senin'],
-                          //       'jSelasa': snapshot.data!['data'][i]['jamOp']
-                          //           ['selasa'],
-                          //       'jRabu': snapshot.data!['data'][i]['jamOp']
-                          //           ['rabu'],
-                          //       'jKamis': snapshot.data!['data'][i]['jamOp']
-                          //           ['kamis'],
-                          //       'jJumat': snapshot.data!['data'][i]['jamOp']
-                          //           ['jumat'],
-                          //       'jSabtu': snapshot.data!['data'][i]['jamOp']
-                          //           ['sabtu'],
-                          //       'jMinggu': snapshot.data!['data'][i]['jamOp']
-                          //           ['minggu']
-                          //     },
-                          //     transition: Transition.downToUp);
+        if (snapshot.connectionState == ConnectionState.done) {
+          return GridView.count(
+            crossAxisCount: 2,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            childAspectRatio: (150 / (MediaQuery.of(context).size.width * 0.5)),
+            children: [
+              for (int i = 0; i < snapshot.data!.data.length; i++)
+                GestureDetector(
+                  onTap: () {
+                    Get.to(DetailScreen(wisata: snapshot.data!.data[i].id),
+                        arguments: {
+                          'image': snapshot.data!.data[i].image,
+                          'nama': snapshot.data!.data[i].nama,
+                          'desa': snapshot.data!.data[i].alamat.desa,
+                          'kec': snapshot.data!.data[i].alamat.kec,
+                          'lat': snapshot.data!.data[i].alamat.latitude,
+                          'long': snapshot.data!.data[i].alamat.longitude,
+                          'tiket': snapshot.data!.data[i].info.tiket,
+                          'desc': snapshot.data!.data[i].info.deskripsi,
+                          'tempClosed': snapshot.data!.data[i].tempClosed,
+                          'distance': snapshot.data!.data[i].distance,
+                          'hSenin': snapshot.data!.data[i].hariOp[0],
+                          'hSelasa': snapshot.data!.data[i].hariOp[1],
+                          'hRabu': snapshot.data!.data[i].hariOp[2],
+                          'hKamis': snapshot.data!.data[i].hariOp[3],
+                          'hJumat': snapshot.data!.data[i].hariOp[4],
+                          'hSabtu': snapshot.data!.data[i].hariOp[5],
+                          'hMinggu': snapshot.data!.data[i].hariOp[6],
+                          'jSenin': snapshot.data!.data[i].jamOp[0],
+                          'jSelasa': snapshot.data!.data[i].jamOp[1],
+                          'jRabu': snapshot.data!.data[i].jamOp[2],
+                          'jKamis': snapshot.data!.data[i].jamOp[3],
+                          'jJumat': snapshot.data!.data[i].jamOp[4],
+                          'jSabtu': snapshot.data!.data[i].jamOp[5],
+                          'jMinggu': snapshot.data!.data[i].jamOp[6],
+                          'imageGaleries': snapshot.data!.data[i].imageGaleries,
+                          'kategori': snapshot.data!.data[i].kategori
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: snapshot.data!.data[i].image != null
-                              ? Image.network(
-                                  snapshot.data!.data[i].image,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    }
+                        transition: Transition.downToUp);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    margin: const EdgeInsets.only(
+                        top: 10, bottom: 10, left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                          blurRadius: 7,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(
+                                DetailScreen(wisata: snapshot.data!.data[i].id),
+                                arguments: {
+                                  'image': snapshot.data!.data[i].image,
+                                  'nama': snapshot.data!.data[i].nama,
+                                  'desa': snapshot.data!.data[i].alamat.desa,
+                                  'kec': snapshot.data!.data[i].alamat.kec,
+                                  'lat': snapshot.data!.data[i].alamat.latitude,
+                                  'long':
+                                      snapshot.data!.data[i].alamat.longitude,
+                                  'tiket': snapshot.data!.data[i].info.tiket,
+                                  'desc': snapshot.data!.data[i].info.deskripsi,
+                                  'tempClosed':
+                                      snapshot.data!.data[i].tempClosed,
+                                  'distance': snapshot.data!.data[i].distance,
+                                  'hSenin': snapshot.data!.data[i].hariOp[0],
+                                  'hSelasa': snapshot.data!.data[i].hariOp[1],
+                                  'hRabu': snapshot.data!.data[i].hariOp[2],
+                                  'hKamis': snapshot.data!.data[i].hariOp[3],
+                                  'hJumat': snapshot.data!.data[i].hariOp[4],
+                                  'hSabtu': snapshot.data!.data[i].hariOp[5],
+                                  'hMinggu': snapshot.data!.data[i].hariOp[6],
+                                  'jSenin': snapshot.data!.data[i].jamOp[0],
+                                  'jSelasa': snapshot.data!.data[i].jamOp[1],
+                                  'jRabu': snapshot.data!.data[i].jamOp[2],
+                                  'jKamis': snapshot.data!.data[i].jamOp[3],
+                                  'jJumat': snapshot.data!.data[i].jamOp[4],
+                                  'jSabtu': snapshot.data!.data[i].jamOp[5],
+                                  'jMinggu': snapshot.data!.data[i].jamOp[6],
+                                  'imageGaleries':
+                                      snapshot.data!.data[i].imageGaleries,
+                                  'kategori': snapshot.data!.data[i].kategori
+                                },
+                                transition: Transition.downToUp);
+                          },
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                snapshot.data!.data[i].image,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
 
-                                    return Container(
-                                      color: Colors.grey[300],
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.38,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5,
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.image,
-                                          color: Colors.grey[600],
-                                          size: 64.0,
-                                        ),
+                                  return Container(
+                                    color: Colors.grey[300],
+                                    height: MediaQuery.of(context).size.width *
+                                        0.38,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image,
+                                        color: Colors.grey[600],
+                                        size: 64.0,
                                       ),
-                                    );
-                                  },
-                                  fit: BoxFit.cover,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.38,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                )
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.38,
+                                width: MediaQuery.of(context).size.width * 0.5,
+                              )
                               // Image.network(
                               //     '${snapshot.data!.data[i].image}', //     fit: BoxFit.cover,
                               //     // height: 150,
@@ -193,73 +177,78 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
                               //     width:
                               //         MediaQuery.of(context).size.width * 0.5,
                               //   )
-                              : Image(
-                                  image: const AssetImage(
-                                      'assets/images/curug-ciampea.jpg'),
-                                  fit: BoxFit.cover,
-                                  // height: 150,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.38,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                          left: 5,
-                          right: 5,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 0,
-                                child: Text(
-                                  snapshot.data!.data[i].nama,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
-                                  softWrap: false,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
+                              // Image(
+                              //     image: const AssetImage(
+                              //         'assets/images/curug-ciampea.jpg'),
+                              //     fit: BoxFit.cover,
+                              //     // height: 150,
+                              //     height:
+                              //         MediaQuery.of(context).size.width * 0.38,
+                              //     width:
+                              //         MediaQuery.of(context).size.width * 0.5,
+                              //   ),
                               ),
-                              const SizedBox(height: 3),
-                              Row(
-                                children: <Widget>[
-                                  Icon(FontAwesomeIcons.locationArrow,
-                                      size: 13,
-                                      color: Theme.of(context).primaryColor),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    snapshot.data!.data[i].alamat.desa,
+                        ),
+                        const SizedBox(height: 5),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                            left: 5,
+                            right: 5,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 0,
+                                  child: Text(
+                                    snapshot.data!.data[i].nama,
                                     maxLines: 1,
                                     overflow: TextOverflow.fade,
                                     softWrap: false,
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500,
-                                        color: Theme.of(context).accentColor),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
                                   ),
-                                ],
-                              ),
-                            ],
+                                ),
+                                const SizedBox(height: 3),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(FontAwesomeIcons.locationArrow,
+                                        size: 13,
+                                        color: Theme.of(context).primaryColor),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      snapshot.data!.data[i].alamat.desa,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                          color: Theme.of(context).accentColor),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
-        );
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
     );
   }

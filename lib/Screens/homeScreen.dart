@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen>
   late TabController _tabController;
 
   // Future<List<Wisata2>>? futurWisata = null;
-  bool circular = false;
+  // bool circular = false;
   bool _isActive = false;
 
   String? _currentAddress;
@@ -40,21 +40,21 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
     _getCurrentPosition();
-    getData();
+    // getData();
   }
 
-  Future<Wisata2?> getData() async {
-    var res = await http.get(Uri.parse(
-        "https://wisata-server-production.up.railway.app/wisata/api"));
-    if (res.statusCode == 200) {
-      // circular = true;
-      Map<String, dynamic> data =
-          (json.decode(res.body) as Map<String, dynamic>);
-      return Wisata2.fromJson(data);
-    } else {
-      return null;
-    }
-  }
+  // Future<Wisata2?> getData() async {
+  //   var res = await http.get(Uri.parse(
+  //       "https://wisata-server-production.up.railway.app/wisata/api"));
+  //   if (res.statusCode == 200) {
+  //     // circular = true;
+  //     Map<String, dynamic> data =
+  //         (json.decode(res.body) as Map<String, dynamic>);
+  //     return Wisata2.fromJson(data);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Future<bool> _handleLocationPermission() async {
     LocationPermission permission;
@@ -244,70 +244,59 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           body: SafeArea(
-            child: circular
-                ? const CircularProgressIndicator()
-                : ListView(
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.only(left: 20, top: 5),
-                          child:
-                              const BigAppText(text: "Rekomendasi", size: 18)),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const SizedBox(
-                        height: 260,
-                        child: RekomendasiWidget(),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: TabBar(
-                            controller: _tabController,
-                            labelColor: Colors.black,
-                            unselectedLabelColor: Colors.grey,
-                            isScrollable: true,
-                            indicator: CircleTabIndicator(
-                                color: Colors.black, radius: 4),
-                            // UnderlineTabIndicator(
-                            //   borderSide:
-                            //   BorderSide(
-                            //       width: 3, color: Theme.of(context).primaryColor),
-                            //   insets: const EdgeInsets.symmetric(horizontal: 16),
-                            // ),
-                            tabs: const [
-                              Tab(text: 'Semua Kategori'),
-                              Tab(text: 'Air Terjun'),
-                              Tab(text: 'Rekreasi'),
-                              Tab(text: 'Situs Prasejarah')
-                            ]),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, bottom: 10),
-                        child: Center(
-                          child: [
-                            FutureBuilder<Wisata2?>(
-                                future: getData(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  }
-                                  return AllCategoriesWidget();
-                                }),
-                            AirTerjunWidget(),
-                            RekreasiWidget(),
-                            SitusWidget(),
-                          ][_tabController.index],
-                        ),
-                      )
-                    ],
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(left: 20, top: 5),
+                    child: const BigAppText(text: "Rekomendasi", size: 18)),
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(
+                  height: 260,
+                  child: RekomendasiWidget(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: TabBar(
+                      controller: _tabController,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.grey,
+                      isScrollable: true,
+                      indicator:
+                          CircleTabIndicator(color: Colors.black, radius: 4),
+                      // UnderlineTabIndicator(
+                      //   borderSide:
+                      //   BorderSide(
+                      //       width: 3, color: Theme.of(context).primaryColor),
+                      //   insets: const EdgeInsets.symmetric(horizontal: 16),
+                      // ),
+                      tabs: const [
+                        Tab(text: 'Semua Kategori'),
+                        Tab(text: 'Air Terjun'),
+                        Tab(text: 'Rekreasi'),
+                        Tab(text: 'Situs Prasejarah')
+                      ]),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: Center(
+                    child: [
+                      AllCategoriesWidget(),
+                      AirTerjunWidget(),
+                      RekreasiWidget(),
+                      SitusWidget(),
+                    ][_tabController.index],
                   ),
+                )
+              ],
+            ),
           ),
           // body: ListView(
           //   physics: const BouncingScrollPhysics(),

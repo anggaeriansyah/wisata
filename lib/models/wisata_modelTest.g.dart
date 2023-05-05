@@ -25,12 +25,25 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
       info: Info.fromJson(json['info'] as Map<String, dynamic>),
       hariOp: (json['hariOp'] as List<dynamic>).map((e) => e as bool).toList(),
       jamOp: (json['jamOp'] as List<dynamic>).map((e) => e as String).toList(),
-      imageGaleries: (json['imageGaleries'] as List<dynamic>)
-          .map((e) => e as String?)
-          .toList(),
-      id: json['id'] as String,
+      imageGaleries: [
+        json["imageGaleries"][0] ?? null,
+        json["imageGaleries"][1] ?? null,
+        json["imageGaleries"][2] ?? null,
+        json["imageGaleries"][3] ?? null,
+      ],
+      // imageGaleries: [
+      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][0].substring(7) ?? '1682872898666-aldepos-salaca.jpg'}',
+      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][1].substring(7) ?? '1682872898666-aldepos-salaca.jpg'}',
+      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][2] ?? 'null'}',
+      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][3] ?? 'null'}'
+      // ],
+      // imageGaleries: (json['imageGaleries'] as List<dynamic>)
+      //     .map((e) => e as String?)
+      //     .toList(),
+      id: json['_id'] as String,
       nama: json['nama'] as String,
-      image: json['image'] as String,
+      image:
+          'https://wisata-server-production.up.railway.app/images/${(json['image'] as String).substring(7)}',
       tempClosed: json['tempClosed'] as bool,
       kategori: json['kategori'] as String,
       distance: json['distance'] as int,

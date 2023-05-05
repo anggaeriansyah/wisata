@@ -1099,7 +1099,7 @@ Completer<GoogleMapController> _controller = Completer();
 
 final List<Marker> _marker = [];
 String mapTheme = '';
-
+final String image = Get.arguments['image'];
 final String nama = Get.arguments['nama'];
 final String desa = Get.arguments['desa'];
 final String kec = Get.arguments['kec'];
@@ -1127,6 +1127,14 @@ final List<String> jamOp = [
   Get.arguments['jSabtu'],
   Get.arguments['jMinggu'],
 ];
+final List<String?> imageGaleries = [
+  Get.arguments['imageGaleries'][0],
+  Get.arguments['imageGaleries'][1],
+  Get.arguments['imageGaleries'][2],
+  Get.arguments['imageGaleries'][3],
+];
+
+final List<String> kategori = Get.arguments['kategori'];
 
 bool _getData = true;
 
@@ -1145,6 +1153,16 @@ class _DetailScreenState extends State<DetailScreen> {
   // LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
 
   late LatLng destination = LatLng(lt, lg);
+
+  get galeries {
+    // List img = [];
+    // for (var i = 0; i < imageGaleries.length; i++) {
+    //   imageGaleries[i] = imageGaleries[i]!.substring(7);
+    //   setState(() {});
+    // }
+    imageGaleries.removeWhere((value) => value == null);
+    return imageGaleries;
+  }
 
   int get jam {
     String j = DateFormat("HH").format(DateTime.now());
@@ -1729,9 +1747,30 @@ class _DetailScreenState extends State<DetailScreen> {
                               bottomRight: Radius.circular(20),
                             ),
                             child: Image(
-                              image:
-                                  AssetImage('assets/images/curug-ciampea.jpg'),
+                              image: NetworkImage(image.toString()),
                               fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+
+                                return Container(
+                                  color: Colors.grey[300],
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.38,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      color: Colors.grey[600],
+                                      size: 64.0,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -2263,7 +2302,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       )
                     : const SizedBox(),
                 // widget.wisata.imageGalerys.length != 0
-                distance != 0
+                galeries.length != 0
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Container(
@@ -2273,7 +2312,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             // itemCount: widget.wisata.imageGalerys.length,
-                            itemCount: 1,
+                            itemCount: galeries.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Stack(
                                 alignment: Alignment.topLeft,
@@ -2288,9 +2327,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => PhotoView(
-                                              imageProvider: AssetImage(
-                                                  // widget.wisata.imageGalerys[index]
-                                                  'assets/images/curug-ciputri.jpg'),
+                                              imageProvider: NetworkImage(
+                                                  'https://wisata-server-production.up.railway.app/images/${imageGaleries[index]?.substring(7)}'),
                                               minScale: PhotoViewComputedScale
                                                       .contained *
                                                   1,
@@ -2302,16 +2340,41 @@ class _DetailScreenState extends State<DetailScreen> {
                                         );
                                       },
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(20),
-                                        ),
-                                        child: Image(
-                                          image: AssetImage(
-                                              // widget.wisata.imageGalerys[index]
-                                              'assets/images/curug-ciputri.jpg'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(20),
+                                          ),
+                                          child: Image.network(
+                                            "https://wisata-server-production.up.railway.app/images/${imageGaleries[index]?.substring(7)}",
+                                            fit: BoxFit.cover,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+
+                                              return Container(
+                                                color: Colors.grey[300],
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.38,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5,
+                                                child: Center(
+                                                  child: Icon(
+                                                    Icons.image,
+                                                    color: Colors.grey[600],
+                                                    size: 64.0,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          )),
                                     ),
                                   ),
                                 ],
@@ -2320,7 +2383,10 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                       )
-                    : const SizedBox(),
+                    : SizedBox(
+                        child: Text(
+                            'https://wisata-server-production.up.railway.app/images/${imageGaleries[0]!.substring(7)}'),
+                      ),
               ],
             ),
     );

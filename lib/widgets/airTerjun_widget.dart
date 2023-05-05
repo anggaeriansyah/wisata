@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
 
 import '../Screens/DetailScreen.dart';
 
@@ -10,6 +11,8 @@ class AirTerjunWidget extends StatelessWidget {
 
   List airTerjun =
       listWisata.where((element) => element.kategori == 'Air Terjun').toList();
+
+  // List a = Wisata2(cod: cod, message: message, data: data);
 
   @override
   Widget build(BuildContext context) {
