@@ -33,8 +33,7 @@ class _Rek2CarouselState extends State<Rek2Carousel> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Get.to(DetailScreen(wisata: wisata[3]),
-                  transition: Transition.downToUp);
+              Get.to(DetailScreen(wisata: 3), transition: Transition.downToUp);
             },
             child: Container(
               decoration: BoxDecoration(

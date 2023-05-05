@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1019816056508",
-    "project_id": "wite-firebase",
-    "storage_bucket": "wite-firebase.appspot.com"
+    "project_number": "914002519959",
+    "project_id": "wisata-tenjolaya",
+    "storage_bucket": "wisata-tenjolaya.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1019816056508:android:f90708a9e0249c556c62b9",
+        "mobilesdk_app_id": "1:914002519959:android:1e965c4907b295ec3586d2",
         "android_client_info": {
           "package_name": "com.angga.wisata_tenjolaya"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1019816056508-fnlvo26jaam173vv10njia38eom6pqr5.apps.googleusercontent.com",
+          "client_id": "914002519959-o9dit2q486qvsdntgsvjsfo4rsdgi86k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCBbwOPzPdGiJiQ3zhCOj88GHDYhJmBy3c"
+          "current_key": "AIzaSyBw8ekfAgSe1vqoNBbNP0cK7FFetFgGreY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1019816056508-fnlvo26jaam173vv10njia38eom6pqr5.apps.googleusercontent.com",
+              "client_id": "914002519959-o9dit2q486qvsdntgsvjsfo4rsdgi86k.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

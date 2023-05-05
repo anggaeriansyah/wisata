@@ -178,6 +178,8 @@ class Wisata {
     required this.distance,
     required this.kategori,
   });
+
+  static fromJson(x) {}
 }
 
 List<Wisata> listWisata = [

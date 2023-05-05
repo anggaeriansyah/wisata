@@ -4,7 +4,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:lottie/lottie.dart';
 import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
 import 'dart:math' show cos, sqrt, asin;
@@ -344,7 +343,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (BuildContext context, index) {
                       return GestureDetector(
                         onTap: () {
-                          Get.to(DetailScreen(wisata: listItemOnSearch[index]),
+                          Get.to(DetailScreen(wisata: index),
                               transition: Transition.downToUp);
                         },
                         child: Container(

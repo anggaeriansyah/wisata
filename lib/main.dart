@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'Screens/homeScreen.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   // await Firebase.initializeApp();
   // await MongoDatabase.connect();
 
