@@ -64,7 +64,7 @@ Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
     };
 
 Alamat _$AlamatFromJson(Map<String, dynamic> json) => Alamat(
-      desa: json['desa'] as String,
+      desa: 'Desa ${json['desa'] as String}',
       kec: json['kec'] as String,
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),

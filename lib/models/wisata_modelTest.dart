@@ -15,6 +15,8 @@ class Wisata2 {
     required this.message,
     required this.data,
   });
+  List get rekreasi =>
+      data.where((element) => element.kategori == 'Rekreasi').toList();
 
   factory Wisata2.fromJson(Map<String, dynamic> json) =>
       _$Wisata2FromJson(json);

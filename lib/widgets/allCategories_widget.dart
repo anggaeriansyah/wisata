@@ -21,7 +21,7 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
   @override
   void initState() {
     super.initState();
-    getData();
+    // getData();
   }
 
   Future<Wisata2?> getData() async {
@@ -147,22 +147,23 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
                                     ImageChunkEvent? loadingProgress) {
                                   if (loadingProgress == null) {
                                     return child;
-                                  }
-
-                                  return Container(
-                                    color: Colors.grey[300],
-                                    height: MediaQuery.of(context).size.width *
-                                        0.38,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        color: Colors.grey[600],
-                                        size: 64.0,
+                                  } else {
+                                    return Container(
+                                      color: Colors.grey[300],
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.38,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.image,
+                                          color: Colors.grey[600],
+                                          size: 64.0,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 },
                                 fit: BoxFit.cover,
                                 height:
@@ -246,7 +247,12 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
+              ),
+            ),
           );
         }
       },
