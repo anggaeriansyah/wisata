@@ -154,17 +154,6 @@ class _TabBarWidgetState extends State<TabBarWidget>
                       child: const Center(
                           child: Text('Tidak ada koneksi internet')),
                     );
-                    // AlertDialog(
-                    //   title: Text('Tidak Ada Koneksi Internet'),
-                    //   content: Text(
-                    //       'Pastikan Anda terhubung ke internet dan coba lagi.'),
-                    //   actions: [
-                    //     TextButton(
-                    //       child: Text('Tutup'),
-                    //       onPressed: () => Navigator.pop(context),
-                    //     ),
-                    //   ],
-                    // );
                   } else {
                     // Koneksi tersedia, tampilkan tampilan normal
                     return FutureBuilder<Wisata2?>(

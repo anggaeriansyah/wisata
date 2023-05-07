@@ -31,22 +31,13 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
         json["imageGaleries"][2] ?? null,
         json["imageGaleries"][3] ?? null,
       ],
-      // imageGaleries: [
-      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][0].substring(7) ?? '1682872898666-aldepos-salaca.jpg'}',
-      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][1].substring(7) ?? '1682872898666-aldepos-salaca.jpg'}',
-      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][2] ?? 'null'}',
-      //   'https://wisata-server-production.up.railway.app/images/${json["imageGaleries"][3] ?? 'null'}'
-      // ],
-      // imageGaleries: (json['imageGaleries'] as List<dynamic>)
-      //     .map((e) => e as String?)
-      //     .toList(),
       id: json['_id'] as String,
       nama: json['nama'] as String,
       image:
           'https://wisata-server-production.up.railway.app/images/${(json['image'] as String).substring(7)}',
       tempClosed: json['tempClosed'] as bool,
       kategori: json['kategori'] as String,
-      distance: json['distance'] as int,
+      distance: 0,
     );
 
 Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
