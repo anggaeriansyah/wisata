@@ -1286,7 +1286,7 @@ class _DetailScreenState extends State<DetailScreen> {
     }
 
     if (widget.wisata.hariOp[now] == true) {
-      opn = 'Buka $hr pukul ${widget.wisata.jamOp[now].substring(0, 5)}';
+      opn = 'Buka $hr pukul ${widget.wisata.jamOp[nxt].substring(0, 5)}';
     } else {
       opn = 'Buka segera';
     }
