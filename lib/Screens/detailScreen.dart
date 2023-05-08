@@ -1078,9 +1078,6 @@ import 'package:glass/glass.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
 
 class DetailScreen extends StatefulWidget {
   // const DetailScreen({Key? key}) : super(key: key);
@@ -1099,42 +1096,40 @@ Completer<GoogleMapController> _controller = Completer();
 
 final List<Marker> _marker = [];
 String mapTheme = '';
-final String image = Get.arguments['image'];
-final String nama = Get.arguments['nama'];
-final String desa = Get.arguments['desa'];
-final String kec = Get.arguments['kec'];
-final double lt = Get.arguments['lat'];
-final double lg = Get.arguments['long'];
-final String tiket = Get.arguments['tiket'];
-final String desc = Get.arguments['desc'];
-final tempClosed = Get.arguments['tempClosed'];
-final distance = Get.arguments['distance'];
-final hariOp = [
-  Get.arguments['hSenin'],
-  Get.arguments['hSelasa'],
-  Get.arguments['hRabu'],
-  Get.arguments['hKamis'],
-  Get.arguments['hJumat'],
-  Get.arguments['hSabtu'],
-  Get.arguments['hMinggu'],
-];
-final List<String> jamOp = [
-  Get.arguments['jSenin'],
-  Get.arguments['jSelasa'],
-  Get.arguments['jRabu'],
-  Get.arguments['jKamis'],
-  Get.arguments['jJumat'],
-  Get.arguments['jSabtu'],
-  Get.arguments['jMinggu'],
-];
-final List<String?> imageGaleries = [
-  Get.arguments['imageGaleries'][0],
-  Get.arguments['imageGaleries'][1],
-  Get.arguments['imageGaleries'][2],
-  Get.arguments['imageGaleries'][3],
-];
-
-final List<String> kategori = Get.arguments['kategori'];
+// String image =
+//     'https://wisata-server-production.up.railway.app/images/1682872898666-aldepos-salaca.jpg';
+// String nama = 'tes';
+// String desa = 'tes';
+// String kec = 'tes';
+// double lt = -0011;
+// double lg = 1000;
+// String tiket = 'tes';
+// String desc = 'tes';
+// bool tempClosed = false;
+// int distance = 0;
+// List hariOp = [
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+// ];
+// List<String> jamOp = [
+//   '12:00 - 15:00',
+//   '12:00 - 15:00',
+//   '12:00 - 15:00',
+//   '12:00 - 15:00',
+//   '12:00 - 15:00',
+//   '12:00 - 15:00',
+//   '12:00 - 15:00',
+// ];
+// List<String?> imageGaleries = [
+//   'images//1682872898666-aldepos-salaca.jpg',
+//   'images//1682872898666-aldepos-salaca.jpg'
+// ];
+// String kategori = 'rekreasi';
 
 bool _getData = true;
 
@@ -1152,7 +1147,8 @@ class _DetailScreenState extends State<DetailScreen> {
   // late LatLng source =
   // LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
 
-  late LatLng destination = LatLng(lt, lg);
+  late LatLng destination =
+      LatLng(widget.wisata.alamat.latitude, widget.wisata.alamat.longitude);
 
   get galeries {
     // List img = [];
@@ -1160,8 +1156,8 @@ class _DetailScreenState extends State<DetailScreen> {
     //   imageGaleries[i] = imageGaleries[i]!.substring(7);
     //   setState(() {});
     // }
-    imageGaleries.removeWhere((value) => value == null);
-    return imageGaleries;
+    // imageGaleries.removeWhere((value) => value == null);
+    // return imageGaleries;
   }
 
   int get jam {
@@ -1181,18 +1177,20 @@ class _DetailScreenState extends State<DetailScreen> {
 
     String a = '$jam$menit';
     int an = int.parse(a);
-    String b = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String b = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
-        : '${jamOp[now].substring(0, 2)}${jamOp[now].substring(3, 5)}';
+        : '${widget.wisata.jamOp[now].substring(0, 2)}${widget.wisata.jamOp[now].substring(3, 5)}';
     int bn = int.parse(b);
-    String c = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String c = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
-        : '${jamOp[now].substring(8, 10)}${jamOp[now].substring(11, 13)}';
+        : '${widget.wisata.jamOp[now].substring(8, 10)}${widget.wisata.jamOp[now].substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (jamOp[now] == 'Buka 24 jam') {
+    if (widget.wisata.jamOp[now] == 'Buka 24 jam') {
       tdy = true;
-    } else if (hariOp[now] == true && an >= bn && an <= cn) {
+    } else if (widget.wisata.hariOp[now] == true && an >= bn && an <= cn) {
       tdy = true;
     } else {
       tdy = false;
@@ -1205,16 +1203,18 @@ class _DetailScreenState extends State<DetailScreen> {
     int now = DateTime.now().weekday.toInt() - 1;
     String a = '$jam$menit';
     int an = int.parse(a);
-    String b = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String b = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
-        : '${jamOp[now].substring(0, 2)}${jamOp[now].substring(3, 5)}';
+        : '${widget.wisata.jamOp[now].substring(0, 2)}${widget.wisata.jamOp[now].substring(3, 5)}';
     int bn = int.parse(b);
-    String c = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String c = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
-        : '${jamOp[now].substring(8, 10)}${jamOp[now].substring(11, 13)}';
+        : '${widget.wisata.jamOp[now].substring(8, 10)}${widget.wisata.jamOp[now].substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (hariOp[now] == true && (an <= cn)) {
+    if (widget.wisata.hariOp[now] == true && (an <= cn)) {
       ck = true;
     } else {
       ck = false;
@@ -1225,23 +1225,26 @@ class _DetailScreenState extends State<DetailScreen> {
   String get closed {
     String clsd;
     int now = DateTime.now().weekday.toInt() - 1;
-    String a = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String a = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
         : '$jam$menit';
     int an = int.parse(a);
-    String b = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String b = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
-        : '${jamOp[now].substring(0, 2)}${jamOp[now].substring(3, 5)}';
+        : '${widget.wisata.jamOp[now].substring(0, 2)}${widget.wisata.jamOp[now].substring(3, 5)}';
     int bn = int.parse(b);
-    String c = jamOp[now] == 'Buka 24 jam' || jamOp[now] == 'Tutup'
+    String c = widget.wisata.jamOp[now] == 'Buka 24 jam' ||
+            widget.wisata.jamOp[now] == 'Tutup'
         ? '0'
-        : '${jamOp[now].substring(8, 10)}${jamOp[now].substring(11, 13)}';
+        : '${widget.wisata.jamOp[now].substring(8, 10)}${widget.wisata.jamOp[now].substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (jamOp[now] == 'Buka 24 jam') {
+    if (widget.wisata.jamOp[now] == 'Buka 24 jam') {
       clsd = "Buka 24 jam";
-    } else if ((hariOp[now] == true && an >= bn) && (an < cn)) {
-      clsd = 'Tutup pukul ${jamOp[now].substring(8, 13)}';
+    } else if ((widget.wisata.hariOp[now] == true && an >= bn) && (an < cn)) {
+      clsd = 'Tutup pukul ${widget.wisata.jamOp[now].substring(8, 13)}';
     } else {
       clsd = '';
     }
@@ -1282,8 +1285,8 @@ class _DetailScreenState extends State<DetailScreen> {
         hr = '';
     }
 
-    if (hariOp[now] == true) {
-      opn = 'Buka $hr pukul ${jamOp[now].substring(0, 5)}';
+    if (widget.wisata.hariOp[now] == true) {
+      opn = 'Buka $hr pukul ${widget.wisata.jamOp[now].substring(0, 5)}';
     } else {
       opn = 'Buka segera';
     }
@@ -1298,8 +1301,50 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
     super.initState();
+    // String image = Get.arguments['image'];
+    // String nama = Get.arguments['nama'];
+    // String desa = Get.arguments['desa'];
+    // String kec = Get.arguments['kec'];
+    // double lt = Get.arguments['lat'];
+    // double lg = Get.arguments['long'];
+    // String tiket = Get.arguments['tiket'];
+    // String desc = Get.arguments['desc'];
+    // bool tempClosed = Get.arguments['tempClosed'];
+    // int distance = Get.arguments['distance'];
+    // List hariOp = [
+    //   Get.arguments['hSenin'],
+    //   Get.arguments['hSelasa'],
+    //   Get.arguments['hRabu'],
+    //   Get.arguments['hKamis'],
+    //   Get.arguments['hJumat'],
+    //   Get.arguments['hSabtu'],
+    //   Get.arguments['hMinggu'],
+    // ];
+    // List<String> jamOp = [
+    //   Get.arguments['jSenin'],
+    //   Get.arguments['jSelasa'],
+    //   Get.arguments['jRabu'],
+    //   Get.arguments['jKamis'],
+    //   Get.arguments['jJumat'],
+    //   Get.arguments['jSabtu'],
+    //   Get.arguments['jMinggu'],
+    // ];
+    // List<String?> imageGaleries = [
+    //   Get.arguments['imageGaleries'][0],
+    //   Get.arguments['imageGaleries'][1],
+    //   Get.arguments['imageGaleries'][2],
+    //   Get.arguments['imageGaleries'][3],
+    // ];
+
+    // String kategori = Get.arguments['kategori'];
+
     // polylinePoints = PolylinePoints();
     // getData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _cekLokasi() async {
@@ -1392,7 +1437,7 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   Future<void> _getPopup() async {
-    drawPolyline(lt.toString());
+    drawPolyline(widget.wisata.alamat.latitude.toString());
 
     CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng((_currentPosition!.latitude + destination.latitude) / 2,
@@ -1408,7 +1453,8 @@ class _DetailScreenState extends State<DetailScreen> {
     _marker.clear();
     _marker.add(Marker(
       markerId: const MarkerId('value'),
-      position: LatLng(lt, lg),
+      position:
+          LatLng(widget.wisata.alamat.latitude, widget.wisata.alamat.longitude),
       icon: await getBitmapDescriptorFromAssetBytes(
           "assets/images/marker.png", 95),
     ));
@@ -1529,7 +1575,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       children: [
                                         Text(
                                           // nama[0].toString(),
-                                          nama,
+                                          widget.wisata.nama,
                                           style: const TextStyle(
                                               fontSize: 15,
                                               color: Colors.white,
@@ -1544,7 +1590,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           color: Colors.grey,
                                         ),
                                         Text(
-                                          desa,
+                                          widget.wisata.alamat.desa,
                                           style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -1680,7 +1726,7 @@ class _DetailScreenState extends State<DetailScreen> {
         title: Text(
           // style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           // nama[0].toString(),
-          nama,
+          widget.wisata.nama,
           style: const TextStyle(color: Colors.black),
         ),
         actions: [
@@ -1747,7 +1793,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               bottomRight: Radius.circular(20),
                             ),
                             child: Image(
-                              image: NetworkImage(image.toString()),
+                              image: NetworkImage(widget.wisata.image),
                               fit: BoxFit.cover,
                               loadingBuilder: (BuildContext context,
                                   Widget child,
@@ -1798,7 +1844,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   child: Row(
                                     children: [
                                       Text(
-                                        desa.toString(),
+                                        widget.wisata.alamat.desa,
                                         style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500,
@@ -1827,7 +1873,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    tempClosed.toString() == 'false'
+                    widget.wisata.tempClosed.toString() == 'false'
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
@@ -1855,7 +1901,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  hariOp[now] == true
+                                  today == true
                                       ? Text(
                                           'Buka',
                                           style: TextStyle(
@@ -1879,7 +1925,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         today == true
                                             ? closed
                                             : cek == true
-                                                ? 'Buka pukul ${jamOp[now].substring(0, 5)}'
+                                                ? 'Buka pukul ${widget.wisata.jamOp[now].substring(0, 5)}'
                                                 : open,
                                         // '',
                                         style: const TextStyle(
@@ -2032,70 +2078,84 @@ class _DetailScreenState extends State<DetailScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                        jamOp[0] == 'Buka 24 jam' ||
-                                                jamOp[0] == 'Tutup'
-                                            ? jamOp[0]
-                                            : jamOp[0] + ' WIB',
+                                        widget.wisata.jamOp[0] ==
+                                                    'Buka 24 jam' ||
+                                                widget.wisata.jamOp[0] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[0]
+                                            : widget.wisata.jamOp[0] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
-                                        jamOp[1] == 'Buka 24 jam' ||
-                                                jamOp[1] == 'Tutup'
-                                            ? jamOp[1]
-                                            : jamOp[1] + ' WIB',
+                                        widget.wisata.jamOp[1] ==
+                                                    'Buka 24 jam' ||
+                                                widget.wisata.jamOp[1] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[1]
+                                            : widget.wisata.jamOp[1] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
-                                        jamOp[2] == 'Buka 24 jam' ||
-                                                jamOp[2] == 'Tutup'
-                                            ? jamOp[2]
-                                            : jamOp[2] + ' WIB',
+                                        widget.wisata.jamOp[2] ==
+                                                    'Buka 24 jam' ||
+                                                widget.wisata.jamOp[2] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[2]
+                                            : widget.wisata.jamOp[2] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
-                                        jamOp[3] == 'Buka 34 jam' ||
-                                                jamOp[3] == 'Tutup'
-                                            ? jamOp[3]
-                                            : jamOp[3] + ' WIB',
+                                        widget.wisata.jamOp[3] ==
+                                                    'Buka 34 jam' ||
+                                                widget.wisata.jamOp[3] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[3]
+                                            : widget.wisata.jamOp[3] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
-                                        jamOp[4] == 'Buka 24 jam' ||
-                                                jamOp[4] == 'Tutup'
-                                            ? jamOp[4]
-                                            : jamOp[4] + ' WIB',
+                                        widget.wisata.jamOp[4] ==
+                                                    'Buka 24 jam' ||
+                                                widget.wisata.jamOp[4] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[4]
+                                            : widget.wisata.jamOp[4] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
-                                        jamOp[5] == 'Buka 25 jam' ||
-                                                jamOp[5] == 'Tutup'
-                                            ? jamOp[5]
-                                            : jamOp[5] + ' WIB',
+                                        widget.wisata.jamOp[5] ==
+                                                    'Buka 25 jam' ||
+                                                widget.wisata.jamOp[5] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[5]
+                                            : widget.wisata.jamOp[5] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
-                                        jamOp[6] == 'Buka 24 jam' ||
-                                                jamOp[6] == 'Tutup'
-                                            ? jamOp[6]
-                                            : jamOp[6] + ' WIB',
+                                        widget.wisata.jamOp[6] ==
+                                                    'Buka 24 jam' ||
+                                                widget.wisata.jamOp[6] ==
+                                                    'Tutup'
+                                            ? widget.wisata.jamOp[6]
+                                            : widget.wisata.jamOp[6] + ' WIB',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -2165,9 +2225,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                     Flexible(
                                       flex: 0,
                                       child: Text(
-                                        tiket.toString() == 'Gratis'
-                                            ? tiket.toString()
-                                            : 'Rp. ${tiket.toString()}',
+                                        widget.wisata.info.tiket.toString() ==
+                                                'Gratis'
+                                            ? widget.wisata.info.tiket
+                                                .toString()
+                                            : 'Rp. ${widget.wisata.info.tiket.toString()}',
                                         maxLines: 1,
                                         softWrap: false,
                                         style: const TextStyle(
@@ -2217,7 +2279,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         children: [
                                           Text(
                                             // 0.kategori == 'Rekreasi'
-                                            distance == 1
+                                            widget.wisata.kategori == 'rekreasi'
                                                 ? 'Penginapan'
                                                 : 'Camping',
                                             style: TextStyle(
@@ -2228,7 +2290,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
-                                            distance == 1
+                                            // ini salah
+                                            widget.wisata.kategori == 'rekreasi'
                                                 ? 'Tersedia'
                                                 : 'Tidak Tersedia',
                                             softWrap: false,
@@ -2275,7 +2338,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        desc.toString(),
+                        widget.wisata.info.deskripsi.toString(),
                         style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
@@ -2289,7 +2352,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                 ),
                 // 0.imageGalerys.length != 0
-                distance == 0
+                widget.wisata.imageGaleries.length != 0
                     ? const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
@@ -2302,7 +2365,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       )
                     : const SizedBox(),
                 // widget.wisata.imageGalerys.length != 0
-                galeries.length != 0
+                widget.wisata.getImageGaleries().length != 0
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Container(
@@ -2312,7 +2375,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             // itemCount: widget.wisata.imageGalerys.length,
-                            itemCount: galeries.length,
+                            itemCount: widget.wisata.getImageGaleries().length,
                             itemBuilder: (BuildContext context, int index) {
                               return Stack(
                                 alignment: Alignment.topLeft,
@@ -2328,7 +2391,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                           MaterialPageRoute(
                                             builder: (context) => PhotoView(
                                               imageProvider: NetworkImage(
-                                                  'https://wisata-server-production.up.railway.app/images/${imageGaleries[index]?.substring(7)}'),
+                                                  // 'https://wisata-server-production.up.railway.app/images/${imageGaleries[index]?.substring(7)}'
+                                                  widget.wisata
+                                                      .getImageGaleries()[index]
+                                                      .toString()),
                                               minScale: PhotoViewComputedScale
                                                       .contained *
                                                   1,
@@ -2344,7 +2410,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                             Radius.circular(20),
                                           ),
                                           child: Image.network(
-                                            "https://wisata-server-production.up.railway.app/images/${imageGaleries[index]?.substring(7)}",
+                                            widget.wisata
+                                                .getImageGaleries()[index]
+                                                .toString(),
                                             fit: BoxFit.cover,
                                             loadingBuilder:
                                                 (BuildContext context,
@@ -2385,7 +2453,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       )
                     : SizedBox(
                         child: Text(
-                            'https://wisata-server-production.up.railway.app/images/${imageGaleries[0]!.substring(7)}'),
+                            'https://wisata-server-production.up.railway.app/images/'),
                       ),
               ],
             ),

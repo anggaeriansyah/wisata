@@ -256,35 +256,35 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 70,
-              elevation: 0,
-              backgroundColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Expanded(
-                    child: BigAppText(
-                      text: 'Wisata Tenjolaya',
-                      size: 28,
-                    ),
+      body: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 70,
+            elevation: 0,
+            backgroundColor: Colors.white,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: BigAppText(
+                    text: 'Wisata Tenjolaya',
+                    size: 28,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, right: 5),
-                    child: Lottie.asset(
-                      'assets/lottie/paper-rocket.json',
-                      height: 35,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 5),
+                  child: Lottie.asset(
+                    'assets/lottie/paper-rocket.json',
+                    height: 35,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              ],
             ),
-            body: TabBarWidget()),
-      ),
+          ),
+          body: RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              onRefresh: _refresh,
+              child: TabBarWidget())),
     ));
   }
 }

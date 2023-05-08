@@ -51,6 +51,17 @@ class Datum {
     required this.distance,
   });
 
+  getImageGaleries() {
+    var list = [];
+    imageGaleries.removeWhere((value) => value == null);
+    // return imageGaleries;
+    for (var i = 0; i < imageGaleries.length; i++) {
+      list.add(
+          'https://wisata-server-production.up.railway.app/images/${imageGaleries[i]!.substring(7)}');
+    }
+    return list;
+  }
+
   int get jam {
     String j = DateFormat("HH").format(DateTime.now());
     int jData = int.parse(j);
