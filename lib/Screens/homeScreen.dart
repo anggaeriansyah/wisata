@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
-import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
 import 'package:wisata_tenjolaya/Screens/maps.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
-import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
-import 'package:wisata_tenjolaya/widgets/allCategories_widget.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
-import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
-import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
-import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
 import 'package:wisata_tenjolaya/widgets/tabBar_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../widgets/big_app_text.dart';
@@ -27,9 +20,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _HomeScreenState extends State<HomeScreen> {
+  // late TabController _tabController;
 
   cekKoneksi() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -52,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   // Future<List<Wisata2>>? futurWisata = null;
   // bool circular = false;
-  bool _isActive = false;
+  // bool _isActive = false;
 
   String? _currentAddress;
   Position? _currentPosition;
@@ -61,28 +53,33 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
-    _tabController.addListener(_handleTabSelection);
-    _getCurrentPosition();
+    // _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
+    // _tabController.addListener(_handleTabSelection);
+    // _getCurrentPosition();
     // getData();
   }
 
-  Future<Wisata2?> getData() async {
-    var res = await http.get(
-      Uri.parse("https://wisata-server-production.up.railway.app/wisata/api"),
-      headers: {
-        'Cache-Control': 'max-age=3600, public',
-      },
-    );
-    if (res.statusCode == 200) {
-      // circular = true;
-      Map<String, dynamic> data =
-          (json.decode(res.body) as Map<String, dynamic>);
-      return Wisata2.fromJson(data);
-    } else {
-      return null;
-    }
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {});
   }
+
+  // Future<Wisata2?> getData() async {
+  //   var res = await http.get(
+  //     Uri.parse("https://wisata-server-production.up.railway.app/wisata/api"),
+  //     headers: {
+  //       'Cache-Control': 'max-age=3600, public',
+  //     },
+  //   );
+  //   if (res.statusCode == 200) {
+  //     // circular = true;
+  //     Map<String, dynamic> data =
+  //         (json.decode(res.body) as Map<String, dynamic>);
+  //     return Wisata2.fromJson(data);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Future<Wisata2?> getDataRekreasi() async {
     var res = await http.get(
@@ -120,9 +117,7 @@ class _HomeScreenState extends State<HomeScreen>
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location permissions are permanently denied, we cannot request permissions.')));
-      setState(() {
-        _isActive = false;
-      });
+
       return false;
     }
     return true;
@@ -134,9 +129,6 @@ class _HomeScreenState extends State<HomeScreen>
 
     if (!hasPermission) {
       await Geolocator.checkPermission();
-      setState(() {
-        _isActive = false;
-      });
     } else {
       Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium)
           .then((Position position) {
@@ -144,7 +136,6 @@ class _HomeScreenState extends State<HomeScreen>
           () => _currentPosition = position,
         );
         _getAddressFromLatLng(_currentPosition!);
-        _isActive = true;
       }).catchError((e) {
         debugPrint(e);
       });
@@ -164,17 +155,17 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      setState(() {});
-    }
-  }
+  // _handleTabSelection() {
+  //   if (_tabController.indexIsChanging) {
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
-    getData();
+    // _tabController.dispose();
+    // getData();
   }
 
   // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -185,113 +176,116 @@ class _HomeScreenState extends State<HomeScreen>
     // TabController _tabController = TabController(length: 4, vsync: this);
 
     return Scaffold(
-        appBar: _isActive
-            ? AppBar(
-                toolbarHeight: kToolbarHeight * 0.7,
-                elevation: 0,
-                backgroundColor: Theme.of(context).primaryColor,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.place,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Text(
-                        _currentAddress ?? "",
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            overflow: TextOverflow.fade),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : AppBar(
-                elevation: 0,
-                toolbarHeight: 0,
-                backgroundColor: Colors.white,
-              ),
+        // appBar: _isActive
+        //     ? AppBar(
+        //         toolbarHeight: kToolbarHeight * 0.7,
+        //         elevation: 0,
+        //         backgroundColor: Theme.of(context).primaryColor,
+        //         title: Row(
+        //           mainAxisAlignment: MainAxisAlignment.start,
+        //           children: [
+        //             const Icon(
+        //               Icons.place,
+        //               color: Colors.white,
+        //               size: 20,
+        //             ),
+        //             const SizedBox(
+        //               width: 5,
+        //             ),
+        //             Expanded(
+        //               child: Text(
+        //                 _currentAddress ?? "",
+        //                 style: const TextStyle(
+        //                     color: Colors.white,
+        //                     fontSize: 14,
+        //                     overflow: TextOverflow.fade),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       )
+        //     : AppBar(
+        //         elevation: 0,
+        //         toolbarHeight: 0,
+        //         backgroundColor: Colors.white,
+        //       ),
         body: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: GestureDetector(
-              onTap: () {
-                Get.to(const WeatherScreen(), transition: Transition.downToUp);
-              },
-              child: const Icon(
-                Iconsax.cloud,
-                // FontAwesomeIcons.cloudBolt,
-                size: 30,
-                color: Colors.black,
-              ),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: () {
+            Get.to(const WeatherScreen(), transition: Transition.downToUp);
+          },
+          child: const Icon(
+            Iconsax.cloud,
+            // FontAwesomeIcons.cloudBolt,
+            size: 30,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        title: GestureDetector(
+          onTap: () {
+            Get.to(const SearchScreen(), transition: Transition.downToUp);
+          },
+          child: const SizedBox(
+            height: 50,
+            width: 50,
+            child: Icon(
+              Iconsax.search_normal,
+              size: 30,
+              color: Colors.black,
             ),
-            centerTitle: true,
-            title: GestureDetector(
-              onTap: () {
-                Get.to(const SearchScreen(), transition: Transition.downToUp);
+          ),
+        ),
+        actions: [
+          GestureDetector(
+              onTap: () async {
+                // if (_hashData) {
+                // } else {}
+                Get.to(const Maps(), transition: Transition.downToUp);
               },
-              child: const SizedBox(
-                height: 50,
-                width: 50,
+              child: const Padding(
+                padding: EdgeInsets.only(right: 20, left: 20),
                 child: Icon(
-                  Iconsax.search_normal,
+                  Iconsax.map,
                   size: 30,
                   color: Colors.black,
                 ),
+              )),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 70,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Expanded(
+                    child: BigAppText(
+                      text: 'Wisata Tenjolaya',
+                      size: 28,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 5),
+                    child: Lottie.asset(
+                      'assets/lottie/paper-rocket.json',
+                      height: 35,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ],
               ),
             ),
-            actions: [
-              GestureDetector(
-                  onTap: () async {
-                    // if (_hashData) {
-                    // } else {}
-                    Get.to(const Maps(), transition: Transition.downToUp);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    child: Icon(
-                      Iconsax.map,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                  )),
-            ],
-          ),
-          body: Scaffold(
-              appBar: AppBar(
-                toolbarHeight: 70,
-                elevation: 0,
-                backgroundColor: Colors.white,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: BigAppText(
-                        text: 'Wisata Tenjolaya',
-                        size: 28,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, right: 5),
-                      child: Lottie.asset(
-                        'assets/lottie/paper-rocket.json',
-                        height: 35,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              body: TabBarWidget()),
-        ));
+            body: TabBarWidget()),
+      ),
+    ));
   }
 }
 

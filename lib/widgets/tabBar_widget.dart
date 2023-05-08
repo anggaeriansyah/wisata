@@ -12,7 +12,7 @@ import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
 import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 
 class TabBarWidget extends StatefulWidget {
@@ -144,15 +144,14 @@ class _TabBarWidgetState extends State<TabBarWidget>
                 stream: Connectivity().onConnectivityChanged,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   final connectivityResult = snapshot.data;
                   if (connectivityResult == ConnectivityResult.none) {
                     // Tampilkan pesan kesalahan
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 50),
-                      child: const Center(
-                          child: Text('Tidak ada koneksi internet')),
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(child: Text('Tidak ada koneksi internet')),
                     );
                   } else {
                     // Koneksi tersedia, tampilkan tampilan normal
@@ -354,44 +353,12 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20),
-                                                    child: Image.network(
-                                                      !snapshot.hasData
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: !snapshot
+                                                              .hasData
                                                           ? 'https://png.pngtree.com/png-clipart/20220823/original/pngtree-loading-icon-dot-ring-vector-transparent-png-image_8462422.png'
                                                           : snapshot.data!
                                                               .data[i].image,
-                                                      loadingBuilder: (BuildContext
-                                                              context,
-                                                          Widget child,
-                                                          ImageChunkEvent?
-                                                              loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        } else {
-                                                          return Container(
-                                                            color: Colors
-                                                                .grey[300],
-                                                            height: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.38,
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.5,
-                                                            child: Center(
-                                                              child: Icon(
-                                                                Icons.image,
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                size: 64.0,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
                                                       fit: BoxFit.cover,
                                                       height:
                                                           MediaQuery.of(context)
@@ -403,7 +370,58 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                                                   .size
                                                                   .width *
                                                               0.5,
-                                                    )),
+                                                    )
+                                                    // Image.network(
+                                                    //   !snapshot.hasData
+                                                    //       ? 'https://png.pngtree.com/png-clipart/20220823/original/pngtree-loading-icon-dot-ring-vector-transparent-png-image_8462422.png'
+                                                    //       : snapshot.data!
+                                                    //           .data[i].image,
+                                                    //   loadingBuilder: (BuildContext
+                                                    //           context,
+                                                    //       Widget child,
+                                                    //       ImageChunkEvent?
+                                                    //           loadingProgress) {
+                                                    //     if (loadingProgress ==
+                                                    //         null) {
+                                                    //       return child;
+                                                    //     } else {
+                                                    //       return Container(
+                                                    //         color: Colors
+                                                    //             .grey[300],
+                                                    //         height: MediaQuery.of(
+                                                    //                     context)
+                                                    //                 .size
+                                                    //                 .width *
+                                                    //             0.38,
+                                                    //         width: MediaQuery.of(
+                                                    //                     context)
+                                                    //                 .size
+                                                    //                 .width *
+                                                    //             0.5,
+                                                    //         child: Center(
+                                                    //           child: Icon(
+                                                    //             Icons.image,
+                                                    //             color: Colors
+                                                    //                 .grey[600],
+                                                    //             size: 64.0,
+                                                    //           ),
+                                                    //         ),
+                                                    //       );
+                                                    //     }
+                                                    //   },
+                                                    //   fit: BoxFit.cover,
+                                                    //   height:
+                                                    //       MediaQuery.of(context)
+                                                    //               .size
+                                                    //               .width *
+                                                    //           0.38,
+                                                    //   width:
+                                                    //       MediaQuery.of(context)
+                                                    //               .size
+                                                    //               .width *
+                                                    //           0.5,
+                                                    // )
+                                                    ),
                                               ),
                                               const SizedBox(height: 5),
                                               Padding(
