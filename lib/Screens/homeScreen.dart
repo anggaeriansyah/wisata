@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:wisata_tenjolaya/Screens/maps.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
+import 'package:wisata_tenjolaya/services/api_service.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
 import 'package:wisata_tenjolaya/widgets/tabBar_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -22,23 +24,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // late TabController _tabController;
+  late Future<Wisata2?> _futureWisata;
+  late Future<Wisata2?> _futureWisataRekreasi;
+  late Future<Wisata2?> _futureWisataSitus;
+  late Future<Wisata2?> _futureWisataAirTerjun;
+
+  bool online = false;
 
   cekKoneksi() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text('Tidak Ada Koneksi Internet'),
-          content: Text('Pastikan Anda terhubung ke internet dan coba lagi.'),
-          actions: [
-            TextButton(
-              child: Text('Tutup'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      );
+      setState(() {
+        online = false;
+      });
+    } else {
+      setState(() {
+        online = true;
+      });
     }
   }
 
@@ -57,46 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
     // _tabController.addListener(_handleTabSelection);
     // _getCurrentPosition();
     // getData();
+    cekKoneksi();
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 1));
-    setState(() {});
-  }
-
-  // Future<Wisata2?> getData() async {
-  //   var res = await http.get(
-  //     Uri.parse("https://wisata-server-production.up.railway.app/wisata/api"),
-  //     headers: {
-  //       'Cache-Control': 'max-age=3600, public',
-  //     },
-  //   );
-  //   if (res.statusCode == 200) {
-  //     // circular = true;
-  //     Map<String, dynamic> data =
-  //         (json.decode(res.body) as Map<String, dynamic>);
-  //     return Wisata2.fromJson(data);
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  Future<Wisata2?> getDataRekreasi() async {
-    var res = await http.get(
-      Uri.parse(
-          "https://wisata-server-production.up.railway.app/wisata/api/rekreasi"),
-      headers: {
-        'Cache-Control': 'max-age=3600, public',
-      },
-    );
-    if (res.statusCode == 200) {
-      // circular = true;
-      Map<String, dynamic> data =
-          (json.decode(res.body) as Map<String, dynamic>);
-      return Wisata2.fromJson(data);
-    } else {
-      return null;
-    }
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      cekKoneksi();
+      // ApiService(cacheManager: DefaultCacheManager()).refresh();
+    });
   }
 
   Future<bool> _handleLocationPermission() async {
@@ -272,10 +243,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10, right: 5),
-                  child: Lottie.asset(
-                    'assets/lottie/paper-rocket.json',
-                    height: 35,
-                    fit: BoxFit.cover,
+                  child: GestureDetector(
+                    onTap: () => cekKoneksi(),
+                    child: Lottie.asset(
+                      'assets/lottie/paper-rocket.json',
+                      height: 35,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               ],
@@ -284,7 +258,44 @@ class _HomeScreenState extends State<HomeScreen> {
           body: RefreshIndicator(
               color: Theme.of(context).primaryColor,
               onRefresh: _refresh,
-              child: TabBarWidget())),
+              child: online
+                  ? TabBarWidget()
+                  : Stack(
+                      children: [
+                        CustomScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          slivers: <Widget>[
+                            SliverToBoxAdapter(
+                              child: Container(
+                                height: MediaQuery.of(context).size.height,
+                              ),
+                            ),
+                            // tambahkan Sliver lainnya sesuai kebutuhan
+                          ],
+                        ),
+                        Center(
+                          child: Text(
+                            'Tidak ada koneksi internet',
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    )
+
+              // ListView(physics: BouncingScrollPhysics(),
+              // children: [
+              //     Stack(children: [
+              //       Center(
+              //         child: Text(
+              //           'Tidak ada koneksi internet',
+              //           style:
+              //               TextStyle(color: Colors.black54, fontSize: 16),
+              //         ),
+              //       ),
+              //     ]),
+              //   ])
+              )),
     ));
   }
 }
