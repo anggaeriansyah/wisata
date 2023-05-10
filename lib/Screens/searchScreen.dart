@@ -6,7 +6,10 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
 import 'dart:math' show cos, sqrt, asin;
+
+import 'package:wisata_tenjolaya/services/api_service.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -20,7 +23,9 @@ void updateList(String value) {}
 class _SearchScreenState extends State<SearchScreen> {
   // TextEditingController? _textEditingController = TextEditingController();
 
-  List listItem = listWisata;
+  List listItem = [];
+  late Future<Wisata2?> _futureWisata;
+  // List listItem = listWisata;
   List listItemOnSearch = [];
 
   String? _currentAddress;
@@ -35,6 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _cekLokasi();
     onGetNearby();
     setState(() {
+      _futureWisata = ApiService().getData();
       listItemOnSearch = listItem;
     });
   }
@@ -49,8 +55,9 @@ class _SearchScreenState extends State<SearchScreen> {
   onGetNearby() {
     if (_isActive) {
       for (var i = 0; i < listItemOnSearch.length; i++) {
-        listItemOnSearch[i].distance = double.parse(
-            nearby(listItemOnSearch[i].lat, listItemOnSearch[i].long));
+        listItemOnSearch[i].distance = double.parse(nearby(
+            listItemOnSearch[i].alamat.latitude,
+            listItemOnSearch[i].alamat.longitude));
       }
     }
     return;
@@ -66,14 +73,14 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   String nearby(double vLat, double vLong) {
-    var distance;
+    var distances;
     if (_isActive) {
-      distance = calculateDistance(
+      distances = calculateDistance(
           _currentPosition!.latitude, _currentPosition!.longitude, vLat, vLong);
     } else {
-      distance = 0;
+      distances = 0;
     }
-    return distance.toStringAsFixed(2);
+    return distances.toStringAsFixed(2);
   }
 
   void _cekLokasi() async {
@@ -132,8 +139,8 @@ class _SearchScreenState extends State<SearchScreen> {
           listItemOnSearch[i].distance = double.parse(calculateDistance(
                   _currentPosition!.latitude,
                   _currentPosition!.longitude,
-                  listItemOnSearch[i].lat,
-                  listItemOnSearch[i].long)
+                  listItemOnSearch[i].alamat.latitude,
+                  listItemOnSearch[i].alamat.longitude)
               .toStringAsFixed(2));
         }
         _isActive = true;
@@ -159,16 +166,18 @@ class _SearchScreenState extends State<SearchScreen> {
           () => _currentPosition = position,
         );
         _getAddressFromLatLng(_currentPosition!);
-        for (var i = 0; i < listItemOnSearch.length; i++) {
-          listItemOnSearch[i].distance = double.parse(calculateDistance(
-                  _currentPosition!.latitude,
-                  _currentPosition!.longitude,
-                  listItemOnSearch[i].lat,
-                  listItemOnSearch[i].long)
-              .toStringAsFixed(2));
-        }
-        listItemOnSearch.sort((a, b) => a.distance.compareTo(b.distance));
-        _isActive = true;
+        setState(() {
+          for (var i = 0; i < listItemOnSearch.length; i++) {
+            listItemOnSearch[i].distance = double.parse(calculateDistance(
+                    _currentPosition!.latitude,
+                    _currentPosition!.longitude,
+                    listItemOnSearch[i].alamat.latitude,
+                    listItemOnSearch[i].alamat.longitude)
+                .toStringAsFixed(2));
+          }
+          listItemOnSearch.sort((a, b) => a.distance.compareTo(b.distance));
+          _isActive = true;
+        });
       }).catchError((e) {
         debugPrint(e);
       });
@@ -203,7 +212,7 @@ class _SearchScreenState extends State<SearchScreen> {
             color: Colors.black,
           ),
         ),
-        title: const Text(
+        title: Text(
           'Cari Wisata',
           style: TextStyle(
               fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500),
@@ -228,8 +237,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       fontWeight: FontWeight.w500,
                     )),
                 onTap: () {
-                  listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
-                  setState(() {});
+                  setState(() {
+                    listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
+                  });
                 },
               ),
               PopupMenuItem(
@@ -241,28 +251,29 @@ class _SearchScreenState extends State<SearchScreen> {
                       fontWeight: FontWeight.w500,
                     )),
                 onTap: () {
-                  listItemOnSearch.sort((a, b) => b.nama.compareTo(a.nama));
-                  setState(() {});
+                  setState(() {
+                    listItemOnSearch.sort((a, b) => b.nama.compareTo(a.nama));
+                  });
                 },
               ),
-              PopupMenuItem(
-                  height: kMinInteractiveDimension * 0.7,
-                  child: const Text('Jarak',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      )),
-                  onTap: () {
-                    if (_isActive) {
-                      setState(() {
-                        listItemOnSearch
-                            .sort((a, b) => a.distance.compareTo(b.distance));
-                      });
-                    } else {
-                      _listTerdekat();
-                    }
-                  }),
+              // PopupMenuItem(
+              //     height: kMinInteractiveDimension * 0.7,
+              //     child: const Text('Jarak',
+              //         style: TextStyle(
+              //           fontSize: 13,
+              //           color: Colors.black,
+              //           fontWeight: FontWeight.w500,
+              //         )),
+              //     onTap: () {
+              //       if (_isActive) {
+              //         setState(() {
+              //           listItemOnSearch
+              //               .sort((a, b) => a.distance.compareTo(b.distance));
+              //         });
+              //       } else {
+              //         _listTerdekat();
+              //       }
+              //     }),
             ],
             //
             child: const Padding(
@@ -322,143 +333,169 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
           ),
-          body: listItemOnSearch.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'Wisata tidak ditemukan',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, color: Colors.black54),
-                    ),
-                  ),
-                )
-              : Container(
-                  padding: const EdgeInsets.only(top: 10, bottom: 0),
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: listItemOnSearch.length,
-                    itemBuilder: (BuildContext context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(DetailScreen(wisata: index),
-                              transition: Transition.downToUp);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                            top: 4,
-                            left: 20,
-                            right: 20,
-                            bottom: 15,
-                          ),
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 2),
-                                blurRadius: 6,
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
+          body:
+              // listItemOnSearch.isEmpty
+              //     ? const Padding(
+              //         padding: EdgeInsets.only(top: 20),
+              //         child: Align(
+              //           alignment: Alignment.topCenter,
+              //           child: Text(
+              //             'Wisata tidak ditemukan',
+              //             style: TextStyle(
+              //                 fontWeight: FontWeight.w500, color: Colors.black54),
+              //           ),
+              //         ),
+              //       )
+              //     :
+              FutureBuilder<Wisata2?>(
+                  future: _futureWisata,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      listItem.clear();
+                      listItem.addAll(snapshot.data!.data);
+                      return Container(
+                        padding: const EdgeInsets.only(top: 10, bottom: 0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: listItemOnSearch.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                    DetailScreen(
+                                        wisata: listItemOnSearch[index]),
+                                    transition: Transition.downToUp);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  top: 4,
+                                  left: 20,
+                                  right: 20,
+                                  bottom: 15,
+                                ),
+                                height: 80,
                                 decoration: BoxDecoration(
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      bottomLeft: Radius.circular(20)),
-                                  child: Image(
-                                    height: 80,
-                                    width: 80,
-                                    image: AssetImage(
-                                        listItemOnSearch[index].image),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 3),
-                                  leading: Container(
-                                    padding: const EdgeInsets.only(right: 60),
-                                    child: const Text(''),
-                                  ),
-                                  title: Text(
-                                    listItemOnSearch[index].nama,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                  ),
-                                  subtitle: Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Flexible(
-                                          child: Icon(
-                                            FontAwesomeIcons.locationArrow,
-                                            size: 13,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Text(
-                                            listItemOnSearch[index].alamat,
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
-                                          ),
-                                        ),
-                                      ],
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 6,
                                     ),
-                                  ),
-                                  trailing: _isActive
-                                      ? Text(
-                                          '${listItemOnSearch[index].distance.toString()} km',
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            bottomLeft: Radius.circular(20)),
+                                        child: Image(
+                                          height: 80,
+                                          width: 80,
+                                          image: NetworkImage(
+                                              listItemOnSearch[index].image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 20.0, vertical: 3),
+                                        leading: Container(
+                                          padding:
+                                              const EdgeInsets.only(right: 60),
+                                          child: const Text(''),
+                                        ),
+                                        title: Text(
+                                          listItemOnSearch[index].nama,
                                           style: const TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500),
-                                          maxLines: 2,
-                                          textAlign: TextAlign.right,
-                                          softWrap: true,
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
+                                          maxLines: 1,
+                                          softWrap: false,
                                           overflow: TextOverflow.fade,
-                                        )
-                                      : Padding(
+                                        ),
+                                        subtitle: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 5),
-                                          child: Icon(
-                                            Icons.keyboard_arrow_right_rounded,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            size: 30.0,
+                                          child: Row(
+                                            children: <Widget>[
+                                              Flexible(
+                                                child: Icon(
+                                                  FontAwesomeIcons
+                                                      .locationArrow,
+                                                  size: 13,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Flexible(
+                                                flex: 5,
+                                                child: Text(
+                                                  listItemOnSearch[index]
+                                                      .alamat
+                                                      .desa,
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                  overflow: TextOverflow.fade,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        )),
-                            ],
-                          ),
+                                        ),
+                                        trailing: _isActive
+                                            ? Text(
+                                                '${listItemOnSearch[index].distance.toString()} km',
+                                                style: const TextStyle(
+                                                    color: Colors.black87,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 2,
+                                                textAlign: TextAlign.right,
+                                                softWrap: true,
+                                                overflow: TextOverflow.fade,
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Icon(
+                                                  Icons
+                                                      .keyboard_arrow_right_rounded,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  size: 30.0,
+                                                ),
+                                              )),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
-                )),
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.black54),
+                      ),
+                    );
+                  })),
     );
   }
 }

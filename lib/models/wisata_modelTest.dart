@@ -35,7 +35,7 @@ class Datum {
   String image;
   bool tempClosed;
   String kategori;
-  int distance;
+  double distance;
 
   Datum({
     required this.alamat,

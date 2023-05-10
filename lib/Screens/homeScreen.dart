@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             // tambahkan Sliver lainnya sesuai kebutuhan
                           ],
                         ),
-                        Center(
+                        const Center(
                           child: Text(
                             'Tidak ada koneksi internet',
                             style:

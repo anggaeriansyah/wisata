@@ -37,7 +37,7 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
           'https://wisata-server-production.up.railway.app/images/${(json['image'] as String).substring(7)}',
       tempClosed: json['tempClosed'] as bool,
       kategori: json['kategori'] as String,
-      distance: 0,
+      distance: double.parse('0.${json['distance']}'),
     );
 
 Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
