@@ -54,11 +54,6 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {});
   }
 
-  onAscending() {
-    listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
-    setState(() {});
-  }
-
   onGetNearby() {
     if (_isActive) {
       for (var i = 0; i < listItemOnSearch.length; i++) {
@@ -246,10 +241,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         fontWeight: FontWeight.w500,
                       )),
                   onTap: () {
-                    onAscending();
-                    // setState(() {
-                    //   listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
-                    // });
+                    setState(() {
+                      listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
+                    });
                   },
                 ),
                 PopupMenuItem(
@@ -350,7 +344,8 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           body:
               // listItemOnSearch.isEmpty
-              //     ? const Padding(
+              //     ?
+              //const Padding(
               //         padding: EdgeInsets.only(top: 20),
               //         child: Align(
               //           alignment: Alignment.topCenter,
@@ -501,6 +496,22 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                             );
                           },
+                        ),
+                      );
+                    }
+                    if (snapshot.hasData && listItemOnSearch.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Center(
+                            child: Text(
+                              'Wisata tidak ditemukan',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black54),
+                            ),
+                          ),
                         ),
                       );
                     }
