@@ -21,7 +21,7 @@ class SearchScreen extends StatefulWidget {
 void updateList(String value) {}
 
 class _SearchScreenState extends State<SearchScreen> {
-  // TextEditingController? _textEditingController = TextEditingController();
+  TextEditingController? _textEditingController = TextEditingController();
 
   List listItem = [];
   late Future<Wisata2?> _futureWisata;
@@ -33,6 +33,8 @@ class _SearchScreenState extends State<SearchScreen> {
   double? _cLat;
   double? _cLong;
   bool _isActive = false;
+
+  bool _ok = false;
 
   @override
   void initState() {
@@ -49,6 +51,11 @@ class _SearchScreenState extends State<SearchScreen> {
     listItemOnSearch = listItem
         .where((element) => element.nama.toLowerCase().contains(search))
         .toList();
+    setState(() {});
+  }
+
+  onAscending() {
+    listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
     setState(() {});
   }
 
@@ -221,67 +228,71 @@ class _SearchScreenState extends State<SearchScreen> {
           overflow: TextOverflow.fade,
         ),
         actions: [
-          PopupMenuButton(
-            elevation: 3,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            position: PopupMenuPosition.under,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                height: kMinInteractiveDimension * 0.7,
-                child: const Text('A-Z',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    )),
-                onTap: () {
-                  setState(() {
-                    listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
-                  });
-                },
+          Visibility(
+            visible: _ok,
+            child: PopupMenuButton(
+              elevation: 3,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              PopupMenuItem(
-                height: kMinInteractiveDimension * 0.7,
-                child: const Text('Z-A',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    )),
-                onTap: () {
-                  setState(() {
-                    listItemOnSearch.sort((a, b) => b.nama.compareTo(a.nama));
-                  });
-                },
-              ),
-              // PopupMenuItem(
-              //     height: kMinInteractiveDimension * 0.7,
-              //     child: const Text('Jarak',
-              //         style: TextStyle(
-              //           fontSize: 13,
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.w500,
-              //         )),
-              //     onTap: () {
-              //       if (_isActive) {
-              //         setState(() {
-              //           listItemOnSearch
-              //               .sort((a, b) => a.distance.compareTo(b.distance));
-              //         });
-              //       } else {
-              //         _listTerdekat();
-              //       }
-              //     }),
-            ],
-            //
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Icon(
-                Iconsax.filter,
-                color: Colors.black,
-                size: 26,
+              position: PopupMenuPosition.under,
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  height: kMinInteractiveDimension * 0.7,
+                  child: const Text('A-Z',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  onTap: () {
+                    onAscending();
+                    // setState(() {
+                    //   listItemOnSearch.sort((a, b) => a.nama.compareTo(b.nama));
+                    // });
+                  },
+                ),
+                PopupMenuItem(
+                  height: kMinInteractiveDimension * 0.7,
+                  child: const Text('Z-A',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  onTap: () {
+                    setState(() {
+                      listItemOnSearch.sort((a, b) => b.nama.compareTo(a.nama));
+                    });
+                  },
+                ),
+                PopupMenuItem(
+                    height: kMinInteractiveDimension * 0.7,
+                    child: const Text('Jarak',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    onTap: () {
+                      if (_isActive) {
+                        setState(() {
+                          listItemOnSearch
+                              .sort((a, b) => a.distance.compareTo(b.distance));
+                        });
+                      } else {
+                        _listTerdekat();
+                      }
+                    }),
+              ],
+              //
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(
+                  Iconsax.filter,
+                  color: Colors.black,
+                  size: 26,
+                ),
               ),
             ),
           ),
@@ -311,7 +322,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 //   });
                 // },
 
-                onChanged: ((value) => onSearch(value)),
+                // onChanged: ((value) => onSearch(value)),
+                onChanged: (value) {
+                  onSearch(value);
+                  _ok = true;
+                },
                 style: const TextStyle(height: 1.2, color: Colors.black54),
                 // autofocus: true,
                 cursorColor: Colors.black54,
@@ -489,7 +504,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       );
                     }
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(
                         valueColor:
                             AlwaysStoppedAnimation<Color>(Colors.black54),
