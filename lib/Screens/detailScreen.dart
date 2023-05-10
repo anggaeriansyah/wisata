@@ -1255,8 +1255,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                             Radius.circular(20),
                                           ),
                                           child: Image.network(
-                                            widget.wisata
-                                                .getImageGaleries()[index]
+                                            widget
+                                                .wisata.getImageGaleries[index]
                                                 .toString(),
                                             fit: BoxFit.cover,
                                             loadingBuilder:

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
@@ -363,6 +364,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     if (snapshot.hasData) {
                       listItem.clear();
                       listItem.addAll(snapshot.data!.data);
+                      // listItem = snapshot.data!.data.toList();
                       return Container(
                         padding: const EdgeInsets.only(top: 10, bottom: 0),
                         child: ListView.builder(
@@ -403,17 +405,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20)),
-                                        child: Image(
-                                          height: 80,
-                                          width: 80,
-                                          image: NetworkImage(
-                                              listItemOnSearch[index].image),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              bottomLeft: Radius.circular(20)),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                listItemOnSearch[index].image,
+                                            height: 80,
+                                            width: 80,
+                                            fit: BoxFit.cover,
+                                          )
+                                          // NetworkImage(
+                                          //     listItemOnSearch[index].image),
+                                          // fit: BoxFit.cover,
+                                          // ),
+                                          ),
                                     ),
                                     ListTile(
                                         contentPadding:
@@ -496,22 +502,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                             );
                           },
-                        ),
-                      );
-                    }
-                    if (snapshot.hasData && listItemOnSearch.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Center(
-                            child: Text(
-                              'Wisata tidak ditemukan',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black54),
-                            ),
-                          ),
                         ),
                       );
                     }
