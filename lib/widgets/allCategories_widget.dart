@@ -52,35 +52,7 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
               for (int i = 0; i < snapshot.data!.data.length; i++)
                 GestureDetector(
                   onTap: () {
-                    Get.to(DetailScreen(wisata: snapshot.data!.data[i].id),
-                        arguments: {
-                          'image': snapshot.data!.data[i].image,
-                          'nama': snapshot.data!.data[i].nama,
-                          'desa': snapshot.data!.data[i].alamat.desa,
-                          'kec': snapshot.data!.data[i].alamat.kec,
-                          'lat': snapshot.data!.data[i].alamat.latitude,
-                          'long': snapshot.data!.data[i].alamat.longitude,
-                          'tiket': snapshot.data!.data[i].info.tiket,
-                          'desc': snapshot.data!.data[i].info.deskripsi,
-                          'tempClosed': snapshot.data!.data[i].tempClosed,
-                          'distance': snapshot.data!.data[i].distance,
-                          'hSenin': snapshot.data!.data[i].hariOp[0],
-                          'hSelasa': snapshot.data!.data[i].hariOp[1],
-                          'hRabu': snapshot.data!.data[i].hariOp[2],
-                          'hKamis': snapshot.data!.data[i].hariOp[3],
-                          'hJumat': snapshot.data!.data[i].hariOp[4],
-                          'hSabtu': snapshot.data!.data[i].hariOp[5],
-                          'hMinggu': snapshot.data!.data[i].hariOp[6],
-                          'jSenin': snapshot.data!.data[i].jamOp[0],
-                          'jSelasa': snapshot.data!.data[i].jamOp[1],
-                          'jRabu': snapshot.data!.data[i].jamOp[2],
-                          'jKamis': snapshot.data!.data[i].jamOp[3],
-                          'jJumat': snapshot.data!.data[i].jamOp[4],
-                          'jSabtu': snapshot.data!.data[i].jamOp[5],
-                          'jMinggu': snapshot.data!.data[i].jamOp[6],
-                          'imageGaleries': snapshot.data!.data[i].imageGaleries,
-                          'kategori': snapshot.data!.data[i].kategori
-                        },
+                    Get.to(DetailScreen(wisata: snapshot.data!.data[i]),
                         transition: Transition.downToUp);
                   },
                   child: Container(
@@ -103,39 +75,39 @@ class AllCategoriesWidgetState extends State<AllCategoriesWidget> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.to(
-                                DetailScreen(wisata: snapshot.data!.data[i].id),
-                                arguments: {
-                                  'image': snapshot.data!.data[i].image,
-                                  'nama': snapshot.data!.data[i].nama,
-                                  'desa': snapshot.data!.data[i].alamat.desa,
-                                  'kec': snapshot.data!.data[i].alamat.kec,
-                                  'lat': snapshot.data!.data[i].alamat.latitude,
-                                  'long':
-                                      snapshot.data!.data[i].alamat.longitude,
-                                  'tiket': snapshot.data!.data[i].info.tiket,
-                                  'desc': snapshot.data!.data[i].info.deskripsi,
-                                  'tempClosed':
-                                      snapshot.data!.data[i].tempClosed,
-                                  'distance': snapshot.data!.data[i].distance,
-                                  'hSenin': snapshot.data!.data[i].hariOp[0],
-                                  'hSelasa': snapshot.data!.data[i].hariOp[1],
-                                  'hRabu': snapshot.data!.data[i].hariOp[2],
-                                  'hKamis': snapshot.data!.data[i].hariOp[3],
-                                  'hJumat': snapshot.data!.data[i].hariOp[4],
-                                  'hSabtu': snapshot.data!.data[i].hariOp[5],
-                                  'hMinggu': snapshot.data!.data[i].hariOp[6],
-                                  'jSenin': snapshot.data!.data[i].jamOp[0],
-                                  'jSelasa': snapshot.data!.data[i].jamOp[1],
-                                  'jRabu': snapshot.data!.data[i].jamOp[2],
-                                  'jKamis': snapshot.data!.data[i].jamOp[3],
-                                  'jJumat': snapshot.data!.data[i].jamOp[4],
-                                  'jSabtu': snapshot.data!.data[i].jamOp[5],
-                                  'jMinggu': snapshot.data!.data[i].jamOp[6],
-                                  'imageGaleries':
-                                      snapshot.data!.data[i].imageGaleries,
-                                  'kategori': snapshot.data!.data[i].kategori
-                                },
+                            Get.to(DetailScreen(wisata: snapshot.data!.data[i]),
+                                // arguments: {
+                                //   'image': snapshot.data!.data[i].image,
+                                //   'nama': snapshot.data!.data[i].nama,
+                                //   'desa': snapshot.data!.data[i].alamat.desa,
+                                //   'kec': snapshot.data!.data[i].alamat.kec,
+                                //   'lat': snapshot.data!.data[i].alamat.latitude,
+                                //   'long':
+                                //       snapshot.data!.data[i].alamat.longitude,
+                                //   'tiket': snapshot.data!.data[i].info.tiket,
+                                //   'desc': snapshot.data!.data[i].info.deskripsi,
+                                //   'tempClosed':
+                                //       snapshot.data!.data[i].tempClosed,
+                                //   'distance': snapshot.data!.data[i].distance,
+                                //   'hSenin': snapshot.data!.data[i].hariOp[0],
+                                //   'hSelasa': snapshot.data!.data[i].hariOp[1],
+                                //   'hRabu': snapshot.data!.data[i].hariOp[2],
+                                //   'hKamis': snapshot.data!.data[i].hariOp[3],
+                                //   'hJumat': snapshot.data!.data[i].hariOp[4],
+                                //   'hSabtu': snapshot.data!.data[i].hariOp[5],
+                                //   'hMinggu': snapshot.data!.data[i].hariOp[6],
+                                //   'jSenin': snapshot.data!.data[i].jamOp[0],
+                                //   'jSelasa': snapshot.data!.data[i].jamOp[1],
+                                //   'jRabu': snapshot.data!.data[i].jamOp[2],
+                                //   'jKamis': snapshot.data!.data[i].jamOp[3],
+                                //   'jJumat': snapshot.data!.data[i].jamOp[4],
+                                //   'jSabtu': snapshot.data!.data[i].jamOp[5],
+                                //   'jMinggu': snapshot.data!.data[i].jamOp[6],
+                                //   'imageGaleries':
+                                //       snapshot.data!.data[i].imageGaleries,
+                                //   'kategori': snapshot.data!.data[i].kategori
+                                // },
+
                                 transition: Transition.downToUp);
                           },
                           child: ClipRRect(

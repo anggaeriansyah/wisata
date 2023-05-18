@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:wisata_tenjolaya/Screens/maps.dart';
+import 'package:wisata_tenjolaya/Screens/mapsScreen.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<Wisata2?> _futureWisataAirTerjun;
 
   bool online = false;
+  bool _visible = false;
 
   cekKoneksi() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -59,6 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // _tabController.addListener(_handleTabSelection);
     // _getCurrentPosition();
     // getData();
+    _futureWisata = ApiService().getData();
+    _futureWisataRekreasi = ApiService().getDataRekreasi();
+    _futureWisataSitus = ApiService().getDataSitus();
+    _futureWisataAirTerjun = ApiService().getDataAirTerjun();
     cekKoneksi();
   }
 
@@ -211,20 +217,43 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          GestureDetector(
-              onTap: () async {
-                // if (_hashData) {
-                // } else {}
-                Get.to(const Maps(), transition: Transition.downToUp);
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 20, left: 20),
-                child: Icon(
-                  Iconsax.map,
-                  size: 30,
-                  color: Colors.black,
-                ),
-              )),
+          FutureBuilder<Wisata2?>(
+              future: _futureWisata,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  _visible = true;
+
+                  return Visibility(
+                    visible: _visible,
+                    child: GestureDetector(
+                        onTap: () async {
+                          // if (_hashData) {
+                          // } else {}
+                          Get.to(
+                              MapsScreen(
+                                data: snapshot.data!.data,
+                              ),
+                              transition: Transition.downToUp);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(right: 20, left: 20),
+                          child: Icon(
+                            Iconsax.map,
+                            size: 30,
+                            color: Colors.black,
+                          ),
+                        )),
+                  );
+                }
+                return const Padding(
+                  padding: EdgeInsets.only(right: 20, left: 20),
+                  child: Icon(
+                    Iconsax.map,
+                    size: 30,
+                    color: Colors.black26,
+                  ),
+                );
+              }),
         ],
       ),
       body: Scaffold(

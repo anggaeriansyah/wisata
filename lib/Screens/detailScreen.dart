@@ -49,6 +49,17 @@ class _DetailScreenState extends State<DetailScreen> {
   late LatLng destination =
       LatLng(widget.wisata.alamat.latitude, widget.wisata.alamat.longitude);
 
+  List get galeries {
+    var list = [];
+    widget.wisata.imageGaleries.removeWhere((value) => value == null);
+    // return imageGaleries;
+    for (var i = 0; i < widget.wisata.imageGaleries.length; i++) {
+      list.add(
+          'https://wisata-server-production.up.railway.app/images/${widget.wisata.imageGaleries[i]!.substring(7)}');
+    }
+    return list;
+  }
+
   int get jam {
     String j = DateFormat("HH").format(DateTime.now());
     int jData = int.parse(j);
@@ -1196,8 +1207,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     )
                   ],
                 ),
-                // 0.imageGalerys.length != 0
-                widget.wisata.imageGaleries.length != 0
+                galeries.isNotEmpty
                     ? const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
@@ -1209,8 +1219,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       )
                     : const SizedBox(),
-                // widget.wisata.imageGalerys.length != 0
-                widget.wisata.getImageGaleries().length != 0
+                galeries.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Container(
@@ -1219,8 +1228,8 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
-                            // itemCount: widget.wisata.imageGalerys.length,
-                            itemCount: widget.wisata.getImageGaleries().length,
+                            itemCount: galeries.length,
+                            // itemCount: widget.wisata.getImageGaleries().length,
                             itemBuilder: (BuildContext context, int index) {
                               return Stack(
                                 alignment: Alignment.topLeft,
@@ -1235,11 +1244,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => PhotoView(
-                                              imageProvider: NetworkImage(
-                                                  // 'https://wisata-server-production.up.railway.app/images/${imageGaleries[index]?.substring(7)}'
-                                                  widget.wisata
-                                                      .getImageGaleries()[index]
-                                                      .toString()),
+                                              imageProvider:
+                                                  NetworkImage(galeries[index]),
                                               minScale: PhotoViewComputedScale
                                                       .contained *
                                                   1,
@@ -1255,9 +1261,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                             Radius.circular(20),
                                           ),
                                           child: Image.network(
-                                            widget
-                                                .wisata.getImageGaleries[index]
-                                                .toString(),
+                                            galeries[index],
                                             fit: BoxFit.cover,
                                             loadingBuilder:
                                                 (BuildContext context,

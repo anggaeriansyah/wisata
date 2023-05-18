@@ -414,12 +414,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             height: 80,
                                             width: 80,
                                             fit: BoxFit.cover,
-                                          )
-                                          // NetworkImage(
-                                          //     listItemOnSearch[index].image),
-                                          // fit: BoxFit.cover,
-                                          // ),
-                                          ),
+                                          )),
                                     ),
                                     ListTile(
                                         contentPadding:
