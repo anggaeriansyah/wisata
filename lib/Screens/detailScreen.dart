@@ -430,25 +430,25 @@ class _DetailScreenState extends State<DetailScreen> {
           widget.wisata.nama, style: const TextStyle(color: Colors.black),
         ),
         actions: [
-          GestureDetector(
-            onTap: () {
-              if (_isActive) {
-                _getPopup();
-              } else {
-                _getCurrentPosition();
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20, left: 20),
-              child: Icon(
-                FontAwesomeIcons.route,
-                // Icons.place_rounded,
-                // FontAwesomeIcons.locationDot,
-                color: Colors.black,
-                // size: 30,
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     if (_isActive) {
+          //       _getPopup();
+          //     } else {
+          //       _getCurrentPosition();
+          //     }
+          //   },
+          //   child: const Padding(
+          //     padding: EdgeInsets.only(right: 20, left: 20),
+          //     child: Icon(
+          //       FontAwesomeIcons.route,
+          //       // Icons.place_rounded,
+          //       // FontAwesomeIcons.locationDot,
+          //       color: Colors.black,
+          //       // size: 30,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       body: ListView(
@@ -500,40 +500,31 @@ class _DetailScreenState extends State<DetailScreen> {
                   bottom: 10,
                   child: Stack(
                     children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          if (_isActive) {
-                            _getPopup();
-                          } else {
-                            _getCurrentPosition();
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15, top: 5, bottom: 5, right: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  widget.wisata.alamat,
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                ),
-                                const SizedBox(width: 7),
-                                const Icon(
-                                  Icons.place_rounded,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, top: 5, bottom: 5, right: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                widget.wisata.alamat,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
+                              ),
+                              const SizedBox(width: 7),
+                              const Icon(
+                                Icons.place_rounded,
+                                color: Colors.white,
+                              ),
+                            ],
                           ),
-                        ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
-                      ),
+                        ),
+                      ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
                     ],
                   ),
                 ),
