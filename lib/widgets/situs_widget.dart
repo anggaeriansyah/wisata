@@ -22,7 +22,8 @@ class SitusWidget extends StatelessWidget {
         for (int i = 0; i < situs.length; i++)
           GestureDetector(
             onTap: () {
-              Get.to(DetailScreen(wisata: i), transition: Transition.downToUp);
+              Get.to(DetailScreen(wisata: situs[i]),
+                  transition: Transition.downToUp);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -43,7 +44,7 @@ class SitusWidget extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Get.to(DetailScreen(wisata: i),
+                      Get.to(DetailScreen(wisata: situs[i]),
                           transition: Transition.downToUp);
                     },
                     child: ClipRRect(

@@ -1,80 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:wisata_tenjolaya/Screens/maps.dart';
-import 'package:wisata_tenjolaya/Screens/mapsScreen.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
-import 'package:wisata_tenjolaya/models/wisata_modelTest.dart';
-import 'package:wisata_tenjolaya/services/api_service.dart';
+import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
+import 'package:wisata_tenjolaya/widgets/allCategories_widget.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
-import 'package:wisata_tenjolaya/widgets/tabBar_widget.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
+import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
+import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
 import '../widgets/big_app_text.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  // late TabController _tabController;
-  late Future<Wisata2?> _futureWisata;
-  late Future<Wisata2?> _futureWisataRekreasi;
-  late Future<Wisata2?> _futureWisataSitus;
-  late Future<Wisata2?> _futureWisataAirTerjun;
-
-  bool online = false;
-  bool _visible = false;
-
-  cekKoneksi() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      setState(() {
-        online = false;
-      });
-    } else {
-      setState(() {
-        online = true;
-      });
-    }
-  }
-
-  // Future<List<Wisata2>>? futurWisata = null;
-  // bool circular = false;
-  // bool _isActive = false;
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  bool _isActive = false;
 
   String? _currentAddress;
   Position? _currentPosition;
-  final List air = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
-    // _tabController.addListener(_handleTabSelection);
-    // _getCurrentPosition();
-    // getData();
-    _futureWisata = ApiService().getData();
-    _futureWisataRekreasi = ApiService().getDataRekreasi();
-    _futureWisataSitus = ApiService().getDataSitus();
-    _futureWisataAirTerjun = ApiService().getDataAirTerjun();
-    cekKoneksi();
-  }
-
-  Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      cekKoneksi();
-      // ApiService(cacheManager: DefaultCacheManager()).refresh();
-    });
-  }
 
   Future<bool> _handleLocationPermission() async {
     LocationPermission permission;
@@ -94,7 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location permissions are permanently denied, we cannot request permissions.')));
-
+      setState(() {
+        _isActive = false;
+      });
       return false;
     }
     return true;
@@ -106,6 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (!hasPermission) {
       await Geolocator.checkPermission();
+      setState(() {
+        _isActive = false;
+      });
     } else {
       Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium)
           .then((Position position) {
@@ -113,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           () => _currentPosition = position,
         );
         _getAddressFromLatLng(_currentPosition!);
+        _isActive = true;
       }).catchError((e) {
         debugPrint(e);
       });
@@ -132,17 +90,24 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // _handleTabSelection() {
-  //   if (_tabController.indexIsChanging) {
-  //     setState(() {});
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
+    _tabController.addListener(_handleTabSelection);
+    _getCurrentPosition();
+  }
+
+  _handleTabSelection() {
+    if (_tabController.indexIsChanging) {
+      setState(() {});
+    }
+  }
 
   @override
   void dispose() {
     super.dispose();
-    // _tabController.dispose();
-    // getData();
+    _tabController.dispose();
   }
 
   // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -153,110 +118,86 @@ class _HomeScreenState extends State<HomeScreen> {
     // TabController _tabController = TabController(length: 4, vsync: this);
 
     return Scaffold(
-        // appBar: _isActive
-        //     ? AppBar(
-        //         toolbarHeight: kToolbarHeight * 0.7,
-        //         elevation: 0,
-        //         backgroundColor: Theme.of(context).primaryColor,
-        //         title: Row(
-        //           mainAxisAlignment: MainAxisAlignment.start,
-        //           children: [
-        //             const Icon(
-        //               Icons.place,
-        //               color: Colors.white,
-        //               size: 20,
-        //             ),
-        //             const SizedBox(
-        //               width: 5,
-        //             ),
-        //             Expanded(
-        //               child: Text(
-        //                 _currentAddress ?? "",
-        //                 style: const TextStyle(
-        //                     color: Colors.white,
-        //                     fontSize: 14,
-        //                     overflow: TextOverflow.fade),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       )
-        //     : AppBar(
-        //         elevation: 0,
-        //         toolbarHeight: 0,
-        //         backgroundColor: Colors.white,
-        //       ),
-        body: Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: GestureDetector(
-          onTap: () {
-            Get.to(const WeatherScreen(), transition: Transition.downToUp);
-          },
-          child: const Icon(
-            Iconsax.cloud,
-            // FontAwesomeIcons.cloudBolt,
-            size: 30,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        title: GestureDetector(
-          onTap: () {
-            Get.to(const SearchScreen(), transition: Transition.downToUp);
-          },
-          child: const SizedBox(
-            height: 50,
-            width: 50,
-            child: Icon(
-              Iconsax.search_normal,
+      appBar: _isActive
+          ? AppBar(
+              toolbarHeight: kToolbarHeight * 0.7,
+              elevation: 0,
+              backgroundColor: Theme.of(context).primaryColor,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.place,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    child: Text(
+                      _currentAddress ?? "",
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          overflow: TextOverflow.fade),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : AppBar(
+              elevation: 0,
+              toolbarHeight: 0,
+              backgroundColor: Colors.white,
+            ),
+      body: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: GestureDetector(
+            onTap: () {
+              Get.to(const WeatherScreen(), transition: Transition.downToUp);
+            },
+            child: const Icon(
+              Iconsax.cloud,
+              // FontAwesomeIcons.cloudBolt,
               size: 30,
               color: Colors.black,
             ),
           ),
-        ),
-        actions: [
-          FutureBuilder<Wisata2?>(
-              future: _futureWisata,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  _visible = true;
-
-                  return Visibility(
-                    visible: _visible,
-                    child: GestureDetector(
-                        onTap: () async {
-                          // if (_hashData) {
-                          // } else {}
-                          Get.to(
-                              MapsScreen(
-                                data: snapshot.data!.data,
-                              ),
-                              transition: Transition.downToUp);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 20, left: 20),
-                          child: Icon(
-                            Iconsax.map,
-                            size: 30,
-                            color: Colors.black,
-                          ),
-                        )),
-                  );
-                }
-                return const Padding(
+          centerTitle: true,
+          title: GestureDetector(
+            onTap: () {
+              Get.to(const SearchScreen(), transition: Transition.downToUp);
+            },
+            child: const SizedBox(
+              height: 50,
+              width: 50,
+              child: Icon(
+                Iconsax.search_normal,
+                size: 30,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          actions: [
+            GestureDetector(
+                onTap: () async {
+                  Get.to(const Maps(), transition: Transition.downToUp);
+                  setState(() {});
+                },
+                child: const Padding(
                   padding: EdgeInsets.only(right: 20, left: 20),
                   child: Icon(
                     Iconsax.map,
                     size: 30,
-                    color: Colors.black26,
+                    color: Colors.black,
                   ),
-                );
-              }),
-        ],
-      ),
-      body: Scaffold(
+                )),
+          ],
+        ),
+        body: Scaffold(
           appBar: AppBar(
             toolbarHeight: 70,
             elevation: 0,
@@ -272,60 +213,176 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10, right: 5),
-                  child: GestureDetector(
-                    onTap: () => cekKoneksi(),
-                    child: Lottie.asset(
-                      'assets/lottie/paper-rocket.json',
-                      height: 35,
-                      fit: BoxFit.cover,
-                    ),
+                  child: Lottie.asset(
+                    'assets/lottie/paper-rocket.json',
+                    height: 35,
+                    fit: BoxFit.cover,
                   ),
                 )
               ],
             ),
           ),
-          body: RefreshIndicator(
-              color: Theme.of(context).primaryColor,
-              onRefresh: _refresh,
-              child: online
-                  ? TabBarWidget()
-                  : Stack(
-                      children: [
-                        CustomScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          slivers: <Widget>[
-                            SliverToBoxAdapter(
-                              child: Container(
-                                height: MediaQuery.of(context).size.height,
-                              ),
-                            ),
-                            // tambahkan Sliver lainnya sesuai kebutuhan
-                          ],
-                        ),
-                        const Center(
-                          child: Text(
-                            'Tidak ada koneksi internet',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    )
+          body: SafeArea(
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(left: 20, top: 5),
+                    child: const BigAppText(text: "Rekomendasi", size: 18)),
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(
+                  height: 260,
+                  child: RekomendasiWidget(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: TabBar(
+                      controller: _tabController,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.grey,
+                      isScrollable: true,
+                      indicator:
+                          CircleTabIndicator(color: Colors.black, radius: 4),
+                      // UnderlineTabIndicator(
+                      //   borderSide:
+                      //   BorderSide(
+                      //       width: 3, color: Theme.of(context).primaryColor),
+                      //   insets: const EdgeInsets.symmetric(horizontal: 16),
+                      // ),
+                      tabs: const [
+                        Tab(text: 'Semua Kategori'),
+                        Tab(text: 'Air Terjun'),
+                        Tab(text: 'Rekreasi'),
+                        Tab(text: 'Situs Prasejarah')
+                      ]),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: Center(
+                    child: [
+                      AllCategoriesWidget(),
+                      AirTerjunWidget(),
+                      RekreasiWidget(),
+                      SitusWidget(),
+                    ][_tabController.index],
+                  ),
+                )
+              ],
+            ),
+          ),
+          // body: ListView(
+          //   physics: const BouncingScrollPhysics(),
+          //   children: [
+          //     Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Container(
+          //             padding: const EdgeInsets.only(left: 20, top: 5),
+          //             child: const BigAppText(text: "Rekomendasi", size: 18)),
+          //         const SizedBox(
+          //           height: 10,
+          //         ),
+          //         const RekomendasiCarousel(),
+          //         // TabBarView(controller: _tabControl, children: [
+          //         //   Center(child: Text('req_1')),
+          //         //   Center(child: Text('req_2')),
+          //         //   Center(child: Text('req_3')),
+          //         // ]),
 
-              // ListView(physics: BouncingScrollPhysics(),
-              // children: [
-              //     Stack(children: [
-              //       Center(
-              //         child: Text(
-              //           'Tidak ada koneksi internet',
-              //           style:
-              //               TextStyle(color: Colors.black54, fontSize: 16),
-              //         ),
-              //       ),
-              //     ]),
-              //   ])
-              )),
-    ));
+          //         const SizedBox(
+          //           height: 10,
+          //         ),
+          //         Container(
+          //           width: double.maxFinite,
+          //           child: Align(
+          //             alignment: Alignment.centerLeft,
+          //             child: TabBar(
+          //                 controller: _tabController,
+          //                 isScrollable: true,
+          //                 labelPadding:
+          //                     const EdgeInsets.symmetric(horizontal: 20),
+          //                 labelColor: Colors.black,
+          //                 unselectedLabelColor: Colors.grey,
+          //                 indicator:
+          //                     CircleTabIndicator(color: Colors.black, radius: 4),
+          //                 tabs: [
+          //                   const Tab(text: 'Semua Wisata'),
+          //                   const Tab(text: 'Air Terjun'),
+          //                   const Tab(text: 'Rekreasi'),
+          //                   const Tab(text: 'Situs Prasejarah'),
+          //                 ]),
+          //           ),
+          //         ),
+          //         const SizedBox(
+          //           height: 5,
+          //         ),
+          //         // Container(
+          //         //   // width: double.maxFinite,
+          //         //   height: 100,
+          //         //   child: TabBarView(controller: _tabController, children: [
+          //         //     SemuaCarousel(),
+          //         //     AirCarousel(),
+          //         //     RekreasiCarousel(),
+          //         //     const Center(child: Text('kul')),
+          //         //     const Center(child: Text('sit')),
+          //         //   ]),
+          //         // ),
+
+          //         // RekreasiCarousel(),
+          //         // const SizedBox(
+          //         //   height: 10,
+          //         // ),
+
+          //         SafeArea(
+          //           child: Padding(
+          //             padding: const EdgeInsets.only(top: 20),
+          //             child: ListView(
+          //               children: [
+          //                 TabBar(
+          //                     controller: _tabController,
+          //                     labelColor: Theme.of(context).primaryColor,
+          //                     unselectedLabelColor: Colors.grey,
+          //                     isScrollable: true,
+          //                     indicator: UnderlineTabIndicator(
+          //                       borderSide: BorderSide(
+          //                           width: 3,
+          //                           color: Theme.of(context).primaryColor),
+          //                       insets:
+          //                           const EdgeInsets.symmetric(horizontal: 16),
+          //                     ),
+          //                     tabs: [
+          //                       Tab(text: 'Semua Kategori'),
+          //                       Tab(text: 'Air Terjun'),
+          //                       Tab(text: 'Rekreasi'),
+          //                       Tab(text: 'Situs Prasejarah')
+          //                     ]),
+          //                 const SizedBox(height: 20),
+          //                 Center(
+          //                   child: [
+          //                     ItemsWidget(),
+          //                     Text('data'),
+          //                     ItemsWidget(),
+          //                     ItemsWidget(),
+          //                   ][_tabController.index],
+          //                 )
+          //               ],
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
+        ),
+      ),
+    );
   }
 }
 

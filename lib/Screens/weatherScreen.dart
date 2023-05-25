@@ -91,6 +91,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
       return const Icon(FontAwesomeIcons.cloudRain, color: Colors.black);
     } else if (cuaca[value] == 'Clouds') {
       return const Icon(FontAwesomeIcons.cloud, color: Colors.black);
+    } else if (cuaca[value] == 'Clear') {
+      return const Icon(
+        FontAwesomeIcons.solidSun,
+        color: Colors.white,
+        size: 22,
+      );
     } else {
       return const CircularProgressIndicator();
     }
@@ -175,7 +181,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           physics: const BouncingScrollPhysics(),
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 2.8,
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                   // color: Theme.of(context).primaryColor,
@@ -264,7 +270,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 : '',
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 14,
+                              fontSize: 16,
                             ),
                           ),
                         ),

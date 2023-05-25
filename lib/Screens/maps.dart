@@ -319,7 +319,7 @@ class _MapsState extends State<Maps> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => DetailScreen(
-                          wisata: i,
+                          wisata: wisata[i],
                         ),
                       ),
                     );

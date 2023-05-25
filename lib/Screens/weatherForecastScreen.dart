@@ -84,6 +84,12 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
         color: Colors.white,
         size: 22,
       );
+    } else if (cuaca[value] == 'Clear') {
+      return const Icon(
+        FontAwesomeIcons.solidSun,
+        color: Colors.white,
+        size: 22,
+      );
     } else {
       return const CircularProgressIndicator();
     }
