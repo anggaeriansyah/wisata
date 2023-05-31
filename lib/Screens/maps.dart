@@ -11,8 +11,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:glass/glass.dart';
-import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'detailMapScreen.dart';
 
 class Maps extends StatefulWidget {
   const Maps({Key? key}) : super(key: key);
@@ -318,7 +318,7 @@ class _MapsState extends State<Maps> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => DetailScreen(
+                        builder: (_) => DetailMapScreen(
                           wisata: wisata[i],
                         ),
                       ),

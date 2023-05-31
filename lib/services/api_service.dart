@@ -162,6 +162,24 @@ class ApiService {
     }
   }
 
+  Future<bool> getDataWisata() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      return false;
+    } else {
+      var res = await http.get(
+          Uri.parse("https://jsonplaceholder.typicode.com/todos/1"),
+          headers: {
+            'Cache-Control': 'max-age=3600, public',
+          });
+      if (res.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   Future<Wisata2?> getDataAscending() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {

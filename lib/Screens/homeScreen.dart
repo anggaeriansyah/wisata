@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +10,8 @@ import 'package:lottie/lottie.dart';
 import 'package:wisata_tenjolaya/Screens/maps.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
+import 'package:wisata_tenjolaya/firebase_options.dart';
+import 'package:wisata_tenjolaya/services/api_service.dart';
 import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
 import 'package:wisata_tenjolaya/widgets/allCategories_widget.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
@@ -14,6 +19,9 @@ import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
 import '../widgets/big_app_text.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -24,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isActive = false;
+  bool online = false;
+  var db = FirebaseFirestore.instance;
 
   String? _currentAddress;
   Position? _currentPosition;
@@ -96,11 +106,33 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
     _getCurrentPosition();
+    cekKoneksi();
   }
 
   _handleTabSelection() {
     if (_tabController.indexIsChanging) {
       setState(() {});
+    }
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      cekKoneksi();
+      // ApiService(cacheManager: DefaultCacheManager()).refresh();
+    });
+  }
+
+  cekKoneksi() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        online = false;
+      });
+    } else {
+      setState(() {
+        online = true;
+      });
     }
   }
 
@@ -167,25 +199,47 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           centerTitle: true,
-          title: GestureDetector(
-            onTap: () {
-              Get.to(const SearchScreen(), transition: Transition.downToUp);
-            },
-            child: const SizedBox(
-              height: 50,
-              width: 50,
-              child: Icon(
-                Iconsax.search_normal,
-                size: 30,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          title: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: db.collection('wisata').snapshots(),
+              builder: (context, snapshots) {
+                if (snapshots.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Icon(
+                      Iconsax.search_normal,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+                  );
+                }
+                if (snapshots.hasError) {
+                  return const Center(
+                    child: Text("Error"),
+                  );
+                }
+                var wisata = snapshots.data!.docs;
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(SearchScreen(), transition: Transition.downToUp);
+                  },
+                  child: const SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Icon(
+                      Iconsax.search_normal,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+              }),
           actions: [
             GestureDetector(
-                onTap: () async {
-                  Get.to(const Maps(), transition: Transition.downToUp);
-                  setState(() {});
+                onTap: () {
+                  online
+                      ? Get.to(const Maps(), transition: Transition.downToUp)
+                      : print('offline');
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(right: 20, left: 20),
@@ -211,175 +265,134 @@ class _HomeScreenState extends State<HomeScreen>
                     size: 28,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 5),
-                  child: Lottie.asset(
-                    'assets/lottie/paper-rocket.json',
-                    height: 35,
-                    fit: BoxFit.cover,
+                InkWell(
+                  onTap: () {
+                    final wisata = <String, dynamic>{
+                      "image": 'assets/images/curug-luhur.jpg',
+                      "nama": 'Curug Luhur',
+                      "desa": 'Tapos I',
+                      "kec": 'Kecamatan Tenjolaya',
+                      "hariOp": [true, true, true, true, true, true, true],
+                      "jamOp": [
+                        '08:00 - 18:00',
+                        '08:00 - 18:00',
+                        '08:00 - 18:00',
+                        '08:00 - 18:00',
+                        '08:00 - 18:00',
+                        '08:00 - 18:00',
+                        '08:00 - 18:00',
+                      ],
+                      "tempClosed": false,
+                      "p": true,
+                      "tiket": '50.000',
+                      "desc":
+                          'Curug Ciputri adalah destinasi wisata alam yang berlokasi di kaki Gunug Salak, serta suguhan utama dari lokasi wisata tersebut adalah pesona air terjun dan area camping ground.',
+                      "imageGaleries": ['assets/images/curug-luhur2.jpeg'],
+                      "latitude": -6.6568834,
+                      "longitude": 106.7036733,
+                      "kategori": 'Air Terjun',
+                      "image": 'assets/images/kampung-istal.jpeg',
+                      "nama": 'Kampung Istal',
+                      "desa": 'Gunung Malang',
+                      "kec": 'Kecamatan Tenjolaya',
+                      "hariOp": [true, true, true, true, true, true, true],
+                      "tempClosed": true,
+                      "jamOp": [
+                        '07:00 - 17:30',
+                        '07:00 - 17:30',
+                        '07:00 - 17:30',
+                        '07:00 - 17:30',
+                        '07:00 - 17:30',
+                        '07:00 - 17:30',
+                        '07:00 - 17:30',
+                      ],
+                      "tiket": '10.000',
+                      "camping": true,
+                      "desc":
+                          'Wisata Kampung Istal Bogor menyuguhkan pesona alam yang begitu memukau, Pemandangan hijau berupa view Gunung Salak Bogor dipadukan dengan hawa sejuk khas pegunungan akan menjadi sajian utama di tempat wisata ini, Selain itu wisata populer di Bogor ini tentunya memiliki fasilitas dan wahana seru untuk dinikmati wisatawan.',
+                      "latitude": -6.664888,
+                      "longitude": 106.7114566,
+                      "kategori": 'Rekreasi',
+                      "imageGaleries": [
+                        'assets/images/kampung-istal.jpeg',
+                      ]
+                    };
+
+                    db.collection("wisata").add(wisata).then(
+                        (DocumentReference doc) =>
+                            print('DocumentSnapshot added with ID: ${doc.id}'));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 5),
+                    child: Lottie.asset(
+                      'assets/lottie/paper-rocket.json',
+                      height: 35,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               ],
             ),
           ),
           body: SafeArea(
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              children: [
-                Container(
-                    padding: const EdgeInsets.only(left: 20, top: 5),
-                    child: const BigAppText(text: "Rekomendasi", size: 18)),
-                const SizedBox(
-                  height: 10,
-                ),
-                const SizedBox(
-                  height: 260,
-                  child: RekomendasiWidget(),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: TabBar(
-                      controller: _tabController,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.grey,
-                      isScrollable: true,
-                      indicator:
-                          CircleTabIndicator(color: Colors.black, radius: 4),
-                      // UnderlineTabIndicator(
-                      //   borderSide:
-                      //   BorderSide(
-                      //       width: 3, color: Theme.of(context).primaryColor),
-                      //   insets: const EdgeInsets.symmetric(horizontal: 16),
-                      // ),
-                      tabs: const [
-                        Tab(text: 'Semua Kategori'),
-                        Tab(text: 'Air Terjun'),
-                        Tab(text: 'Rekreasi'),
-                        Tab(text: 'Situs Prasejarah')
-                      ]),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                  child: Center(
-                    child: [
-                      AllCategoriesWidget(),
-                      AirTerjunWidget(),
-                      RekreasiWidget(),
-                      SitusWidget(),
-                    ][_tabController.index],
+            child: RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              onRefresh: _refresh,
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  Container(
+                      padding: const EdgeInsets.only(left: 20, top: 5),
+                      child: const BigAppText(text: "Rekomendasi", size: 18)),
+                  const SizedBox(
+                    height: 10,
                   ),
-                )
-              ],
+                  const SizedBox(
+                    height: 260,
+                    child: RekomendasiWidget(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: TabBar(
+                        controller: _tabController,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        isScrollable: true,
+                        indicator:
+                            CircleTabIndicator(color: Colors.black, radius: 4),
+                        // UnderlineTabIndicator(
+                        //   borderSide:
+                        //   BorderSide(
+                        //       width: 3, color: Theme.of(context).primaryColor),
+                        //   insets: const EdgeInsets.symmetric(horizontal: 16),
+                        // ),
+                        tabs: const [
+                          Tab(text: 'Semua Kategori'),
+                          Tab(text: 'Air Terjun'),
+                          Tab(text: 'Rekreasi'),
+                          Tab(text: 'Situs Prasejarah')
+                        ]),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Center(
+                      child: [
+                        AllCategoriesWidget(),
+                        AirTerjunWidget(),
+                        RekreasiWidget(),
+                        SitusWidget(),
+                      ][_tabController.index],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-          // body: ListView(
-          //   physics: const BouncingScrollPhysics(),
-          //   children: [
-          //     Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         Container(
-          //             padding: const EdgeInsets.only(left: 20, top: 5),
-          //             child: const BigAppText(text: "Rekomendasi", size: 18)),
-          //         const SizedBox(
-          //           height: 10,
-          //         ),
-          //         const RekomendasiCarousel(),
-          //         // TabBarView(controller: _tabControl, children: [
-          //         //   Center(child: Text('req_1')),
-          //         //   Center(child: Text('req_2')),
-          //         //   Center(child: Text('req_3')),
-          //         // ]),
-
-          //         const SizedBox(
-          //           height: 10,
-          //         ),
-          //         Container(
-          //           width: double.maxFinite,
-          //           child: Align(
-          //             alignment: Alignment.centerLeft,
-          //             child: TabBar(
-          //                 controller: _tabController,
-          //                 isScrollable: true,
-          //                 labelPadding:
-          //                     const EdgeInsets.symmetric(horizontal: 20),
-          //                 labelColor: Colors.black,
-          //                 unselectedLabelColor: Colors.grey,
-          //                 indicator:
-          //                     CircleTabIndicator(color: Colors.black, radius: 4),
-          //                 tabs: [
-          //                   const Tab(text: 'Semua Wisata'),
-          //                   const Tab(text: 'Air Terjun'),
-          //                   const Tab(text: 'Rekreasi'),
-          //                   const Tab(text: 'Situs Prasejarah'),
-          //                 ]),
-          //           ),
-          //         ),
-          //         const SizedBox(
-          //           height: 5,
-          //         ),
-          //         // Container(
-          //         //   // width: double.maxFinite,
-          //         //   height: 100,
-          //         //   child: TabBarView(controller: _tabController, children: [
-          //         //     SemuaCarousel(),
-          //         //     AirCarousel(),
-          //         //     RekreasiCarousel(),
-          //         //     const Center(child: Text('kul')),
-          //         //     const Center(child: Text('sit')),
-          //         //   ]),
-          //         // ),
-
-          //         // RekreasiCarousel(),
-          //         // const SizedBox(
-          //         //   height: 10,
-          //         // ),
-
-          //         SafeArea(
-          //           child: Padding(
-          //             padding: const EdgeInsets.only(top: 20),
-          //             child: ListView(
-          //               children: [
-          //                 TabBar(
-          //                     controller: _tabController,
-          //                     labelColor: Theme.of(context).primaryColor,
-          //                     unselectedLabelColor: Colors.grey,
-          //                     isScrollable: true,
-          //                     indicator: UnderlineTabIndicator(
-          //                       borderSide: BorderSide(
-          //                           width: 3,
-          //                           color: Theme.of(context).primaryColor),
-          //                       insets:
-          //                           const EdgeInsets.symmetric(horizontal: 16),
-          //                     ),
-          //                     tabs: [
-          //                       Tab(text: 'Semua Kategori'),
-          //                       Tab(text: 'Air Terjun'),
-          //                       Tab(text: 'Rekreasi'),
-          //                       Tab(text: 'Situs Prasejarah')
-          //                     ]),
-          //                 const SizedBox(height: 20),
-          //                 Center(
-          //                   child: [
-          //                     ItemsWidget(),
-          //                     Text('data'),
-          //                     ItemsWidget(),
-          //                     ItemsWidget(),
-          //                   ][_tabController.index],
-          //                 )
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
         ),
       ),
     );

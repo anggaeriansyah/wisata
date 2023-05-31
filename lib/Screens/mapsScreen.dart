@@ -30,7 +30,7 @@ class _MapsScreenState extends State<MapsScreen> {
 
   @override
   void initState() {
-    kategori();
+    // kategori();
     loadData();
     _cekLokasi();
     super.initState();
@@ -156,37 +156,37 @@ class _MapsScreenState extends State<MapsScreen> {
   // bool _isSitusActive = false;
   bool _isAll = true;
 
-  List kategori() {
-    List listW;
-    List airTerjun = widget.data
-        .where((element) => element.kategori == 'Air Terjun')
-        .toList();
-    List rekreasi =
-        listWisata.where((element) => element.kategori == 'Rekreasi').toList();
-    List situs =
-        listWisata.where((element) => element.kategori == 'Situs').toList();
-    setState(() {});
-    if (_isAirTerjun && _isRekreasi && _isSitus) {
-      listW = widget.data;
-      _isAll = true;
-    } else if (_isAirTerjun && _isRekreasi) {
-      listW = airTerjun + rekreasi;
-      _isAll = false;
-    } else if (_isRekreasi) {
-      listW = rekreasi;
-      _isAll = false;
-    } else if (_isAirTerjun) {
-      listW = airTerjun;
-      _isAll = false;
-    } else if (_isSitus) {
-      listW = situs;
-      _isAll = false;
-    } else {
-      listW = widget.data;
-      _isAll = true;
-    }
-    return listW;
-  }
+  // List kategori() {
+  //   List listW;
+  //   List airTerjun = widget.data
+  //       .where((element) => element.kategori == 'Air Terjun')
+  //       .toList();
+  //   List rekreasi =
+  //       listWisata.where((element) => element.kategori == 'Rekreasi').toList();
+  //   List situs =
+  //       listWisata.where((element) => element.kategori == 'Situs').toList();
+  //   setState(() {});
+  //   if (_isAirTerjun && _isRekreasi && _isSitus) {
+  //     listW = widget.data;
+  //     _isAll = true;
+  //   } else if (_isAirTerjun && _isRekreasi) {
+  //     listW = airTerjun + rekreasi;
+  //     _isAll = false;
+  //   } else if (_isRekreasi) {
+  //     listW = rekreasi;
+  //     _isAll = false;
+  //   } else if (_isAirTerjun) {
+  //     listW = airTerjun;
+  //     _isAll = false;
+  //   } else if (_isSitus) {
+  //     listW = situs;
+  //     _isAll = false;
+  //   } else {
+  //     listW = widget.data;
+  //     _isAll = true;
+  //   }
+  //   return listW;
+  // }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);

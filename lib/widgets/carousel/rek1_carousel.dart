@@ -1,4 +1,5 @@
 // import 'dart:html';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -13,124 +14,142 @@ class Rek1Carousel extends StatefulWidget {
 }
 
 class _Rek1CarouselState extends State<Rek1Carousel> {
+  var db = FirebaseFirestore.instance;
+
   @override
   void initState() {
     super.initState();
+    // getData();
   }
 
   bool _isActive = false;
   bool get isActive => _isActive;
-  List wisata = listWisata;
+  // List wisata = listWisata;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              Get.to(DetailScreen(wisata: wisata[1]),
-                  transition: Transition.downToUp);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              child: Stack(children: <Widget>[
-                Hero(
-                  tag: Text('${wisata[1].image}'),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image(
-                      height: 220,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      image: AssetImage(wisata[1].image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: db.collection('wisata').doc("wqgsTinO8Rc4QqvoMo6f").snapshots(),
+        builder: (context, snapshots) {
+          if (snapshots.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black54));
+          }
+          if (snapshots.hasError) {
+            return const Center(
+              child: Text("Error"),
+            );
+          }
+
+          Map<String, dynamic> data = snapshots.data!.data()!;
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Get.to(DetailScreen(wisata: snapshots.data),
+                        transition: Transition.downToUp);
+                  },
                   child: Container(
-                    height: 220,
-                    width: MediaQuery.of(context).size.width * 0.9,
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomLeft,
-                        colors: [Colors.transparent, Colors.black38],
-                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                          blurRadius: 10,
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                Positioned(
-                  left: 20,
-                  bottom: 20,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        wisata[1].nama,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
+                    child: Stack(children: <Widget>[
+                      Hero(
+                        tag: Text('tag'),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image(
+                            height: 220,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            image: AssetImage(data['image'].toString()),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 3),
-                      Row(
-                        children: <Widget>[
-                          const Icon(
-                            FontAwesomeIcons.locationArrow,
-                            size: 25,
-                            color: Colors.white,
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          height: 220,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomLeft,
+                              colors: [Colors.transparent, Colors.black38],
+                            ),
                           ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                wisata[1].alamat,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                wisata[1].alamatKec,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    ],
+                      Positioned(
+                        left: 20,
+                        bottom: 20,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data['nama'],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Row(
+                              children: <Widget>[
+                                const Icon(
+                                  FontAwesomeIcons.locationArrow,
+                                  size: 25,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data['desa'],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      data['kec'],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
-              ]),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }
