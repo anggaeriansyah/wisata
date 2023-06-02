@@ -339,7 +339,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

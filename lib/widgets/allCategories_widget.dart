@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,9 +7,7 @@ import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
 
 class AllCategoriesWidget extends StatelessWidget {
-  // const AllCategoriesWidget({Key? key}) : super(key: key);
   var db = FirebaseFirestore.instance;
-  // List wisata = listWisata;
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +41,10 @@ class AllCategoriesWidget extends StatelessWidget {
                         transition: Transition.downToUp);
                   },
                   onLongPress: () {
-                    wisata[i]
-                        .reference
-                        .delete()
-                        .then((value) => print("Delete berhasil"));
+                    // wisata[i]
+                    //     .reference
+                    //     .delete()
+                    //     .then((value) => print("Delete berhasil"));
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -72,13 +71,64 @@ class AllCategoriesWidget extends StatelessWidget {
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image(
-                              image: AssetImage(wisata[i].data()['image']),
-                              fit: BoxFit.cover,
-                              // height: 150,
-                              height: MediaQuery.of(context).size.width * 0.38,
-                              width: MediaQuery.of(context).size.width * 0.5,
-                            ),
+                            child: wisata[i]
+                                        .data()['image']
+                                        .toString()
+                                        .substring(0, 6) !=
+                                    'assets'
+                                ?
+                                // Image.network(
+                                //     wisata[i].data()['image'].toString(),
+                                //     loadingBuilder: (BuildContext context,
+                                //         Widget child,
+                                //         ImageChunkEvent? loadingProgress) {
+                                //       if (loadingProgress == null) {
+                                //         return child;
+                                //       } else {
+                                //         return Container(
+                                //           color: Colors.grey[300],
+                                //           height: MediaQuery.of(context)
+                                //                   .size
+                                //                   .width *
+                                //               0.38,
+                                //           width: MediaQuery.of(context)
+                                //                   .size
+                                //                   .width *
+                                //               0.5,
+                                //           child: Center(
+                                //             child: Icon(
+                                //               Icons.image,
+                                //               color: Colors.grey[600],
+                                //               size: 64.0,
+                                //             ),
+                                //           ),
+                                //         );
+                                //       }
+                                //     },
+                                //     fit: BoxFit.cover,
+                                //     height: MediaQuery.of(context).size.width *
+                                //         0.38,
+                                //     width:
+                                //         MediaQuery.of(context).size.width * 0.5,
+                                //   )
+                                CachedNetworkImage(
+                                    imageUrl: wisata[i].data()['image'],
+                                    height: MediaQuery.of(context).size.width *
+                                        0.38,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image(
+                                    image:
+                                        AssetImage(wisata[i].data()['image']),
+                                    fit: BoxFit.cover,
+                                    // height: 150,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.38,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 5),

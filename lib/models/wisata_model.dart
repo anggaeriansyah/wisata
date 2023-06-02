@@ -186,7 +186,7 @@ List<Wisata> listWisata = [
   Wisata(
     image: 'assets/images/curug-ciampea.jpg',
     nama: 'Curug Ciampea',
-    alamat: 'Desa Tapos I',
+    alamat: 'Tapos I',
     alamatKec: 'Kecamatan Tenjolaya',
     hariOp: [true, true, true, false, false, true, true],
     tempClosed: false,
@@ -215,7 +215,7 @@ List<Wisata> listWisata = [
   Wisata(
     image: 'assets/images/curug-ciputri.jpg',
     nama: 'Curug Ciputri',
-    alamat: 'Desa Tapos I',
+    alamat: 'Tapos I',
     alamatKec: 'Kecamatan Tenjolaya',
     hariOp: [true, false, false, true, true, false, true],
     jamOp: [
@@ -241,7 +241,7 @@ List<Wisata> listWisata = [
   Wisata(
     image: 'assets/images/curug-luhur.jpg',
     nama: 'Curug Luhur',
-    alamat: 'Desa Tapos I',
+    alamat: 'Tapos I',
     alamatKec: 'Kecamatan Tenjolaya',
     hariOp: [true, true, true, true, true, true, true],
     jamOp: [
@@ -322,7 +322,7 @@ List<Wisata> listWisata = [
   Wisata(
       image: 'assets/images/aldepos-salaca.jpg',
       nama: 'Aldepos Salaca',
-      alamat: 'Desa Tapos II',
+      alamat: 'Tapos II',
       alamatKec: 'Kecamatan Tenjolaya',
       hariOp: [true, true, true, true, true, true, true],
       tempClosed: false,
@@ -349,7 +349,7 @@ List<Wisata> listWisata = [
   Wisata(
       image: 'assets/images/haur-salaca-sinarwangi.jpg',
       nama: 'Haur Salaca Sinarwangi',
-      alamat: 'Desa Tapos I',
+      alamat: 'Tapos I',
       alamatKec: 'Kecamatan Tenjolaya',
       hariOp: [true, true, true, true, false, true, true],
       tempClosed: false,
@@ -374,7 +374,7 @@ List<Wisata> listWisata = [
   Wisata(
       image: 'assets/images/arca-domas.jpg',
       nama: 'Arca Domas Cibalay',
-      alamat: 'Desa Tapos I',
+      alamat: 'Tapos I',
       alamatKec: 'Kecamatan Tenjolaya',
       hariOp: [true, true, true, true, true, true, true],
       tempClosed: false,

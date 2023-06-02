@@ -31,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _isActive = false;
+  // bool _isActive = false;
   bool online = false;
   var db = FirebaseFirestore.instance;
 
@@ -56,9 +56,9 @@ class _HomeScreenState extends State<HomeScreen>
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location permissions are permanently denied, we cannot request permissions.')));
-      setState(() {
-        _isActive = false;
-      });
+      // setState(() {
+      //   _isActive = false;
+      // });
       return false;
     }
     return true;
@@ -70,9 +70,9 @@ class _HomeScreenState extends State<HomeScreen>
 
     if (!hasPermission) {
       await Geolocator.checkPermission();
-      setState(() {
-        _isActive = false;
-      });
+      // setState(() {
+      //   _isActive = false;
+      // });
     } else {
       Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium)
           .then((Position position) {
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
           () => _currentPosition = position,
         );
         _getAddressFromLatLng(_currentPosition!);
-        _isActive = true;
+        // _isActive = true;
       }).catchError((e) {
         debugPrint(e);
       });
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
-    _getCurrentPosition();
+    // _getCurrentPosition();
     cekKoneksi();
   }
 
@@ -150,39 +150,40 @@ class _HomeScreenState extends State<HomeScreen>
     // TabController _tabController = TabController(length: 4, vsync: this);
 
     return Scaffold(
-      appBar: _isActive
-          ? AppBar(
-              toolbarHeight: kToolbarHeight * 0.7,
-              elevation: 0,
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.place,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Expanded(
-                    child: Text(
-                      _currentAddress ?? "",
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          overflow: TextOverflow.fade),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : AppBar(
-              elevation: 0,
-              toolbarHeight: 0,
-              backgroundColor: Colors.white,
-            ),
+      // appBar:
+      // _isActive
+      //     ? AppBar(
+      //         toolbarHeight: kToolbarHeight * 0.7,
+      //         elevation: 0,
+      //         backgroundColor: Theme.of(context).primaryColor,
+      //         title: Row(
+      //           mainAxisAlignment: MainAxisAlignment.start,
+      //           children: [
+      //             const Icon(
+      //               Icons.place,
+      //               color: Colors.white,
+      //               size: 20,
+      //             ),
+      //             const SizedBox(
+      //               width: 5,
+      //             ),
+      //             Expanded(
+      //               child: Text(
+      //                 _currentAddress ?? "",
+      //                 style: const TextStyle(
+      //                     color: Colors.white,
+      //                     fontSize: 14,
+      //                     overflow: TextOverflow.fade),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       )
+      //     : AppBar(
+      //         elevation: 0,
+      //         toolbarHeight: 0,
+      //         backgroundColor: Colors.white,
+      //       ),
       body: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -268,54 +269,29 @@ class _HomeScreenState extends State<HomeScreen>
                 InkWell(
                   onTap: () {
                     final wisata = <String, dynamic>{
-                      "image": 'assets/images/curug-luhur.jpg',
-                      "nama": 'Curug Luhur',
+                      "image": 'assets/images/arca-domas.jpg',
+                      "nama": 'Arca Domas Cibalay',
                       "desa": 'Tapos I',
                       "kec": 'Kecamatan Tenjolaya',
                       "hariOp": [true, true, true, true, true, true, true],
                       "jamOp": [
-                        '08:00 - 18:00',
-                        '08:00 - 18:00',
-                        '08:00 - 18:00',
-                        '08:00 - 18:00',
-                        '08:00 - 18:00',
-                        '08:00 - 18:00',
-                        '08:00 - 18:00',
+                        '09:00 - 17:00',
+                        '09:00 - 17:00',
+                        '09:00 - 17:00',
+                        '09:00 - 17:00',
+                        '09:00 - 17:00',
+                        '09:00 - 17:00',
+                        '09:00 - 17:00',
                       ],
                       "tempClosed": false,
-                      "p": true,
-                      "tiket": '50.000',
+                      "penginapan": false,
+                      "tiket": '5.000',
                       "desc":
-                          'Curug Ciputri adalah destinasi wisata alam yang berlokasi di kaki Gunug Salak, serta suguhan utama dari lokasi wisata tersebut adalah pesona air terjun dan area camping ground.',
-                      "imageGaleries": ['assets/images/curug-luhur2.jpeg'],
-                      "latitude": -6.6568834,
-                      "longitude": 106.7036733,
-                      "kategori": 'Air Terjun',
-                      "image": 'assets/images/kampung-istal.jpeg',
-                      "nama": 'Kampung Istal',
-                      "desa": 'Gunung Malang',
-                      "kec": 'Kecamatan Tenjolaya',
-                      "hariOp": [true, true, true, true, true, true, true],
-                      "tempClosed": true,
-                      "jamOp": [
-                        '07:00 - 17:30',
-                        '07:00 - 17:30',
-                        '07:00 - 17:30',
-                        '07:00 - 17:30',
-                        '07:00 - 17:30',
-                        '07:00 - 17:30',
-                        '07:00 - 17:30',
-                      ],
-                      "tiket": '10.000',
-                      "camping": true,
-                      "desc":
-                          'Wisata Kampung Istal Bogor menyuguhkan pesona alam yang begitu memukau, Pemandangan hijau berupa view Gunung Salak Bogor dipadukan dengan hawa sejuk khas pegunungan akan menjadi sajian utama di tempat wisata ini, Selain itu wisata populer di Bogor ini tentunya memiliki fasilitas dan wahana seru untuk dinikmati wisatawan.',
-                      "latitude": -6.664888,
-                      "longitude": 106.7114566,
-                      "kategori": 'Rekreasi',
-                      "imageGaleries": [
-                        'assets/images/kampung-istal.jpeg',
-                      ]
+                          'Tempat ini merupakan situs berbentuk kompleks (kumpulan situs), Di dalam komplek ini terdapat persebaran situs diantaranya Situs Jami Paciing, Balekambang, Pasir Manggis, Arca Domas, Endong Kasang, Cipangentehan dan situs Batu Bergores. Adapun situs-situs tersebut membentuk batu kubur, dolmen (mirip meja berukuran lebih pendek), menhir (batu panjang yang berdiri) dan batu bergurat-gurat yang diyakini sebagai pahatan tulisan kuno.',
+                      "imageGaleries": [],
+                      "latitude": -6.67139,
+                      "longitude": 106.70989,
+                      "kategori": 'situs',
                     };
 
                     db.collection("wisata").add(wisata).then(

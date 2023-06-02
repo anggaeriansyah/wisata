@@ -1,8 +1,10 @@
 // import 'dart:html';
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -13,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:glass/glass.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/number_symbols.dart';
 import 'package:photo_view/photo_view.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -33,6 +36,12 @@ Completer<GoogleMapController> _controller = Completer();
 final List<Marker> _marker = [];
 String mapTheme = '';
 
+String formatNumberWithComma(int number) {
+  final formatter = NumberFormat('#,##0');
+  String formattedNumber = formatter.format(number);
+  return formattedNumber.replaceAll(',', '.');
+}
+
 class _DetailScreenState extends State<DetailScreen> {
   String? _currentAddressDesa;
   String? _currentAddressKec;
@@ -52,6 +61,11 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     super.initState();
     // polylinePoints = PolylinePoints();
+  }
+
+  getWidget(widgetValue) {
+    var widgetV = widgetValue;
+    return widgetV.length;
   }
 
   int get jam {
@@ -547,6 +561,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     int now = DateTime.now().weekday.toInt() - 1;
+    int hrg = widget.wisata.data()['tiket'];
 
     return Scaffold(
       appBar: AppBar(
@@ -598,15 +613,25 @@ class _DetailScreenState extends State<DetailScreen> {
           GestureDetector(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PhotoView(
-                          imageProvider:
-                              AssetImage(widget.wisata.data()['image']),
-                          minScale: PhotoViewComputedScale.contained * 1,
-                          maxScale: PhotoViewComputedScale.covered * 1.1,
-                        )),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => widget.wisata
+                                  .data()['image']
+                                  .toString()
+                                  .substring(0, 6) ==
+                              'assets'
+                          ? PhotoView(
+                              imageProvider:
+                                  AssetImage(widget.wisata.data()['image']),
+                              minScale: PhotoViewComputedScale.contained * 1,
+                              maxScale: PhotoViewComputedScale.covered * 1.1,
+                            )
+                          : PhotoView(
+                              imageProvider: CachedNetworkImageProvider(
+                                  widget.wisata.data()['image']),
+                              minScale: PhotoViewComputedScale.contained * 1,
+                              maxScale: PhotoViewComputedScale.covered * 1.1,
+                            )));
             },
             child: Stack(
               children: <Widget>[
@@ -623,17 +648,26 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      child: Image(
-                        image: AssetImage(widget.wisata.data()['image']),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                        child: widget.wisata
+                                    .data()['image']
+                                    .toString()
+                                    .substring(0, 6) ==
+                                'assets'
+                            ? Image(
+                                image:
+                                    AssetImage(widget.wisata.data()['image']),
+                                fit: BoxFit.cover,
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: widget.wisata.data()['image'],
+                                fit: BoxFit.cover,
+                              )),
                   ),
                 ),
                 Positioned(
@@ -1026,9 +1060,9 @@ class _DetailScreenState extends State<DetailScreen> {
                               Flexible(
                                 flex: 0,
                                 child: Text(
-                                  widget.wisata.data()['tiket'] == 'Gratis'
-                                      ? widget.wisata.data()['tiket']
-                                      : 'Rp. ${widget.wisata.data()['tiket']}',
+                                  hrg == 0 || hrg == 0.0
+                                      ? "Gratis"
+                                      : 'Rp. ${formatNumberWithComma(hrg)}',
                                   maxLines: 1,
                                   softWrap: false,
                                   style: const TextStyle(
@@ -1145,7 +1179,7 @@ class _DetailScreenState extends State<DetailScreen> {
               )
             ],
           ),
-          widget.wisata.data()['imageGaleries'] != null
+          getWidget(widget.wisata.data()['imageGaleries']) != 0
               ? const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
@@ -1157,7 +1191,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                 )
               : const SizedBox(),
-          widget.wisata.data()['imageGaleries'] != null
+          getWidget(widget.wisata.data()['imageGaleries']) != 0
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Container(
@@ -1181,7 +1215,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => PhotoView(
-                                        imageProvider: AssetImage(widget.wisata
+                                        imageProvider: NetworkImage(widget
+                                            .wisata
                                             .data()['imageGaleries'][index]),
                                         minScale:
                                             PhotoViewComputedScale.contained *
@@ -1194,15 +1229,21 @@ class _DetailScreenState extends State<DetailScreen> {
                                   );
                                 },
                                 child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                  child: Image(
-                                    image: AssetImage(widget.wisata
-                                        .data()['imageGaleries'][index]),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                    child:
+                                        //  Image(
+                                        //   image:
+                                        //   AssetImage(widget.wisata
+                                        //       .data()['imageGaleries'][index]),
+                                        //   fit: BoxFit.cover,
+                                        // ),
+                                        CachedNetworkImage(
+                                      imageUrl: widget.wisata
+                                          .data()['imageGaleries'][index],
+                                      fit: BoxFit.cover,
+                                    )),
                               ),
                             ),
                           ],

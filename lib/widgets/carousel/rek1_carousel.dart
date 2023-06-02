@@ -1,4 +1,5 @@
 // import 'dart:html';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,8 +33,14 @@ class _Rek1CarouselState extends State<Rek1Carousel> {
         stream: db.collection('wisata').doc("wqgsTinO8Rc4QqvoMo6f").snapshots(),
         builder: (context, snapshots) {
           if (snapshots.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.black54));
+            return Center(
+              child: Container(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black54)),
+              ),
+            );
           }
           if (snapshots.hasError) {
             return const Center(
@@ -70,12 +77,22 @@ class _Rek1CarouselState extends State<Rek1Carousel> {
                         tag: Text('tag'),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image(
-                            height: 220,
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            image: AssetImage(data['image'].toString()),
-                            fit: BoxFit.cover,
-                          ),
+                          child: data['image'].toString().substring(0, 6) !=
+                                  'assets'
+                              ? CachedNetworkImage(
+                                  imageUrl: data['image'],
+                                  height: 220,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image(
+                                  height: 220,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  image: AssetImage(data['image'].toString()),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       Positioned(

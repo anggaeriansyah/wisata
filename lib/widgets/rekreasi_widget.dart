@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -75,13 +76,29 @@ class RekreasiWidget extends StatelessWidget {
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image(
-                              image: AssetImage(wisata[i].data()['image']),
-                              fit: BoxFit.cover,
-                              // height: 150,
-                              height: MediaQuery.of(context).size.width * 0.38,
-                              width: MediaQuery.of(context).size.width * 0.5,
-                            ),
+                            child: wisata[i]
+                                        .data()['image']
+                                        .toString()
+                                        .substring(0, 6) !=
+                                    'assets'
+                                ? CachedNetworkImage(
+                                    imageUrl: wisata[i].data()['image'],
+                                    height: MediaQuery.of(context).size.width *
+                                        0.38,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image(
+                                    image:
+                                        AssetImage(wisata[i].data()['image']),
+                                    fit: BoxFit.cover,
+                                    // height: 150,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.38,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 5),
