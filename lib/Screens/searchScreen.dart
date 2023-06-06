@@ -41,8 +41,8 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    _cekLokasi();
-    onGetNearby();
+    // _cekLokasi();
+    // onGetNearby();
     _searchData('');
     // setState(() {
     // listItemOnSearch = listItem;

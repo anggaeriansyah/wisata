@@ -47,126 +47,129 @@ class _Rek1CarouselState extends State<Rek1Carousel> {
               child: Text("Error"),
             );
           }
-
-          Map<String, dynamic> data = snapshots.data!.data()!;
-          return Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Get.to(DetailScreen(wisata: snapshots.data),
-                        transition: Transition.downToUp);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(0, 2),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: Stack(children: <Widget>[
-                      Hero(
-                        tag: Text('tag'),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: data['image'].toString().substring(0, 6) !=
-                                  'assets'
-                              ? CachedNetworkImage(
-                                  imageUrl: data['image'],
-                                  height: 220,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image(
-                                  height: 220,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  image: AssetImage(data['image'].toString()),
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
+          if (snapshots.hasData) {
+            Map<String, dynamic> data = snapshots.data!.data()!;
+            return Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(DetailScreen(wisata: snapshots.data),
+                          transition: Transition.downToUp);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            offset: Offset(0, 2),
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          height: 220,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
+                      child: Stack(children: <Widget>[
+                        Hero(
+                          tag: Text('tag'),
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomLeft,
-                              colors: [Colors.transparent, Colors.black38],
+                            child: data['image'].toString().substring(0, 6) !=
+                                    'assets'
+                                ? CachedNetworkImage(
+                                    imageUrl: data['image'],
+                                    height: 220,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image(
+                                    height: 220,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    image: AssetImage(data['image'].toString()),
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            height: 220,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomLeft,
+                                colors: [Colors.transparent, Colors.black38],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: 20,
-                        bottom: 20,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              data['nama'],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            Row(
-                              children: <Widget>[
-                                const Icon(
-                                  FontAwesomeIcons.locationArrow,
-                                  size: 25,
+                        Positioned(
+                          left: 20,
+                          bottom: 20,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                data['nama'],
+                                style: const TextStyle(
                                   color: Colors.white,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      data['desa'],
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
+                              ),
+                              const SizedBox(height: 3),
+                              Row(
+                                children: <Widget>[
+                                  const Icon(
+                                    FontAwesomeIcons.locationArrow,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        data['desa'],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      data['kec'],
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
+                                      Text(
+                                        data['kec'],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ]),
+                      ]),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
+                ],
+              ),
+            );
+          }
+          return CircularProgressIndicator();
         });
   }
 }

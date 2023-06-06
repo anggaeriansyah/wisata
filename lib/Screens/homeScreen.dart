@@ -190,52 +190,61 @@ class _HomeScreenState extends State<HomeScreen>
           elevation: 0,
           backgroundColor: Colors.white,
           leading: GestureDetector(
-            onTap: () {
-              Get.to(const WeatherScreen(), transition: Transition.downToUp);
-            },
-            child: const Icon(
-              Iconsax.cloud,
-              // FontAwesomeIcons.cloudBolt,
-              size: 30,
-              color: Colors.black,
+            onTap: () => Get.to(AboutScreen()),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Image.asset("assets/images/WT.png"),
             ),
           ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Get.to(const WeatherScreen(), transition: Transition.downToUp);
+          //   },
+          //   child: const Icon(
+          //     Iconsax.cloud,
+          //     // FontAwesomeIcons.cloudBolt,
+          //     size: 30,
+          //     color: Colors.black,
+          //   ),
+          // ),
           centerTitle: true,
-          title: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: db.collection('wisata').snapshots(),
-              builder: (context, snapshots) {
-                if (snapshots.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Icon(
-                      Iconsax.search_normal,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                  );
-                }
-                if (snapshots.hasError) {
-                  return const Center(
-                    child: Text("Error"),
-                  );
-                }
-                var wisata = snapshots.data!.docs;
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(SearchScreen(), transition: Transition.downToUp);
-                  },
-                  child: const SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Icon(
-                      Iconsax.search_normal,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                  ),
-                );
-              }),
+          title:
+              // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              //     stream: db.collection('wisata').snapshots(),
+              //     builder: (context, snapshots) {
+              //       if (snapshots.connectionState == ConnectionState.waiting) {
+              //         return const SizedBox(
+              //           height: 50,
+              //           width: 50,
+              //           child: Icon(
+              //             Iconsax.search_normal,
+              //             size: 30,
+              //             color: Colors.black,
+              //           ),
+              //         );
+              //       }
+              //       if (snapshots.hasError) {
+              //         return const Center(
+              //           child: Text("Error"),
+              //         );
+              //       }
+              //       var wisata = snapshots.data!.docs;
+              // return
+              GestureDetector(
+            onTap: () {
+              Get.to(SearchScreen(), transition: Transition.downToUp);
+            },
+            child: const SizedBox(
+              height: 50,
+              width: 50,
+              child: Icon(
+                Iconsax.search_normal,
+                size: 30,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          // }),
           actions: [
             GestureDetector(
                 onTap: () {
@@ -267,49 +276,49 @@ class _HomeScreenState extends State<HomeScreen>
                     size: 28,
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Get.to(AboutScreen());
-                    // final wisata = <String, dynamic>{
-                    //   "image": 'assets/images/arca-domas.jpg',
-                    //   "nama": 'Arca Domas Cibalay',
-                    //   "desa": 'Tapos I',
-                    //   "kec": 'Kecamatan Tenjolaya',
-                    //   "hariOp": [true, true, true, true, true, true, true],
-                    //   "jamOp": [
-                    //     '09:00 - 17:00',
-                    //     '09:00 - 17:00',
-                    //     '09:00 - 17:00',
-                    //     '09:00 - 17:00',
-                    //     '09:00 - 17:00',
-                    //     '09:00 - 17:00',
-                    //     '09:00 - 17:00',
-                    //   ],
-                    //   "tempClosed": false,
-                    //   "penginapan": false,
-                    //   "tiket": '5.000',
-                    //   "desc":
-                    //       'Tempat ini merupakan situs berbentuk kompleks (kumpulan situs), Di dalam komplek ini terdapat persebaran situs diantaranya Situs Jami Paciing, Balekambang, Pasir Manggis, Arca Domas, Endong Kasang, Cipangentehan dan situs Batu Bergores. Adapun situs-situs tersebut membentuk batu kubur, dolmen (mirip meja berukuran lebih pendek), menhir (batu panjang yang berdiri) dan batu bergurat-gurat yang diyakini sebagai pahatan tulisan kuno.',
-                    //   "imageGaleries": [],
-                    //   "latitude": -6.67139,
-                    //   "longitude": 106.70989,
-                    //   "kategori": 'situs',
-                    // };
+                // InkWell(
+                //   onTap: () {
+                //     Get.to(AboutScreen());
+                //     // final wisata = <String, dynamic>{
+                //     //   "image": 'assets/images/arca-domas.jpg',
+                //     //   "nama": 'Arca Domas Cibalay',
+                //     //   "desa": 'Tapos I',
+                //     //   "kec": 'Kecamatan Tenjolaya',
+                //     //   "hariOp": [true, true, true, true, true, true, true],
+                //     //   "jamOp": [
+                //     //     '09:00 - 17:00',
+                //     //     '09:00 - 17:00',
+                //     //     '09:00 - 17:00',
+                //     //     '09:00 - 17:00',
+                //     //     '09:00 - 17:00',
+                //     //     '09:00 - 17:00',
+                //     //     '09:00 - 17:00',
+                //     //   ],
+                //     //   "tempClosed": false,
+                //     //   "penginapan": false,
+                //     //   "tiket": '5.000',
+                //     //   "desc":
+                //     //       'Tempat ini merupakan situs berbentuk kompleks (kumpulan situs), Di dalam komplek ini terdapat persebaran situs diantaranya Situs Jami Paciing, Balekambang, Pasir Manggis, Arca Domas, Endong Kasang, Cipangentehan dan situs Batu Bergores. Adapun situs-situs tersebut membentuk batu kubur, dolmen (mirip meja berukuran lebih pendek), menhir (batu panjang yang berdiri) dan batu bergurat-gurat yang diyakini sebagai pahatan tulisan kuno.',
+                //     //   "imageGaleries": [],
+                //     //   "latitude": -6.67139,
+                //     //   "longitude": 106.70989,
+                //     //   "kategori": 'situs',
+                //     // };
 
-                    // db.collection("wisata").add(wisata).then(
-                    //     (DocumentReference doc) =>
-                    //         print('DocumentSnapshot added with ID: ${doc.id}'));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10, right: 5),
-                    child: Lottie.asset(
-                      'assets/lottie/about-icon.json',
-                      // 'assets/lottie/paper-rocket.json',
-                      height: 35,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
+                //     // db.collection("wisata").add(wisata).then(
+                //     //     (DocumentReference doc) =>
+                //     //         print('DocumentSnapshot added with ID: ${doc.id}'));
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 10, right: 5),
+                //     child: Lottie.asset(
+                //       'assets/lottie/about-icon.json',
+                //       // 'assets/lottie/paper-rocket.json',
+                //       height: 35,
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
@@ -320,12 +329,12 @@ class _HomeScreenState extends State<HomeScreen>
               child: ListView(
                 physics: const BouncingScrollPhysics(),
                 children: [
-                  Container(
-                      padding: const EdgeInsets.only(left: 20, top: 5),
-                      child: const BigAppText(text: "Rekomendasi", size: 18)),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  // Container(
+                  //     padding: const EdgeInsets.only(left: 20, top: 5),
+                  //     child: const BigAppText(text: "Rekomendasi", size: 18)),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
                   const SizedBox(
                     height: 260,
                     child: RekomendasiWidget(),

@@ -8,8 +8,13 @@ import 'package:wisata_tenjolaya/Screens/weatherForecastScreen.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class WeatherScreen extends StatefulWidget {
-  const WeatherScreen({Key? key}) : super(key: key);
+  // const WeatherScreen({Key? key}) : super(key: key);
 
+  final lat;
+  final long;
+  final nama;
+  const WeatherScreen(
+      {required this.lat, required this.long, required this.nama});
   @override
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
@@ -102,9 +107,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
   }
 
-  Future getWeather() async {
+  Future getWeather(lat, long) async {
     http.Response response = await http.get(Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
+        // "https://api.openweathermap.org/data/2.5/weather?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
+        "https://api.openweathermap.org/data/2.5/weather?lat=${lat.toString()}&lon=${long.toString()}&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
     var results = jsonDecode(response.body);
     temp = results['main']['temp'];
     desc = results['weather'][0]['description'];
@@ -116,7 +122,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     tempMax = results['main']['temp_max'];
 
     http.Response response2 = await http.get(Uri.parse(
-        "http://api.openweathermap.org/data/2.5/forecast?lat=-6.6400000&lon=106.708000&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
+        "http://api.openweathermap.org/data/2.5/forecast?lat=${lat.toString()}&lon=${long.toString()}&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
     var results2 = jsonDecode(response2.body);
     for (var i = 3; i < results2['list'].length - 20; i++) {
       temp5.add(results2['list'][i]['main']['temp']);
@@ -136,7 +142,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void internetChecked() async {
     bool result = await InternetConnectionChecker().hasConnection;
     if (result == true) {
-      getWeather();
+      getWeather(widget.lat, widget.long);
       internetConn = true;
     } else {
       internetConn = false;
@@ -170,8 +176,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
           ),
         ),
         centerTitle: true,
-        title: const Text(
-          'Tenjolaya',
+        title: Text(
+          widget.nama,
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
