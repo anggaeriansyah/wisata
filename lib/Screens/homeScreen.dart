@@ -1,18 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:lottie/lottie.dart';
 import 'package:wisata_tenjolaya/Screens/aboutScreen.dart';
 import 'package:wisata_tenjolaya/Screens/maps.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
-import 'package:wisata_tenjolaya/firebase_options.dart';
-import 'package:wisata_tenjolaya/services/api_service.dart';
 import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
 import 'package:wisata_tenjolaya/widgets/allCategories_widget.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
@@ -20,7 +16,6 @@ import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
 import '../widgets/big_app_text.dart';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

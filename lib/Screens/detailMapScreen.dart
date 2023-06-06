@@ -12,7 +12,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:glass/glass.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 
 class DetailMapScreen extends StatefulWidget {
   // const DetailScreen({Key? key}) : super(key: key);
@@ -432,24 +434,45 @@ class _DetailMapScreenState extends State<DetailMapScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              if (_isActive) {
-                _getPopup();
-              } else {
-                _getCurrentPosition();
-              }
+              Get.to(
+                  WeatherScreen(
+                    nama: widget.wisata.nama,
+                    lat: widget.wisata.lat,
+                    long: widget.wisata.long,
+                  ),
+                  transition: Transition.downToUp);
             },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20, left: 20),
-              child: Icon(
-                FontAwesomeIcons.route,
-                // Icons.place_rounded,
-                // FontAwesomeIcons.locationDot,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: const Icon(
+                Iconsax.cloud,
+                // FontAwesomeIcons.cloudBolt,
+                size: 30,
                 color: Colors.black,
-                // size: 30,
               ),
             ),
           ),
         ],
+        // GestureDetector(
+        //   onTap: () {
+        //     if (_isActive) {
+        //       _getPopup();
+        //     } else {
+        //       _getCurrentPosition();
+        //     }
+        //   },
+        //   child: const Padding(
+        //     padding: EdgeInsets.only(right: 20, left: 20),
+        //     child: Icon(
+        //       FontAwesomeIcons.route,
+        //       // Icons.place_rounded,
+        //       // FontAwesomeIcons.locationDot,
+        //       color: Colors.black,
+        //       // size: 30,
+        //     ),
+        //   ),
+        // ),
+        // ],
       ),
       body: ListView(
         physics: const ScrollPhysics(),
