@@ -67,6 +67,9 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
           case 'Clouds':
             hasil.add('Berawan');
             break;
+          case 'Clear':
+            hasil.add('Cerah');
+            break;
           default:
             '';
         }

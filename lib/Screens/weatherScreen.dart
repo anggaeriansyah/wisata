@@ -83,6 +83,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
           case 'Clouds':
             hasil.add('Berawan');
             break;
+          case 'Clear':
+            hasil.add('Cerah');
+            break;
           default:
             '';
         }
@@ -99,7 +102,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     } else if (cuaca[value] == 'Clear') {
       return const Icon(
         FontAwesomeIcons.solidSun,
-        color: Colors.white,
+        color: Colors.black,
         size: 22,
       );
     } else {
@@ -124,7 +127,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     http.Response response2 = await http.get(Uri.parse(
         "http://api.openweathermap.org/data/2.5/forecast?lat=${lat.toString()}&lon=${long.toString()}&units=metric&lang=id&appid=dbdeefdb6e461817032cc39199b4cc87"));
     var results2 = jsonDecode(response2.body);
-    for (var i = 3; i < results2['list'].length - 20; i++) {
+    for (var i = 3; i < results2['list'].length - 25; i++) {
       temp5.add(results2['list'][i]['main']['temp']);
       dt.add(results2['list'][i]['dt_txt']);
       windSpeed5.add(results2['list'][i]['wind']['speed']);
@@ -480,7 +483,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: dt.length,
+                  itemCount: cuaca.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return Center(
@@ -521,14 +524,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               style: const TextStyle(color: Colors.black),
                             ),
                             cuaca.isEmpty
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.black),
-                                    ),
-                                  )
+                                ? Text("Loading")
+                                // const SizedBox(
+                                //     height: 20,
+                                //     width: 20,
+                                //     child: CircularProgressIndicator(
+                                //       valueColor: AlwaysStoppedAnimation<Color>(
+                                //           Colors.black),
+                                //     ),
+                                //   )
                                 : _cuacaIcons(index),
                             Text(
                               cuaca.isEmpty ? 'loading' : '${_cuacaId[index]}',
