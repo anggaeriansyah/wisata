@@ -557,7 +557,7 @@ class _MapsState extends State<Maps> {
     ];
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       // appBar: AppBar(
       //   automaticallyImplyLeading: false,
       //   backgroundColor: Colors.transparent,
@@ -660,7 +660,7 @@ class _MapsState extends State<Maps> {
             offset: 50,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 85),
+            padding: const EdgeInsets.only(top: 5),
             child: SizedBox(
               height: 50,
               child: ListView(

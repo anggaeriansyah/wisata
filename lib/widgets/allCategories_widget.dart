@@ -113,8 +113,8 @@ class AllCategoriesWidget extends StatelessWidget {
                                 //   )
                                 CachedNetworkImage(
                                     imageUrl: wisata[i].data()['image'],
-                                    height: MediaQuery.of(context).size.width *
-                                        0.38,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.18,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                     fit: BoxFit.cover,
