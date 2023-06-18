@@ -37,6 +37,8 @@ class _SearchScreenState extends State<SearchScreen> {
   double? _cLong;
   bool _isActive = false;
   bool onSearching = false;
+  bool isAscending = false;
+  // List<DocumentSnapshot> sortedResults = [];
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
     // onGetNearby();
     // _searchData('');
     searchDocuments('');
+    // sortedResults = searchResults;
     // setState(() {
     // listItemOnSearch = listItem;
     // });
@@ -67,14 +70,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   //   setState(() {});
   // }
-  List<DocumentSnapshot> searchResults = [];
+  List<QueryDocumentSnapshot> searchResults = [];
 
   void searchDocuments(String keyword) {
     FirebaseFirestore.instance
         .collection('wisata')
         .get()
         .then((QuerySnapshot querySnapshot) {
-      List<DocumentSnapshot> results = [];
+      List<QueryDocumentSnapshot> results = [];
       querySnapshot.docs.forEach((doc) {
         var data = doc.data() as Map<String, dynamic>;
         // if (data['field'].contains(keyword)) {
@@ -90,6 +93,19 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     });
   }
+
+  // void sortResults() {
+  //   setState(() {
+  //     isAscending = !isAscending;
+  //     sortedResults.sort((a, b) {
+  //       String? titleA = a.get('title');
+  //       String? titleB = b.get('title');
+  //       return isAscending
+  //           ? (titleA ?? '').compareTo(titleB ?? '')
+  //           : (titleB ?? '').compareTo(titleA ?? '');
+  //     });
+  //   });
+  // }
 
   void _searchData(value) async {
     final query = value;
@@ -426,10 +442,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemBuilder: (BuildContext context, index) {
                   final document =
                       searchResults[index].data() as Map<String, dynamic>?;
+                  final documentSend = searchResults[index];
+                  ;
                   if (document != null) {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(DetailScreen(wisata: document),
+                        Get.to(DetailScreen(wisata: documentSend),
                             transition: Transition.downToUp);
                       },
                       child: Container(
