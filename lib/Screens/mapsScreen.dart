@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:glass/glass.dart';
+import 'package:intl/intl.dart';
 import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
 import 'package:wisata_tenjolaya/models/wisata_model.dart';
 
@@ -306,13 +307,18 @@ class _MapsScreenState extends State<MapsScreen> {
     final icon =
         await getBitmapDescriptorFromAssetBytes("assets/images/marker.png", 88);
     for (int i = 0; i < wisata.length; i++) {
-      dynamic placemarks = await placemarkFromCoordinates(
-          wisata[i].alamat.latitude, wisata[i].alamat.longitude);
+      // dynamic placemarks = await placemarkFromCoordinates(
+      //   double.parse(widget.data[i].data()['latitude']),
+      //   double.parse(widget.data[i].data()['longitude']),
+      //   // widget.data[i].data()['longitude']
+      // );
       _markers.add(
         Marker(
             markerId: MarkerId(i.toString()),
-            position:
-                LatLng(wisata[i].alamat.latitude, wisata[i].alamat.longitude),
+            // ignore: await_only_futures
+            position: LatLng(
+                double.parse(wisata[i].data()['latitude'].toString()),
+                double.parse(wisata[i].data()['longitude'].toString())),
             // icon: BitmapDescriptor.defaultMarkerWithHue(
             //     BitmapDescriptor.hueOrange),
             icon: icon,
@@ -345,7 +351,8 @@ class _MapsScreenState extends State<MapsScreen> {
                           width: 300,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(wisata[i].image.toString()),
+                              image: NetworkImage(
+                                  widget.data[i].data()['image'].toString()),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: const BorderRadius.only(
@@ -364,7 +371,7 @@ class _MapsScreenState extends State<MapsScreen> {
                                 Expanded(
                                   flex: 0,
                                   child: Text(
-                                    '${wisata[i].nama}',
+                                    widget.data[i].data()['nama'].toString(),
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -395,7 +402,8 @@ class _MapsScreenState extends State<MapsScreen> {
                                     Expanded(
                                       flex: 3,
                                       child: Text(
-                                        '${placemarks.first.subLocality.toString()}, ${placemarks.first.locality.toString()}',
+                                        // '${placemarks.first.subLocality.toString()}, ${placemarks.first.locality.toString()}',
+                                        '${wisata[i].data()['desa'].toString()}, ${wisata[i].data()['kec'].toString()}',
                                         style: const TextStyle(
                                             color: Colors.black54,
                                             fontSize: 13),
@@ -414,7 +422,7 @@ class _MapsScreenState extends State<MapsScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    wisata[i].tempClosed
+                                    widget.data[i].data()['tempClosed']
                                         ? const Text(
                                             'Tutup Sementara',
                                             style: TextStyle(
@@ -423,7 +431,7 @@ class _MapsScreenState extends State<MapsScreen> {
                                             overflow: TextOverflow.fade,
                                             softWrap: false,
                                           )
-                                        : wisata[i].today == true
+                                        : today(i) == true
                                             ? Text(
                                                 'Buka',
                                                 style: TextStyle(
@@ -442,14 +450,14 @@ class _MapsScreenState extends State<MapsScreen> {
                                                 overflow: TextOverflow.fade,
                                                 softWrap: false,
                                               ),
-                                    wisata[i].tempClosed
+                                    widget.data[i].data()['tempClosed']
                                         ? const Text('')
                                         : Text(
-                                            wisata[i].today == true
-                                                ? ' ⋅ ${wisata[i].closed}'
-                                                : wisata[i].cek == true
-                                                    ? ' ⋅ Buka pukul ${wisata[i].jamOp[now].substring(0, 5)}'
-                                                    : " ⋅ ${wisata[i].open}",
+                                            today(i) == true
+                                                ? ' ⋅ ${closed(i)}'
+                                                : cek(i) == true
+                                                    ? ' ⋅ Buka pukul ${widget.data[i].data()['jamOp'][now].substring(0, 5)}'
+                                                    : " ⋅ ${open(i)}",
                                             style: const TextStyle(
                                               color: Colors.black54,
                                               fontSize: 13,
@@ -481,13 +489,152 @@ class _MapsScreenState extends State<MapsScreen> {
                     clipBorderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
-                LatLng(wisata[i].alamat.latitude, wisata[i].alamat.longitude),
+                LatLng(double.parse(wisata[i].data()['latitude'].toString()),
+                    double.parse(wisata[i].data()['longitude'].toString())),
               );
             }),
       );
 
       setState(() {});
     }
+  }
+
+  int get jam {
+    String j = DateFormat("HH").format(DateTime.now());
+    int jData = int.parse(j);
+    return jData;
+  }
+
+  String get menit {
+    String m = DateFormat("mm").format(DateTime.now());
+    return m;
+  }
+
+  bool today(index) {
+    bool oc;
+    int now = DateTime.now().weekday.toInt() - 1;
+
+    String a = '$jam$menit';
+    int an = int.parse(a);
+    String b = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data.data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '${widget.data[index].data()['jamOp'][now].substring(0, 2)}${widget.data[index].data()['jamOp'][now].substring(3, 5)}';
+    int bn = int.parse(b);
+    String c = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data[index].data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '${widget.data[index].data()['jamOp'][now].substring(8, 10)}${widget.data[index].data()['jamOp'][now].substring(11, 13)}';
+    int cn = int.parse(c);
+
+    if (widget.data[index].data()['jamOp'][now] == 'Buka 24 jam') {
+      oc = true;
+    } else if (widget.data[index].data()['hariOp'][now] == true &&
+        an >= bn &&
+        an <= cn) {
+      oc = true;
+    } else {
+      oc = false;
+    }
+    return oc;
+  }
+
+  bool cek(index) {
+    bool ck;
+    int now = DateTime.now().weekday.toInt() - 1;
+    String a = '$jam$menit';
+    int an = int.parse(a);
+    String b = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data[index].data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '${widget.data[index].data()['jamOp'][now].substring(0, 2)}${widget.data[index].data()['jamOp'][now].substring(3, 5)}';
+    int bn = int.parse(b);
+    String c = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data[index].data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '${widget.data[index].data()['jamOp'][now].substring(8, 10)}${widget.data[index].data()['jamOp'][now].substring(11, 13)}';
+    int cn = int.parse(c);
+
+    if (widget.data[index].data()['hariOp'][now] == true && (an <= cn)) {
+      ck = true;
+    } else {
+      ck = false;
+    }
+    return ck;
+  }
+
+  String closed(index) {
+    String clsd;
+    int now = DateTime.now().weekday.toInt() - 1;
+    String a = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data[index].data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '$jam$menit';
+    int an = int.parse(a);
+    String b = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data[index].data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '${widget.data[index].data()['jamOp'][now].substring(0, 2)}${widget.data[index].data()['jamOp'][now].substring(3, 5)}';
+    int bn = int.parse(b);
+    String c = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
+            widget.data[index].data()['jamOp'][now] == 'Tutup'
+        ? '0'
+        : '${widget.data[index].data()['jamOp'][now].substring(8, 10)}${widget.data[index].data()['jamOp'][now].substring(11, 13)}';
+    int cn = int.parse(c);
+
+    if (widget.data[index].data()['jamOp'][now] == 'Buka 24 jam') {
+      clsd = "Buka 24 jam";
+    } else if ((widget.data[index].data()['hariOp'][now] == true && an >= bn) &&
+        (an < cn)) {
+      clsd =
+          'Tutup pukul ${widget.data[index].data()['jamOp'][now].substring(8, 13)}';
+    } else {
+      clsd = '';
+    }
+    return clsd;
+  }
+
+  String open(index) {
+    String opn;
+    String hr;
+    int now = DateTime.now().weekday.toInt() - 1;
+    int nxt = DateTime.now().weekday.toInt();
+    if (nxt == 7) {
+      nxt = 0;
+    }
+    switch (nxt) {
+      case 0:
+        hr = 'Senin';
+        break;
+      case 1:
+        hr = 'Selasa';
+        break;
+      case 2:
+        hr = 'Rabu';
+        break;
+      case 3:
+        hr = 'Kamis';
+        break;
+      case 4:
+        hr = 'Jum\'at';
+        break;
+      case 5:
+        hr = 'Sabtu';
+        break;
+      case 6:
+        hr = 'Minggu';
+        break;
+      default:
+        hr = '';
+    }
+
+    if (widget.data[index].data()['hariOp'][nxt] == true) {
+      opn =
+          'Buka $hr pukul ${widget.data[index].data()['jamOp'][nxt].substring(0, 5)}';
+    } else {
+      opn = 'Buka segera';
+    }
+    return opn;
   }
 
   @override
@@ -613,8 +760,9 @@ class _MapsScreenState extends State<MapsScreen> {
             // size: 30,
           ),
         ),
-        title: const Text(
+        title: Text(
           'Peta Wisata',
+          // widget.data[0].data()['longitude'].toString(),
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,

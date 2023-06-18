@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:wisata_tenjolaya/Screens/aboutScreen.dart';
 import 'package:wisata_tenjolaya/Screens/maps.dart';
+import 'package:wisata_tenjolaya/Screens/mapsScreen.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
@@ -241,20 +242,41 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           // }),
           actions: [
-            GestureDetector(
-                onTap: () {
-                  online
-                      ? Get.to(const Maps(), transition: Transition.downToUp)
-                      : print('offline');
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 20, left: 20),
-                  child: Icon(
-                    Iconsax.map,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                )),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: db.collection('wisata').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.only(right: 20, left: 20),
+                      child: Icon(
+                        Iconsax.map,
+                        size: 30,
+                        color: Colors.grey,
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text("Error"),
+                    );
+                  }
+                  var wisata = snapshot.data!.docs;
+                  return GestureDetector(
+                      onTap: () {
+                        online
+                            ? Get.to(MapsScreen(data: wisata),
+                                transition: Transition.downToUp)
+                            : print('offline');
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 20, left: 20),
+                        child: Icon(
+                          Iconsax.map,
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                      ));
+                }),
           ],
         ),
         body: Scaffold(

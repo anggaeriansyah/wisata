@@ -86,41 +86,42 @@ class _AboutScreenState extends State<AboutScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-            child: Row(
-              children: [
-                const Text(
-                  "Website : ",
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Flexible(
-                  child: InkWell(
-                    onTap: () {
-                      _launchURL("https://flutter.dev");
-                      // launchUrl(_url);
-                    },
-                    child: RichText(
-                      text: const TextSpan(
-                        text: 'Klik di sini untuk membuka halaman web',
-                        style: TextStyle(
-                          overflow: TextOverflow.clip,
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          //   child: Row(
+          //     children: [
+          //       const Text(
+          //         "Website : ",
+          //         style: TextStyle(
+          //           color: Colors.black87,
+          //           fontSize: 15,
+          //           fontWeight: FontWeight.w400,
+          //         ),
+          //       ),
+          //       Flexible(
+          //         child: InkWell(
+          //           onTap: () {
+          //             _launchURL("https://docs.google.com/forms/d/e/1FAIpQLScxDIqPVFd1-9KeGASKMUQTmbBoGDLVvwyqyYjThdSHMp2D3w/viewform?usp=sf_link");
+          //             // launchUrl(_url);
+          //           },
+          //           child: RichText(
+          //             text: const TextSpan(
+          //               text: 'Klik di sini untuk membuka halaman web',
+          //               style: TextStyle(
+          //                 overflow: TextOverflow.clip,
+          //                 color: Colors.blue,
+          //                 decoration: TextDecoration.underline,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
+
           const Padding(
-            padding: EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 10),
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
             child: Text(
               "bantuan atau dukungan",
               style: TextStyle(fontWeight: FontWeight.w700),
@@ -136,6 +137,47 @@ class _AboutScreenState extends State<AboutScreen> {
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
               ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
+            child: Text(
+              "Penilaian Aplikasi",
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            child: Row(
+              children: [
+                const Text(
+                  "Link penilaian : ",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      _launchURL(
+                          "https://docs.google.com/forms/d/e/1FAIpQLScxDIqPVFd1-9KeGASKMUQTmbBoGDLVvwyqyYjThdSHMp2D3w/viewform?usp=sf_link");
+                      // launchUrl(_url);
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'Klik di sini',
+                        style: TextStyle(
+                          overflow: TextOverflow.clip,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
           // Padding(

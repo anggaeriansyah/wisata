@@ -135,7 +135,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Prediksi Cuaca',
+          'Prakiraan Cuaca',
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,

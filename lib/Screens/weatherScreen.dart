@@ -408,7 +408,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    internetConn == true ? 'Prediksi Cuaca' : '',
+                    internetConn == true ? 'Prakiraan Cuaca' : '',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   InkWell(

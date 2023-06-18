@@ -43,7 +43,8 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     // _cekLokasi();
     // onGetNearby();
-    _searchData('');
+    // _searchData('');
+    searchDocuments('');
     // setState(() {
     // listItemOnSearch = listItem;
     // });
@@ -66,6 +67,29 @@ class _SearchScreenState extends State<SearchScreen> {
 
   //   setState(() {});
   // }
+  List<DocumentSnapshot> searchResults = [];
+
+  void searchDocuments(String keyword) {
+    FirebaseFirestore.instance
+        .collection('wisata')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      List<DocumentSnapshot> results = [];
+      querySnapshot.docs.forEach((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        // if (data['field'].contains(keyword)) {
+        //   results.add(doc);
+        // }
+        var searchNama = data['nama'].toString().toLowerCase();
+        if (data != null && searchNama.contains(keyword)) {
+          results.add(doc);
+        }
+      });
+      setState(() {
+        searchResults = results;
+      });
+    });
+  }
 
   void _searchData(value) async {
     final query = value;
@@ -354,7 +378,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   //   });
                   // },
 
-                  onChanged: ((value) => _searchData(value.capitalize)),
+                  onChanged: ((value) => searchDocuments(value)),
                   style: const TextStyle(height: 1.2, color: Colors.black54),
                   // autofocus: true,
                   cursorColor: Colors.black54,
@@ -376,142 +400,149 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
             ),
-            body: _searchResults == null
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                // const Padding(
-                //     padding: EdgeInsets.only(top: 20),
-                //     child: Align(
-                //       alignment: Alignment.topCenter,
-                //       child: Text(
-                //         'Wisata tidak ditemukan',
-                //         style: TextStyle(
-                //             fontWeight: FontWeight.w500, color: Colors.black54),
-                //       ),
-                //     ),
-                //   )
-                : Container(
-                    padding: const EdgeInsets.only(top: 10, bottom: 0),
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: _searchResults!.docs.length,
-                      itemBuilder: (BuildContext context, index) {
-                        final document = _searchResults!.docs[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(DetailScreen(wisata: document),
-                                transition: Transition.downToUp);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                              top: 4,
-                              left: 20,
-                              right: 20,
-                              bottom: 15,
-                            ),
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 6,
-                                ),
-                              ],
-                            ),
-                            child: Stack(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        bottomLeft: Radius.circular(20)),
-                                    child: document['image']
-                                                .toString()
-                                                .substring(0, 6) !=
-                                            'assets'
-                                        ? CachedNetworkImage(
-                                            imageUrl: document['image'],
-                                            height: 80,
-                                            width: 80,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image(
-                                            height: 80,
-                                            width: 80,
-                                            image:
-                                                AssetImage(document['image']),
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ),
-                                ),
-                                ListTile(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 3),
-                                    leading: Container(
-                                      padding: const EdgeInsets.only(right: 60),
-                                      child: const Text(''),
-                                    ),
-                                    title: Text(
-                                      document['nama'],
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                      maxLines: 1,
-                                      softWrap: false,
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                    subtitle: Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Flexible(
-                                            child: Icon(
-                                              FontAwesomeIcons.locationArrow,
-                                              size: 13,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Flexible(
-                                            flex: 5,
-                                            child: Text(
-                                              document['desa'],
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                              maxLines: 1,
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    trailing: Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Icon(
-                                        Icons.keyboard_arrow_right_rounded,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 30.0,
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        );
+            body:
+                // searchResults == null
+                //     ? const Center(
+                //         child: CircularProgressIndicator(),
+                //       )
+                //     // const Padding(
+                //     //     padding: EdgeInsets.only(top: 20),
+                //     //     child: Align(
+                //     //       alignment: Alignment.topCenter,
+                //     //       child: Text(
+                //     //         'Wisata tidak ditemukan',
+                //     //         style: TextStyle(
+                //     //             fontWeight: FontWeight.w500, color: Colors.black54),
+                //     //       ),
+                //     //     ),
+                //     //   )
+                //     :
+                Container(
+              padding: const EdgeInsets.only(top: 10, bottom: 0),
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                physics: const BouncingScrollPhysics(),
+                itemCount: searchResults.length,
+                itemBuilder: (BuildContext context, index) {
+                  final document =
+                      searchResults[index].data() as Map<String, dynamic>?;
+                  if (document != null) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(DetailScreen(wisata: document),
+                            transition: Transition.downToUp);
                       },
-                    ),
-                  )));
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          top: 4,
+                          left: 20,
+                          right: 20,
+                          bottom: 15,
+                        ),
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(0, 2),
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    bottomLeft: Radius.circular(20)),
+                                child: document['image']
+                                            .toString()
+                                            .substring(0, 6) !=
+                                        'assets'
+                                    ? CachedNetworkImage(
+                                        imageUrl: document['image'],
+                                        height: 80,
+                                        width: 80,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image(
+                                        height: 80,
+                                        width: 80,
+                                        image: AssetImage(document['image']),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                            ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 3),
+                                leading: Container(
+                                  padding: const EdgeInsets.only(right: 60),
+                                  child: const Text(''),
+                                ),
+                                title: Text(
+                                  document['nama'],
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
+                                ),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Flexible(
+                                        child: Icon(
+                                          FontAwesomeIcons.locationArrow,
+                                          size: 13,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Flexible(
+                                        flex: 5,
+                                        child: Text(
+                                          document['desa'],
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Icon(
+                                    Icons.keyboard_arrow_right_rounded,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 30.0,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+            )));
   }
 }
