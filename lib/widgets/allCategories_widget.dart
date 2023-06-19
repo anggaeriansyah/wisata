@@ -32,21 +32,13 @@ class AllCategoriesWidget extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             // childAspectRatio: (160 / (MediaQuery.of(context).size.width * 0.5)),
-            childAspectRatio: (MediaQuery.of(context).size.height *
-                0.178 /
-                (MediaQuery.of(context).size.width * 0.5)),
+            childAspectRatio: (153 / (MediaQuery.of(context).size.width * 0.5)),
             children: [
               for (int i = 0; i < wisata.length; i++)
                 GestureDetector(
                   onTap: () {
                     Get.to(DetailScreen(wisata: wisata[i]),
                         transition: Transition.downToUp);
-                  },
-                  onLongPress: () {
-                    // wisata[i]
-                    //     .reference
-                    //     .delete()
-                    //     .then((value) => print("Delete berhasil"));
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -115,8 +107,9 @@ class AllCategoriesWidget extends StatelessWidget {
                                 //   )
                                 CachedNetworkImage(
                                     imageUrl: wisata[i].data()['image'],
-                                    height: MediaQuery.of(context).size.height *
-                                        0.18,
+                                    height: 150,
+                                    // height: MediaQuery.of(context).size.height *
+                                    //     0.18,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                     fit: BoxFit.cover,
@@ -126,8 +119,7 @@ class AllCategoriesWidget extends StatelessWidget {
                                         AssetImage(wisata[i].data()['image']),
                                     fit: BoxFit.cover,
                                     // height: 150,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.38,
+                                    height: 150,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                   ),

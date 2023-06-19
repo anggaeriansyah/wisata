@@ -40,7 +40,7 @@ class SitusWidget extends StatelessWidget {
                   shrinkWrap: true,
                   // childAspectRatio: (160 / (MediaQuery.of(context).size.width * 0.5)),
                   childAspectRatio:
-                      (150 / (MediaQuery.of(context).size.width * 0.5)),
+                      (153 / (MediaQuery.of(context).size.width * 0.5)),
                   children: [
                     for (int i = 0; i < wisata.length; i++)
                       GestureDetector(
@@ -86,10 +86,7 @@ class SitusWidget extends StatelessWidget {
                                           'assets'
                                       ? CachedNetworkImage(
                                           imageUrl: wisata[i].data()['image'],
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.38,
+                                          height: 150,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -101,10 +98,7 @@ class SitusWidget extends StatelessWidget {
                                               wisata[i].data()['image']),
                                           fit: BoxFit.cover,
                                           // height: 150,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.38,
+                                          height: 150,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
