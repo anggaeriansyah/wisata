@@ -94,19 +94,6 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  // void sortResults() {
-  //   setState(() {
-  //     isAscending = !isAscending;
-  //     sortedResults.sort((a, b) {
-  //       String? titleA = a.get('title');
-  //       String? titleB = b.get('title');
-  //       return isAscending
-  //           ? (titleA ?? '').compareTo(titleB ?? '')
-  //           : (titleB ?? '').compareTo(titleA ?? '');
-  //     });
-  //   });
-  // }
-
   void _searchData(value) async {
     final query = value;
     final queryLetters = query.split('');
