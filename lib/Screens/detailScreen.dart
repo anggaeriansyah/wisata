@@ -577,12 +577,10 @@ class _DetailScreenState extends State<DetailScreen> {
           child: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.black,
-            // size: 30,
           ),
         ),
         centerTitle: true,
         title: Text(
-          // style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           widget.wisata.data()['nama'],
           style: const TextStyle(color: Colors.black),
           overflow: TextOverflow.fade,

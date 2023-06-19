@@ -11,6 +11,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:glass/glass.dart';
+// ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:photo_view/photo_view.dart';
@@ -442,9 +443,9 @@ class _DetailMapScreenState extends State<DetailMapScreen> {
                   ),
                   transition: Transition.downToUp);
             },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: const Icon(
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: Icon(
                 Iconsax.cloud,
                 // FontAwesomeIcons.cloudBolt,
                 size: 30,

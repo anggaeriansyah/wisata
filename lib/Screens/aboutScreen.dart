@@ -18,10 +18,9 @@ class _AboutScreenState extends State<AboutScreen> {
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
         automaticallyImplyLeading: false,
-        title: Text(
-          // style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        title: const Text(
           "About",
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         leading: GestureDetector(
           onTap: () {

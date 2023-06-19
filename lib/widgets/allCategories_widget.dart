@@ -31,8 +31,9 @@ class AllCategoriesWidget extends StatelessWidget {
             crossAxisCount: 2,
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            // childAspectRatio: (160 / (MediaQuery.of(context).size.width * 0.5)),
-            childAspectRatio: (153 / (MediaQuery.of(context).size.width * 0.5)),
+            childAspectRatio: ((MediaQuery.of(context).size.width * 0.401) /
+                (MediaQuery.of(context).size.width * 0.5)),
+            // childAspectRatio: 0.77,
             children: [
               for (int i = 0; i < wisata.length; i++)
                 GestureDetector(
@@ -107,9 +108,8 @@ class AllCategoriesWidget extends StatelessWidget {
                                 //   )
                                 CachedNetworkImage(
                                     imageUrl: wisata[i].data()['image'],
-                                    height: 150,
-                                    // height: MediaQuery.of(context).size.height *
-                                    //     0.18,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.36,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                     fit: BoxFit.cover,
@@ -118,14 +118,15 @@ class AllCategoriesWidget extends StatelessWidget {
                                     image:
                                         AssetImage(wisata[i].data()['image']),
                                     fit: BoxFit.cover,
-                                    // height: 150,
-                                    height: 150,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.36,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                   ),
                           ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.011),
                         Padding(
                           padding: const EdgeInsets.only(
                             top: 5,
@@ -140,18 +141,39 @@ class AllCategoriesWidget extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 0,
-                                  child: Text(
-                                    wisata[i].data()['nama'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    softWrap: false,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black),
-                                  ),
+                                  child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                    double screenWidth = constraints.maxWidth;
+
+                                    // Menyesuaikan ukuran teks berdasarkan lebar layar
+                                    double textSize = screenWidth * 0.125;
+
+                                    return Text(
+                                      wisata[i].data()['nama'],
+                                      // style: TextStyle(fontSize: textSize),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                          fontSize: textSize,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    );
+                                  }),
+                                  // Text(
+                                  //   wisata[i].data()['nama'],
+                                  //   maxLines: 1,
+                                  //   overflow: TextOverflow.fade,
+                                  //   softWrap: false,
+                                  //   style: const TextStyle(
+                                  //       fontSize: 15.8,
+                                  //       fontWeight: FontWeight.w600,
+                                  //       color: Colors.black),
+                                  // ),
                                 ),
-                                const SizedBox(height: 3),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.005),
                                 Expanded(
                                   flex: 0,
                                   child: Row(
@@ -163,20 +185,45 @@ class AllCategoriesWidget extends StatelessWidget {
                                               size: 13,
                                               color: Theme.of(context)
                                                   .primaryColor)),
-                                      const SizedBox(width: 5),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.01),
                                       Flexible(
                                         flex: 1,
-                                        child: Text(
-                                          wisata[i].data()['desa'],
-                                          maxLines: 1,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              overflow: TextOverflow.fade,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w500,
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
+                                        child: LayoutBuilder(
+                                            builder: (context, constraints) {
+                                          double screenWidth =
+                                              constraints.maxWidth;
+
+                                          // Menyesuaikan ukuran teks berdasarkan lebar layar
+                                          double textSize = screenWidth * 0.115;
+
+                                          return Text(
+                                            wisata[i].data()['desa'],
+                                            // style: TextStyle(fontSize: textSize),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.fade,
+                                            softWrap: false,
+                                            style: TextStyle(
+                                                fontSize: textSize,
+                                                fontWeight: FontWeight.w500,
+                                                color: Theme.of(context)
+                                                    .accentColor),
+                                          );
+                                        }),
+                                        // Text(
+                                        //   wisata[i].data()['desa'],
+                                        //   maxLines: 1,
+                                        //   softWrap: false,
+                                        //   style: TextStyle(
+                                        //       overflow: TextOverflow.fade,
+                                        //       fontSize: 13,
+                                        //       fontWeight: FontWeight.w500,
+                                        //       color: Theme.of(context)
+                                        //           .accentColor),
+                                        // ),
                                       ),
                                     ],
                                   ),
