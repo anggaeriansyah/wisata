@@ -9,6 +9,7 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   // const AboutScreen({Key? key}) : super(key: key);
+  var email = 'anggaeriansyah7527@gmail.com';
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +55,9 @@ class _AboutScreenState extends State<AboutScreen> {
               style: TextStyle(fontWeight: FontWeight.w700),
             )),
           ),
+
           const Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.only(top: 20, left: 20, bottom: 10, right: 20),
             child: Text(
               "Selamat datang di aplikasi WITE (Wisata Tenjolaya) Aplikasi ini dirancang untuk memudahkan Anda dalam mencari wisata di tenjolaya. Dengan fitur perkiraan cuaca di tenjolaya dan memiliki antarmuka yang intuitif, kami berusaha memberikan pengalaman terbaik bagi pengguna kami.",
               textAlign: TextAlign.justify,
@@ -66,8 +68,38 @@ class _AboutScreenState extends State<AboutScreen> {
               ),
             ),
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            child: Row(
+              children: [
+                const Text(
+                  "Website : ",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Flexible(
+                  child: InkWell(
+                    onTap: () => _launchURL("https://wisatatenjolaya.site/"),
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'www.wisatatenjolaya.site',
+                        style: TextStyle(
+                          overflow: TextOverflow.clip,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.only(left: 20, bottom: 10, top: 20, right: 20),
             child: Text(
               "Informasi Pengembang",
               style: TextStyle(fontWeight: FontWeight.w700),
@@ -84,39 +116,70 @@ class _AboutScreenState extends State<AboutScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          //   child: Row(
-          //     children: [
-          //       const Text(
-          //         "Website : ",
-          //         style: TextStyle(
-          //           color: Colors.black87,
-          //           fontSize: 15,
-          //           fontWeight: FontWeight.w400,
-          //         ),
-          //       ),
-          //       Flexible(
-          //         child: InkWell(
-          //           onTap: () {
-          //             _launchURL("https://docs.google.com/forms/d/e/1FAIpQLScxDIqPVFd1-9KeGASKMUQTmbBoGDLVvwyqyYjThdSHMp2D3w/viewform?usp=sf_link");
-          //             // launchUrl(_url);
-          //           },
-          //           child: RichText(
-          //             text: const TextSpan(
-          //               text: 'Klik di sini untuk membuka halaman web',
-          //               style: TextStyle(
-          //                 overflow: TextOverflow.clip,
-          //                 color: Colors.blue,
-          //                 decoration: TextDecoration.underline,
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            child: Row(
+              children: [
+                const Text(
+                  "Email : ",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Flexible(
+                  child: InkWell(
+                    onTap: () async {
+                      await launch('mailto:anggaeriansyah43@gmail.com');
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'anggaeriansyah43@gmail.com',
+                        style: TextStyle(
+                          overflow: TextOverflow.clip,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 5, left: 20, right: 20),
+            child: Row(
+              children: [
+                const Text(
+                  "LinkedIn : ",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      _launchURL('https://www.linkedin.com/in/angga-eriansyah');
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'www.linkedin.com/in/angga-eriansyah',
+                        style: TextStyle(
+                          overflow: TextOverflow.clip,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
 
           const Padding(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
@@ -128,7 +191,7 @@ class _AboutScreenState extends State<AboutScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
-              "Jika Anda memerlukan bantuan atau memiliki pertanyaan, silakan hubungi tim dukungan kami melalui email anggaeriansyah43@gmail.com.",
+              "Jika Anda memerlukan bantuan atau memiliki pertanyaan, silakan hubungi tim dukungan kami :",
               textAlign: TextAlign.justify,
               style: TextStyle(
                 color: Colors.black87,
@@ -137,6 +200,39 @@ class _AboutScreenState extends State<AboutScreen> {
               ),
             ),
           ),
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Row(
+              children: [
+                const Text(
+                  "Email : ",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    // _launchGmail();
+                    await launch('mailto:wisatatenjolaya@gmail.com');
+                  },
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'wisatatenjolaya@gmail.com',
+                      style: TextStyle(
+                        overflow: TextOverflow.clip,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           const Padding(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
             child: Text(
@@ -174,7 +270,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

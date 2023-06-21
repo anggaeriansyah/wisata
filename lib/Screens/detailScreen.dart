@@ -707,15 +707,19 @@ class _DetailScreenState extends State<DetailScreen> {
                             widget.wisata.data()['longitude']),
                       ));
                       showDialog(
-                        barrierDismissible: false,
+                        // barrierDismissible: false,
                         context: context,
                         builder: (context) => AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10), // Ubah nilai sesuai keinginan
+                          ),
                           title: const Text('Maps'),
                           content: SizedBox(
-                            height: MediaQuery.of(context).size.height / 1.9,
+                            height: MediaQuery.of(context).size.height / 2.2,
                             width: MediaQuery.of(context).size.width,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(10),
                               child: GoogleMap(
                                 initialCameraPosition: _kGooglePlex,
                                 markers: Set<Marker>.of(_marker),
@@ -728,31 +732,10 @@ class _DetailScreenState extends State<DetailScreen> {
                             ),
                           ),
                           actions: [
-                            // Container(
-                            //   margin: const EdgeInsets.only(right: 15),
-                            //   child: TextButton(
-                            //     style: TextButton.styleFrom(
-                            //       backgroundColor:
-                            //           Theme.of(context).primaryColor,
-                            //       primary: Colors.white,
-                            //       // padding: const EdgeInsets.all(16.0),
-                            //       textStyle: const TextStyle(fontSize: 20),
-                            //     ),
-                            //     onPressed: () => Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //         builder: (context) => MapsScreen(
-                            //           data: widget.wisata,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     child: const Padding(
-                            //       padding: EdgeInsets.symmetric(horizontal: 10),
-                            //       child: Text('Lihat Semua Wisata'),
-                            //     ),
-                            //   ),
-                            // ),
                             Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               margin: const EdgeInsets.only(right: 15),
                               child: TextButton(
                                 style: TextButton.styleFrom(
@@ -760,15 +743,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                       Theme.of(context).primaryColor,
                                   primary: Colors.white,
                                   // padding: const EdgeInsets.all(16.0),
-                                  textStyle: const TextStyle(fontSize: 20),
+                                  textStyle: const TextStyle(fontSize: 16),
                                 ),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text('kembali'),
-                                ),
+                                child: const Text('kembali'),
                               ),
                             ),
                           ],
