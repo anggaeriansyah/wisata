@@ -6,8 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
-import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'package:wisata_tenjolaya/Screens/detailScreen.dart';
 import 'dart:math' show cos, sqrt, asin;
 
 class SearchScreen extends StatefulWidget {

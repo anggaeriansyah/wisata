@@ -9,7 +9,6 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   // const AboutScreen({Key? key}) : super(key: key);
-  final Uri _url = Uri.parse('https://flutter.dev');
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,7 @@ class _AboutScreenState extends State<AboutScreen> {
             padding: EdgeInsets.only(bottom: 20),
             child: Center(
                 child: Text(
-              "Versi : 1.0.0",
+              "Versi : 1.0.1",
               style: TextStyle(fontWeight: FontWeight.w700),
             )),
           ),
@@ -68,14 +67,14 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
               "Informasi Pengembang",
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
               "Pengembang : Angga Eriansyah",
               style: TextStyle(
@@ -127,7 +126,7 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
               "Jika Anda memerlukan bantuan atau memiliki pertanyaan, silakan hubungi tim dukungan kami melalui email anggaeriansyah43@gmail.com.",
               textAlign: TextAlign.justify,
@@ -146,7 +145,7 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child: Row(
               children: [
                 const Text(

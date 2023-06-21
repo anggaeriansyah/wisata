@@ -4,8 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
-import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'package:wisata_tenjolaya/Screens/detailScreen.dart';
 
 class Rek1Carousel extends StatefulWidget {
   const Rek1Carousel({Key? key}) : super(key: key);

@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
-import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'package:wisata_tenjolaya/Screens/detailScreen.dart';
 
 class RekreasiWidget extends StatelessWidget {
   // const RekreasiWidget({Key? key}) : super(key: key);
@@ -37,7 +36,8 @@ class RekreasiWidget extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             // childAspectRatio: (160 / (MediaQuery.of(context).size.width * 0.5)),
-            childAspectRatio: (153 / (MediaQuery.of(context).size.width * 0.5)),
+            childAspectRatio: ((MediaQuery.of(context).size.width * 0.401) /
+                (MediaQuery.of(context).size.width * 0.5)),
             children: [
               for (int i = 0; i < wisata.length; i++)
                 GestureDetector(
@@ -83,9 +83,8 @@ class RekreasiWidget extends StatelessWidget {
                                     'assets'
                                 ? CachedNetworkImage(
                                     imageUrl: wisata[i].data()['image'],
-                                    height: 150,
-                                    // height: MediaQuery.of(context).size.width *
-                                    //     0.38,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.36,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                     fit: BoxFit.cover,
@@ -94,14 +93,15 @@ class RekreasiWidget extends StatelessWidget {
                                     image:
                                         AssetImage(wisata[i].data()['image']),
                                     fit: BoxFit.cover,
-                                    // height: 150,
-                                    height: 150,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.36,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                   ),
                           ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.011),
                         Padding(
                           padding: const EdgeInsets.only(
                             top: 5,
@@ -116,33 +116,58 @@ class RekreasiWidget extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 0,
-                                  child: Text(
-                                    wisata[i].data()['nama'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    softWrap: false,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black),
-                                  ),
+                                  child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                    double screenWidth = constraints.maxWidth;
+
+                                    // Menyesuaikan ukuran teks berdasarkan lebar layar
+                                    double textSize = screenWidth * 0.125;
+
+                                    return Text(
+                                      wisata[i].data()['nama'],
+                                      // style: TextStyle(fontSize: textSize),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                          fontSize: textSize,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    );
+                                  }),
                                 ),
-                                const SizedBox(height: 3),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.004),
                                 Row(
                                   children: <Widget>[
                                     Icon(FontAwesomeIcons.locationArrow,
                                         size: 13,
                                         color: Theme.of(context).primaryColor),
                                     const SizedBox(width: 5),
-                                    Text(
-                                      wisata[i].data()['desa'],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      softWrap: false,
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500,
-                                          color: Theme.of(context).accentColor),
+                                    Flexible(
+                                      flex: 1,
+                                      child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                        double screenWidth =
+                                            constraints.maxWidth;
+
+                                        // Menyesuaikan ukuran teks berdasarkan lebar layar
+                                        double textSize = screenWidth * 0.115;
+
+                                        return Text(
+                                          wisata[i].data()['desa'],
+                                          // style: TextStyle(fontSize: textSize),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                          softWrap: false,
+                                          style: TextStyle(
+                                              fontSize: textSize,
+                                              fontWeight: FontWeight.w500,
+                                              color: Theme.of(context)
+                                                  .accentColor),
+                                        );
+                                      }),
                                     ),
                                   ],
                                 ),

@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
-import 'package:wisata_tenjolaya/models/wisata_model.dart';
+import 'package:wisata_tenjolaya/Screens/detailScreen.dart';
 
 class AllCategoriesWidget extends StatelessWidget {
   var db = FirebaseFirestore.instance;
@@ -38,7 +37,10 @@ class AllCategoriesWidget extends StatelessWidget {
               for (int i = 0; i < wisata.length; i++)
                 GestureDetector(
                   onTap: () {
-                    Get.to(DetailScreen(wisata: wisata[i]),
+                    Get.to(
+                        DetailScreen(
+                          wisata: wisata[i],
+                        ),
                         transition: Transition.downToUp);
                   },
                   child: Container(
@@ -173,7 +175,7 @@ class AllCategoriesWidget extends StatelessWidget {
                                 ),
                                 SizedBox(
                                     height: MediaQuery.of(context).size.width *
-                                        0.005),
+                                        0.004),
                                 Expanded(
                                   flex: 0,
                                   child: Row(

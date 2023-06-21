@@ -1,33 +1,27 @@
 // import 'dart:html';
 
 import 'dart:async';
-import 'dart:ffi';
-import 'dart:ui' as ui;
-import 'dart:typed_data';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:glass/glass.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/number_symbols.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:wisata_tenjolaya/Screens/mapsScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 
 class DetailScreen extends StatefulWidget {
   // const DetailScreen({Key? key}) : super(key: key);
 
-  // final AirTerjun airTerjun;
-  // ignore: prefer_typing_uninitialized_variables
   final wisata;
 
-  DetailScreen({required this.wisata});
+  DetailScreen({
+    required this.wisata,
+  });
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -565,6 +559,16 @@ class _DetailScreenState extends State<DetailScreen> {
     int now = DateTime.now().weekday.toInt() - 1;
     int hrg = widget.wisata.data()['tiket'];
 
+    CameraPosition _kGooglePlex = CameraPosition(
+        target: LatLng(widget.wisata.data()['latitude'],
+            widget.wisata.data()['longitude']),
+        zoom: 13);
+    DefaultAssetBundle.of(context)
+        .loadString('assets/maptheme/standard_theme.json')
+        .then((value) {
+      mapTheme = value;
+    });
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -694,34 +698,112 @@ class _DetailScreenState extends State<DetailScreen> {
                 Positioned(
                   right: 30,
                   bottom: 10,
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, top: 5, bottom: 5, right: 10),
-                          child: Row(
-                            children: [
-                              Text(
-                                widget.wisata.data()['desa'],
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
+                  child: GestureDetector(
+                    onTap: () {
+                      _marker.clear();
+                      _marker.add(Marker(
+                        markerId: const MarkerId('value'),
+                        position: LatLng(widget.wisata.data()['latitude'],
+                            widget.wisata.data()['longitude']),
+                      ));
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Maps'),
+                          content: SizedBox(
+                            height: MediaQuery.of(context).size.height / 1.9,
+                            width: MediaQuery.of(context).size.width,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: GoogleMap(
+                                initialCameraPosition: _kGooglePlex,
+                                markers: Set<Marker>.of(_marker),
+                                onMapCreated: (GoogleMapController controller) {
+                                  // _infoWindowController.googleMapController = controller;
+                                  controller.setMapStyle(mapTheme);
+                                  // _controller.complete(controller);
+                                },
                               ),
-                              const SizedBox(width: 7),
-                              const Icon(
-                                Icons.place_rounded,
-                                color: Colors.white,
-                              ),
-                            ],
+                            ),
                           ),
+                          actions: [
+                            // Container(
+                            //   margin: const EdgeInsets.only(right: 15),
+                            //   child: TextButton(
+                            //     style: TextButton.styleFrom(
+                            //       backgroundColor:
+                            //           Theme.of(context).primaryColor,
+                            //       primary: Colors.white,
+                            //       // padding: const EdgeInsets.all(16.0),
+                            //       textStyle: const TextStyle(fontSize: 20),
+                            //     ),
+                            //     onPressed: () => Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) => MapsScreen(
+                            //           data: widget.wisata,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     child: const Padding(
+                            //       padding: EdgeInsets.symmetric(horizontal: 10),
+                            //       child: Text('Lihat Semua Wisata'),
+                            //     ),
+                            //   ),
+                            // ),
+                            Container(
+                              margin: const EdgeInsets.only(right: 15),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  primary: Colors.white,
+                                  // padding: const EdgeInsets.all(16.0),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Text('kembali'),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
-                    ],
+                      );
+                    },
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, top: 5, bottom: 5, right: 10),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.wisata.data()['desa'],
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                                const SizedBox(width: 7),
+                                const Icon(
+                                  Icons.place_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ).asGlass(clipBorderRadius: BorderRadius.circular(20)),
+                      ],
+                    ),
                   ),
                 ),
               ],

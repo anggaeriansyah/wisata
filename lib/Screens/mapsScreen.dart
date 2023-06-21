@@ -6,14 +6,12 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:glass/glass.dart';
 import 'package:intl/intl.dart';
 import 'package:wisata_tenjolaya/Screens/DetailScreen.dart';
-import 'package:wisata_tenjolaya/models/wisata_model.dart';
 
 class MapsScreen extends StatefulWidget {
   // const MapsScreen({Key? key}) : super(key: key);
@@ -157,37 +155,38 @@ class _MapsScreenState extends State<MapsScreen> {
   // bool _isSitusActive = false;
   bool _isAll = true;
 
-  // List kategori() {
-  //   List listW;
-  //   List airTerjun = widget.data
-  //       .where((element) => element.kategori == 'Air Terjun')
-  //       .toList();
-  //   List rekreasi =
-  //       listWisata.where((element) => element.kategori == 'Rekreasi').toList();
-  //   List situs =
-  //       listWisata.where((element) => element.kategori == 'Situs').toList();
-  //   setState(() {});
-  //   if (_isAirTerjun && _isRekreasi && _isSitus) {
-  //     listW = widget.data;
-  //     _isAll = true;
-  //   } else if (_isAirTerjun && _isRekreasi) {
-  //     listW = airTerjun + rekreasi;
-  //     _isAll = false;
-  //   } else if (_isRekreasi) {
-  //     listW = rekreasi;
-  //     _isAll = false;
-  //   } else if (_isAirTerjun) {
-  //     listW = airTerjun;
-  //     _isAll = false;
-  //   } else if (_isSitus) {
-  //     listW = situs;
-  //     _isAll = false;
-  //   } else {
-  //     listW = widget.data;
-  //     _isAll = true;
-  //   }
-  //   return listW;
-  // }
+  List kategori() {
+    List listW;
+    List airTerjun = widget.data
+        .where((element) => element['kategori'] == 'air-terjun')
+        .toList();
+    List rekreasi = widget.data
+        .where((element) => element['kategori'] == 'rekreasi')
+        .toList();
+    List situs =
+        widget.data.where((element) => element['kategori'] == 'situs').toList();
+    setState(() {});
+    if (_isAirTerjun && _isRekreasi && _isSitus) {
+      listW = widget.data;
+      _isAll = true;
+    } else if (_isAirTerjun && _isRekreasi) {
+      listW = airTerjun + rekreasi;
+      _isAll = false;
+    } else if (_isRekreasi) {
+      listW = rekreasi;
+      _isAll = false;
+    } else if (_isAirTerjun) {
+      listW = airTerjun;
+      _isAll = false;
+    } else if (_isSitus) {
+      listW = situs;
+      _isAll = false;
+    } else {
+      listW = widget.data;
+      _isAll = true;
+    }
+    return listW;
+  }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
@@ -302,7 +301,8 @@ class _MapsScreenState extends State<MapsScreen> {
       mapTheme = value;
     });
 
-    List wisata = widget.data;
+    // List wisata = widget.data;
+    List wisata = kategori();
 
     final icon =
         await getBitmapDescriptorFromAssetBytes("assets/images/marker.png", 88);
@@ -329,9 +329,7 @@ class _MapsScreenState extends State<MapsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => DetailScreen(
-                          wisata: i,
-                        ),
+                        builder: (_) => DetailScreen(wisata: wisata[i]),
                       ),
                     );
                   },
@@ -351,8 +349,7 @@ class _MapsScreenState extends State<MapsScreen> {
                           width: 300,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(
-                                  widget.data[i].data()['image'].toString()),
+                              image: NetworkImage(wisata[i].data()['image']),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: const BorderRadius.only(
@@ -371,7 +368,7 @@ class _MapsScreenState extends State<MapsScreen> {
                                 Expanded(
                                   flex: 0,
                                   child: Text(
-                                    widget.data[i].data()['nama'].toString(),
+                                    wisata[i].data()['nama'].toString(),
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -422,7 +419,7 @@ class _MapsScreenState extends State<MapsScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    widget.data[i].data()['tempClosed']
+                                    wisata[i].data()['tempClosed']
                                         ? const Text(
                                             'Tutup Sementara',
                                             style: TextStyle(
@@ -450,13 +447,13 @@ class _MapsScreenState extends State<MapsScreen> {
                                                 overflow: TextOverflow.fade,
                                                 softWrap: false,
                                               ),
-                                    widget.data[i].data()['tempClosed']
+                                    wisata[i].data()['tempClosed']
                                         ? const Text('')
                                         : Text(
                                             today(i) == true
                                                 ? ' ⋅ ${closed(i)}'
                                                 : cek(i) == true
-                                                    ? ' ⋅ Buka pukul ${widget.data[i].data()['jamOp'][now].substring(0, 5)}'
+                                                    ? ' ⋅ Buka pukul ${wisata[i].data()['jamOp'][now].toString().substring(0, 5)}'
                                                     : " ⋅ ${open(i)}",
                                             style: const TextStyle(
                                               color: Colors.black54,
@@ -465,20 +462,6 @@ class _MapsScreenState extends State<MapsScreen> {
                                           ),
                                   ],
                                 ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.start,
-                                //   crossAxisAlignment: CrossAxisAlignment.center,
-                                //   children: [
-                                //     Icon(
-                                //       FontAwesomeIcons.locationArrow,
-                                //       size: 15,
-                                //       color: Colors.black54,
-                                //     ),
-                                //     SizedBox(
-                                //       width: 5,
-                                //     ),
-                                //   ],
-                                // ),
                               ],
                             ),
                           ),
@@ -494,7 +477,6 @@ class _MapsScreenState extends State<MapsScreen> {
               );
             }),
       );
-
       setState(() {});
     }
   }
@@ -510,52 +492,60 @@ class _MapsScreenState extends State<MapsScreen> {
     return m;
   }
 
-  bool today(index) {
+  bool today(int index) {
     bool oc;
     int now = DateTime.now().weekday.toInt() - 1;
+    // var wisata = widget.data[index].data();
+    var wisata = kategori()[index].data();
 
     String a = '$jam$menit';
     int an = int.parse(a);
-    String b = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data.data()['jamOp'][now] == 'Tutup'
+    String b = wisata['jamOp'][now] == 'Buka 24 jam' ||
+            wisata['jamOp'][now] == 'Tutup'
         ? '0'
-        : '${widget.data[index].data()['jamOp'][now].substring(0, 2)}${widget.data[index].data()['jamOp'][now].substring(3, 5)}';
+        : '${wisata['jamOp'][now].toString().substring(0, 2)}${wisata['jamOp'][now].toString().substring(3, 5)}';
     int bn = int.parse(b);
-    String c = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data[index].data()['jamOp'][now] == 'Tutup'
+    String c = wisata['jamOp'][now] == 'Buka 24 jam' ||
+            wisata['jamOp'][now] == 'Tutup'
         ? '0'
-        : '${widget.data[index].data()['jamOp'][now].substring(8, 10)}${widget.data[index].data()['jamOp'][now].substring(11, 13)}';
+        : '${wisata['jamOp'][now].toString().substring(8, 10)}${wisata['jamOp'][now].toString().substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (widget.data[index].data()['jamOp'][now] == 'Buka 24 jam') {
+    if (wisata['hariOp'][now] == true) {
       oc = true;
-    } else if (widget.data[index].data()['hariOp'][now] == true &&
-        an >= bn &&
-        an <= cn) {
+    } else if (wisata['hariOp'][now] == true) {
       oc = true;
     } else {
       oc = false;
     }
+    // wisata['jamOp'][now] == 'Buka 24 jam' ||
+    //         (wisata['hariOp'][now] == true && an >= bn && an <= cn)
+    //     ? oc = true
+    //     : oc = false;
+
     return oc;
   }
 
   bool cek(index) {
     bool ck;
     int now = DateTime.now().weekday.toInt() - 1;
+    // var wisata = widget.data[index].data();
+    var wisata = kategori()[index].data();
+
     String a = '$jam$menit';
     int an = int.parse(a);
-    String b = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data[index].data()['jamOp'][now] == 'Tutup'
+    String b = wisata['jamOp'][now] == 'Buka 24 jam' ||
+            wisata['jamOp'][now] == 'Tutup'
         ? '0'
-        : '${widget.data[index].data()['jamOp'][now].substring(0, 2)}${widget.data[index].data()['jamOp'][now].substring(3, 5)}';
+        : '${wisata['jamOp'][now].toString().substring(0, 2)}${wisata['jamOp'][now].toString().substring(3, 5)}';
     int bn = int.parse(b);
-    String c = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data[index].data()['jamOp'][now] == 'Tutup'
+    String c = wisata['jamOp'][now] == 'Buka 24 jam' ||
+            wisata['jamOp'][now] == 'Tutup'
         ? '0'
-        : '${widget.data[index].data()['jamOp'][now].substring(8, 10)}${widget.data[index].data()['jamOp'][now].substring(11, 13)}';
+        : '${wisata['jamOp'][now].toString().substring(8, 10)}${wisata['jamOp'][now].toString().substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (widget.data[index].data()['hariOp'][now] == true && (an <= cn)) {
+    if (wisata['hariOp'][now] == true && (an <= cn)) {
       ck = true;
     } else {
       ck = false;
@@ -566,28 +556,29 @@ class _MapsScreenState extends State<MapsScreen> {
   String closed(index) {
     String clsd;
     int now = DateTime.now().weekday.toInt() - 1;
-    String a = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data[index].data()['jamOp'][now] == 'Tutup'
-        ? '0'
-        : '$jam$menit';
+    // var wisata = widget.data[index].data();
+    var wisata = kategori()[index].data();
+
+    String a =
+        wisata['jamOp'][now] == 'Buka 24 jam' || wisata['jamOp'][now] == 'Tutup'
+            ? '0'
+            : '$jam$menit';
     int an = int.parse(a);
-    String b = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data[index].data()['jamOp'][now] == 'Tutup'
+    String b = wisata['jamOp'][now] == 'Buka 24 jam' ||
+            wisata['jamOp'][now] == 'Tutup'
         ? '0'
-        : '${widget.data[index].data()['jamOp'][now].substring(0, 2)}${widget.data[index].data()['jamOp'][now].substring(3, 5)}';
+        : '${wisata['jamOp'][now].toString().substring(0, 2)}${wisata['jamOp'][now].toString().substring(3, 5)}';
     int bn = int.parse(b);
-    String c = widget.data[index].data()['jamOp'][now] == 'Buka 24 jam' ||
-            widget.data[index].data()['jamOp'][now] == 'Tutup'
+    String c = wisata['jamOp'][now] == 'Buka 24 jam' ||
+            wisata['jamOp'][now] == 'Tutup'
         ? '0'
-        : '${widget.data[index].data()['jamOp'][now].substring(8, 10)}${widget.data[index].data()['jamOp'][now].substring(11, 13)}';
+        : '${wisata['jamOp'][now].toString().substring(8, 10)}${wisata['jamOp'][now].toString().substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (widget.data[index].data()['jamOp'][now] == 'Buka 24 jam') {
+    if (wisata['jamOp'][now] == 'Buka 24 jam') {
       clsd = "Buka 24 jam";
-    } else if ((widget.data[index].data()['hariOp'][now] == true && an >= bn) &&
-        (an < cn)) {
-      clsd =
-          'Tutup pukul ${widget.data[index].data()['jamOp'][now].substring(8, 13)}';
+    } else if ((wisata['hariOp'][now] == true && an >= bn) && (an < cn)) {
+      clsd = 'Tutup pukul ${wisata['jamOp'][now].toString().substring(8, 13)}';
     } else {
       clsd = '';
     }
@@ -599,6 +590,8 @@ class _MapsScreenState extends State<MapsScreen> {
     String hr;
     int now = DateTime.now().weekday.toInt() - 1;
     int nxt = DateTime.now().weekday.toInt();
+    // var wisata = widget.data[index].data();
+    var wisata = kategori()[index].data();
     if (nxt == 7) {
       nxt = 0;
     }
@@ -628,9 +621,8 @@ class _MapsScreenState extends State<MapsScreen> {
         hr = '';
     }
 
-    if (widget.data[index].data()['hariOp'][nxt] == true) {
-      opn =
-          'Buka $hr pukul ${widget.data[index].data()['jamOp'][nxt].substring(0, 5)}';
+    if (wisata['hariOp'][nxt] == true) {
+      opn = 'Buka $hr pukul ${wisata['jamOp'][nxt].toString().substring(0, 5)}';
     } else {
       opn = 'Buka segera';
     }
@@ -760,9 +752,8 @@ class _MapsScreenState extends State<MapsScreen> {
             // size: 30,
           ),
         ),
-        title: Text(
+        title: const Text(
           'Peta Wisata',
-          // widget.data[0].data()['longitude'].toString(),
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,

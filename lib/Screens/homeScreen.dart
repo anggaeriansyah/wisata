@@ -6,10 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:wisata_tenjolaya/Screens/aboutScreen.dart';
-import 'package:wisata_tenjolaya/Screens/maps.dart';
 import 'package:wisata_tenjolaya/Screens/mapsScreen.dart';
 import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
-import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
 import 'package:wisata_tenjolaya/widgets/allCategories_widget.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
@@ -17,8 +15,6 @@ import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
 import '../widgets/big_app_text.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -286,56 +282,13 @@ class _HomeScreenState extends State<HomeScreen>
             backgroundColor: Colors.white,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(
+              children: const [
+                Expanded(
                   child: BigAppText(
                     text: 'Wisata Tenjolaya',
                     size: 28,
                   ),
                 ),
-                // InkWell(
-                //   onTap: () {
-                //     Get.to(AboutScreen());
-                //     // final wisata = <String, dynamic>{
-                //     //   "image": 'assets/images/arca-domas.jpg',
-                //     //   "nama": 'Arca Domas Cibalay',
-                //     //   "desa": 'Tapos I',
-                //     //   "kec": 'Kecamatan Tenjolaya',
-                //     //   "hariOp": [true, true, true, true, true, true, true],
-                //     //   "jamOp": [
-                //     //     '09:00 - 17:00',
-                //     //     '09:00 - 17:00',
-                //     //     '09:00 - 17:00',
-                //     //     '09:00 - 17:00',
-                //     //     '09:00 - 17:00',
-                //     //     '09:00 - 17:00',
-                //     //     '09:00 - 17:00',
-                //     //   ],
-                //     //   "tempClosed": false,
-                //     //   "penginapan": false,
-                //     //   "tiket": '5.000',
-                //     //   "desc":
-                //     //       'Tempat ini merupakan situs berbentuk kompleks (kumpulan situs), Di dalam komplek ini terdapat persebaran situs diantaranya Situs Jami Paciing, Balekambang, Pasir Manggis, Arca Domas, Endong Kasang, Cipangentehan dan situs Batu Bergores. Adapun situs-situs tersebut membentuk batu kubur, dolmen (mirip meja berukuran lebih pendek), menhir (batu panjang yang berdiri) dan batu bergurat-gurat yang diyakini sebagai pahatan tulisan kuno.',
-                //     //   "imageGaleries": [],
-                //     //   "latitude": -6.67139,
-                //     //   "longitude": 106.70989,
-                //     //   "kategori": 'situs',
-                //     // };
-
-                //     // db.collection("wisata").add(wisata).then(
-                //     //     (DocumentReference doc) =>
-                //     //         print('DocumentSnapshot added with ID: ${doc.id}'));
-                //   },
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(top: 10, right: 5),
-                //     child: Lottie.asset(
-                //       'assets/lottie/about-icon.json',
-                //       // 'assets/lottie/paper-rocket.json',
-                //       height: 35,
-                //       fit: BoxFit.cover,
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
