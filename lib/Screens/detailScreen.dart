@@ -600,9 +600,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   transition: Transition.downToUp);
             },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: const Icon(
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: Icon(
                 Iconsax.cloud,
                 // FontAwesomeIcons.cloudBolt,
                 size: 30,
@@ -640,23 +640,12 @@ class _DetailScreenState extends State<DetailScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => widget.wisata
-                                  .data()['image']
-                                  .toString()
-                                  .substring(0, 6) ==
-                              'assets'
-                          ? PhotoView(
-                              imageProvider:
-                                  AssetImage(widget.wisata.data()['image']),
-                              minScale: PhotoViewComputedScale.contained * 1,
-                              maxScale: PhotoViewComputedScale.covered * 1.1,
-                            )
-                          : PhotoView(
-                              imageProvider: CachedNetworkImageProvider(
-                                  widget.wisata.data()['image']),
-                              minScale: PhotoViewComputedScale.contained * 1,
-                              maxScale: PhotoViewComputedScale.covered * 1.1,
-                            )));
+                      builder: (context) => PhotoView(
+                            imageProvider: CachedNetworkImageProvider(
+                                widget.wisata.data()['image']),
+                            minScale: PhotoViewComputedScale.contained * 1,
+                            maxScale: PhotoViewComputedScale.covered * 1.1,
+                          )));
             },
             child: Stack(
               children: <Widget>[
@@ -679,20 +668,10 @@ class _DetailScreenState extends State<DetailScreen> {
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20),
                         ),
-                        child: widget.wisata
-                                    .data()['image']
-                                    .toString()
-                                    .substring(0, 6) ==
-                                'assets'
-                            ? Image(
-                                image:
-                                    AssetImage(widget.wisata.data()['image']),
-                                fit: BoxFit.cover,
-                              )
-                            : CachedNetworkImage(
-                                imageUrl: widget.wisata.data()['image'],
-                                fit: BoxFit.cover,
-                              )),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.wisata.data()['image'],
+                          fit: BoxFit.cover,
+                        )),
                   ),
                 ),
                 Positioned(
@@ -1250,6 +1229,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   widget.wisata.data()['desc'],
+                  textAlign: TextAlign.justify,
                   style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 16,

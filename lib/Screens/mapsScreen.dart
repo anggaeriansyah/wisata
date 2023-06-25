@@ -511,9 +511,9 @@ class _MapsScreenState extends State<MapsScreen> {
         : '${wisata['jamOp'][now].toString().substring(8, 10)}${wisata['jamOp'][now].toString().substring(11, 13)}';
     int cn = int.parse(c);
 
-    if (wisata['hariOp'][now] == true) {
+    if (wisata['jamOp'][now] == 'Buka 24 jam') {
       oc = true;
-    } else if (wisata['hariOp'][now] == true) {
+    } else if ((wisata['hariOp'][now] == true) && (an >= bn && an <= cn)) {
       oc = true;
     } else {
       oc = false;
@@ -773,272 +773,264 @@ class _MapsScreenState extends State<MapsScreen> {
               itemBuilder: (context) => popupMenuList)
         ],
       ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: _kGooglePlex,
-            // mapType: MapType.normal,
-            myLocationButtonEnabled: false,
-            compassEnabled: true,
-            // myLocationEnabled: true,
-            markers: Set<Marker>.of(_markers),
-            polygons: _polygon,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: _kGooglePlex,
+              // mapType: MapType.normal,
+              myLocationButtonEnabled: false,
+              compassEnabled: true,
+              // myLocationEnabled: true,
+              markers: Set<Marker>.of(_markers),
+              polygons: _polygon,
 
-            onMapCreated: (GoogleMapController controller) {
-              _infoWindowController.googleMapController = controller;
-              controller.setMapStyle(mapTheme);
+              onMapCreated: (GoogleMapController controller) {
+                _infoWindowController.googleMapController = controller;
+                controller.setMapStyle(mapTheme);
 
-              _controller.complete(controller);
-            },
-            onTap: (position) {
-              _infoWindowController.hideInfoWindow!();
-            },
-            onCameraMove: (position) {
-              _infoWindowController.onCameraMove!();
-            },
-          ),
-          CustomInfoWindow(
-            controller: _infoWindowController,
-            height: 200,
-            width: 300,
-            offset: 50,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 85),
-            child: SizedBox(
-              height: 50,
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () async {
-                      _isAll == true ? '' : _markers.clear();
-                      GoogleMapController controller = await _controller.future;
-                      controller.animateCamera(
-                        CameraUpdate.newCameraPosition(_kGooglePlex),
-                      );
-                      _infoWindowController.hideInfoWindow!();
-                      _isAll = true;
-                      _isAirTerjun = false;
-                      _isRekreasi = false;
-                      _isSitus = false;
+                _controller.complete(controller);
+              },
+              onTap: (position) {
+                _infoWindowController.hideInfoWindow!();
+              },
+              onCameraMove: (position) {
+                _infoWindowController.onCameraMove!();
+              },
+            ),
+            CustomInfoWindow(
+              controller: _infoWindowController,
+              height: 200,
+              width: 300,
+              offset: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: SizedBox(
+                height: 50,
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () async {
+                        _isAll == true ? '' : _markers.clear();
+                        GoogleMapController controller =
+                            await _controller.future;
+                        controller.animateCamera(
+                          CameraUpdate.newCameraPosition(_kGooglePlex),
+                        );
+                        _infoWindowController.hideInfoWindow!();
+                        _isAll = true;
+                        _isAirTerjun = false;
+                        _isRekreasi = false;
+                        _isSitus = false;
 
-                      setState(() {
-                        if (_isActive) {
-                          _markers.add(Marker(
-                              markerId: MarkerId(50.toString()),
-                              position: LatLng(_currentPosition!.latitude,
-                                  _currentPosition!.longitude),
-                              icon: BitmapDescriptor.defaultMarker));
-                        }
-                        loadData();
-                      });
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.only(
-                            left: 20, top: 10, right: 10, bottom: 10),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                            color: _isAll
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                spreadRadius: -2,
-                                color: Colors.black26,
-                                offset: Offset(0, 2),
-                                blurRadius: 7,
-                              ),
-                            ]),
-                        child: Text(
-                          'All',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: _isAll ? Colors.white : Colors.black),
-                        )),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      _markers.clear();
-                      GoogleMapController controller = await _controller.future;
-                      controller.animateCamera(
-                        CameraUpdate.newCameraPosition(_kGooglePlex),
-                      );
-                      _infoWindowController.hideInfoWindow!();
-                      _isAll = false;
-                      _isRekreasi = false;
-                      _isSitus = false;
-                      _isAirTerjun = !_isAirTerjun;
-                      setState(() {
-                        if (_isActive) {
-                          _markers.add(Marker(
-                              markerId: MarkerId(50.toString()),
-                              position: LatLng(_currentPosition!.latitude,
-                                  _currentPosition!.longitude),
-                              icon: BitmapDescriptor.defaultMarker));
-                        }
-                        loadData();
-                      });
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 10, right: 10, bottom: 10),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                            color: _isAirTerjun
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                spreadRadius: -2,
-                                color: Colors.black26,
-                                offset: Offset(0, 2),
-                                blurRadius: 7,
-                              ),
-                            ]),
-                        child: Text(
-                          'Air Terjun',
-                          style: TextStyle(
-                              // fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color:
-                                  _isAirTerjun ? Colors.white : Colors.black),
-                        )),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      // wisata.
-                      _markers.clear();
-                      GoogleMapController controller = await _controller.future;
-                      controller.animateCamera(
-                        CameraUpdate.newCameraPosition(_kGooglePlex),
-                      );
-                      _infoWindowController.hideInfoWindow!();
-                      _isAll = false;
-                      _isAirTerjun = false;
-                      _isSitus = false;
-                      _isRekreasi = !_isRekreasi;
+                        setState(() {
+                          if (_isActive) {
+                            _markers.add(Marker(
+                                markerId: MarkerId(50.toString()),
+                                position: LatLng(_currentPosition!.latitude,
+                                    _currentPosition!.longitude),
+                                icon: BitmapDescriptor.defaultMarker));
+                          }
+                          loadData();
+                        });
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.only(
+                              left: 20, top: 10, right: 10, bottom: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                              color: _isAll
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                  spreadRadius: -2,
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 7,
+                                ),
+                              ]),
+                          child: Text(
+                            'All',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: _isAll ? Colors.white : Colors.black),
+                          )),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        _markers.clear();
+                        GoogleMapController controller =
+                            await _controller.future;
+                        controller.animateCamera(
+                          CameraUpdate.newCameraPosition(_kGooglePlex),
+                        );
+                        _infoWindowController.hideInfoWindow!();
+                        _isAll = false;
+                        _isRekreasi = false;
+                        _isSitus = false;
+                        _isAirTerjun = !_isAirTerjun;
+                        setState(() {
+                          if (_isActive) {
+                            _markers.add(Marker(
+                                markerId: MarkerId(50.toString()),
+                                position: LatLng(_currentPosition!.latitude,
+                                    _currentPosition!.longitude),
+                                icon: BitmapDescriptor.defaultMarker));
+                          }
+                          loadData();
+                        });
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 10, right: 10, bottom: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                              color: _isAirTerjun
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                  spreadRadius: -2,
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 7,
+                                ),
+                              ]),
+                          child: Text(
+                            'Air Terjun',
+                            style: TextStyle(
+                                // fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color:
+                                    _isAirTerjun ? Colors.white : Colors.black),
+                          )),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        // wisata.
+                        _markers.clear();
+                        GoogleMapController controller =
+                            await _controller.future;
+                        controller.animateCamera(
+                          CameraUpdate.newCameraPosition(_kGooglePlex),
+                        );
+                        _infoWindowController.hideInfoWindow!();
+                        _isAll = false;
+                        _isAirTerjun = false;
+                        _isSitus = false;
+                        _isRekreasi = !_isRekreasi;
 
-                      setState(() {
-                        if (_isActive) {
-                          _markers.add(Marker(
-                              markerId: MarkerId(50.toString()),
-                              position: LatLng(_currentPosition!.latitude,
-                                  _currentPosition!.longitude),
-                              icon: BitmapDescriptor.defaultMarker));
-                        }
-                        loadData();
-                      });
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 10, right: 10, bottom: 10),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                            color: _isRekreasi
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                spreadRadius: -2,
-                                color: Colors.black26,
-                                offset: Offset(0, 2),
-                                blurRadius: 7,
-                              ),
-                            ]),
-                        child: Text(
-                          'Rekreasi',
-                          style: TextStyle(
-                              // fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: _isRekreasi ? Colors.white : Colors.black),
-                        )),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      _markers.clear();
-                      GoogleMapController controller = await _controller.future;
-                      controller.animateCamera(
-                        CameraUpdate.newCameraPosition(_kGooglePlex),
-                      );
-                      _infoWindowController.hideInfoWindow!();
-                      _isAll = false;
-                      _isAirTerjun = false;
-                      _isRekreasi = false;
-                      _isSitus = !_isSitus;
-                      setState(() {
-                        if (_isActive) {
-                          _markers.add(Marker(
-                              markerId: MarkerId(50.toString()),
-                              position: LatLng(_currentPosition!.latitude,
-                                  _currentPosition!.longitude),
-                              icon: BitmapDescriptor.defaultMarker));
-                        }
-                        loadData();
-                      });
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 10, right: 10, bottom: 10),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                            color: _isSitus
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                spreadRadius: -2,
-                                color: Colors.black26,
-                                offset: Offset(0, 2),
-                                blurRadius: 7,
-                              ),
-                            ]),
-                        child: Text(
-                          'Situs Prasejarah',
-                          style: TextStyle(
-                              // fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: _isSitus ? Colors.white : Colors.black),
-                        )),
-                  ),
-                ],
+                        setState(() {
+                          if (_isActive) {
+                            _markers.add(Marker(
+                                markerId: MarkerId(50.toString()),
+                                position: LatLng(_currentPosition!.latitude,
+                                    _currentPosition!.longitude),
+                                icon: BitmapDescriptor.defaultMarker));
+                          }
+                          loadData();
+                        });
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 10, right: 10, bottom: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                              color: _isRekreasi
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                  spreadRadius: -2,
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 7,
+                                ),
+                              ]),
+                          child: Text(
+                            'Rekreasi',
+                            style: TextStyle(
+                                // fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color:
+                                    _isRekreasi ? Colors.white : Colors.black),
+                          )),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        _markers.clear();
+                        GoogleMapController controller =
+                            await _controller.future;
+                        controller.animateCamera(
+                          CameraUpdate.newCameraPosition(_kGooglePlex),
+                        );
+                        _infoWindowController.hideInfoWindow!();
+                        _isAll = false;
+                        _isAirTerjun = false;
+                        _isRekreasi = false;
+                        _isSitus = !_isSitus;
+                        setState(() {
+                          if (_isActive) {
+                            _markers.add(Marker(
+                                markerId: MarkerId(50.toString()),
+                                position: LatLng(_currentPosition!.latitude,
+                                    _currentPosition!.longitude),
+                                icon: BitmapDescriptor.defaultMarker));
+                          }
+                          loadData();
+                        });
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 10, right: 10, bottom: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                              color: _isSitus
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                  spreadRadius: -2,
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 7,
+                                ),
+                              ]),
+                          child: Text(
+                            'Situs Prasejarah',
+                            style: TextStyle(
+                                // fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: _isSitus ? Colors.white : Colors.black),
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 155,
-            right: 10,
-            child: FloatingActionButton(
-              mini: true,
-              heroTag: '2',
-              backgroundColor: Colors.white70,
-              elevation: 0,
-              tooltip: 'Show current position',
-              onPressed: () async {
-                if (_isActive) {
-                  GoogleMapController controller = await _controller.future;
-                  controller.animateCamera(
-                    CameraUpdate.newCameraPosition(CameraPosition(
-                        target: LatLng(_currentPosition!.latitude,
-                            _currentPosition!.longitude),
-                        zoom: 13)),
-                  );
-                } else {
-                  Geolocator.getCurrentPosition(
-                          desiredAccuracy: LocationAccuracy.medium)
-                      .then((Position position) async {
-                    setState(
-                      () => _currentPosition = position,
-                    );
+            Positioned(
+              bottom: 155,
+              right: 10,
+              child: FloatingActionButton(
+                mini: true,
+                heroTag: '2',
+                backgroundColor: Colors.white70,
+                elevation: 0,
+                tooltip: 'Show current position',
+                onPressed: () async {
+                  if (_isActive) {
                     GoogleMapController controller = await _controller.future;
                     controller.animateCamera(
                       CameraUpdate.newCameraPosition(CameraPosition(
@@ -1046,57 +1038,72 @@ class _MapsScreenState extends State<MapsScreen> {
                               _currentPosition!.longitude),
                           zoom: 13)),
                     );
-                    _infoWindowController.hideInfoWindow!();
-                    _isActive = true;
-                    setState(() {
-                      _markers.add(Marker(
-                          markerId: MarkerId(50.toString()),
-                          position: LatLng(_currentPosition!.latitude,
-                              _currentPosition!.longitude),
-                          icon: BitmapDescriptor.defaultMarker,
-                          infoWindow:
-                              const InfoWindow(title: 'Lokasi saat ini'),
-                          onTap: () {
-                            _infoWindowController.hideInfoWindow!();
-                          }));
+                  } else {
+                    Geolocator.getCurrentPosition(
+                            desiredAccuracy: LocationAccuracy.medium)
+                        .then((Position position) async {
+                      setState(
+                        () => _currentPosition = position,
+                      );
+                      GoogleMapController controller = await _controller.future;
+                      controller.animateCamera(
+                        CameraUpdate.newCameraPosition(CameraPosition(
+                            target: LatLng(_currentPosition!.latitude,
+                                _currentPosition!.longitude),
+                            zoom: 13)),
+                      );
+                      _infoWindowController.hideInfoWindow!();
+                      _isActive = true;
+                      setState(() {
+                        _markers.add(Marker(
+                            markerId: MarkerId(50.toString()),
+                            position: LatLng(_currentPosition!.latitude,
+                                _currentPosition!.longitude),
+                            icon: BitmapDescriptor.defaultMarker,
+                            infoWindow:
+                                const InfoWindow(title: 'Lokasi saat ini'),
+                            onTap: () {
+                              _infoWindowController.hideInfoWindow!();
+                            }));
+                      });
+                    }).catchError((e) {
+                      debugPrint(e);
                     });
-                  }).catchError((e) {
-                    debugPrint(e);
-                  });
-                }
-                setState(() {});
-              },
-              child: Icon(
-                FontAwesomeIcons.streetView,
-                color: Theme.of(context).primaryColor,
-                size: 25,
+                  }
+                  setState(() {});
+                },
+                child: Icon(
+                  FontAwesomeIcons.streetView,
+                  color: Theme.of(context).primaryColor,
+                  size: 25,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 108,
-            right: 10,
-            child: FloatingActionButton(
-              mini: true,
-              backgroundColor: Colors.white70,
-              elevation: 0,
-              tooltip: 'Kembali ke posisi semula',
-              onPressed: () async {
-                GoogleMapController controller = await _controller.future;
-                controller.animateCamera(
-                  CameraUpdate.newCameraPosition(_kGooglePlex),
-                );
-                _infoWindowController.hideInfoWindow!();
-                setState(() {});
-              },
-              child: Icon(
-                FontAwesomeIcons.locationCrosshairs,
-                color: Theme.of(context).primaryColor,
-                size: 25,
+            Positioned(
+              bottom: 108,
+              right: 10,
+              child: FloatingActionButton(
+                mini: true,
+                backgroundColor: Colors.white70,
+                elevation: 0,
+                tooltip: 'Kembali ke posisi semula',
+                onPressed: () async {
+                  GoogleMapController controller = await _controller.future;
+                  controller.animateCamera(
+                    CameraUpdate.newCameraPosition(_kGooglePlex),
+                  );
+                  _infoWindowController.hideInfoWindow!();
+                  setState(() {});
+                },
+                child: Icon(
+                  FontAwesomeIcons.locationCrosshairs,
+                  color: Theme.of(context).primaryColor,
+                  size: 25,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

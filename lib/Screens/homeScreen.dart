@@ -11,7 +11,7 @@ import 'package:wisata_tenjolaya/Screens/searchScreen.dart';
 import 'package:wisata_tenjolaya/widgets/airTerjun_widget.dart';
 import 'package:wisata_tenjolaya/widgets/allCategories_widget.dart';
 import 'package:wisata_tenjolaya/widgets/big_app_text.dart';
-import 'package:wisata_tenjolaya/widgets/rekomendasi_widget.dart';
+import 'package:wisata_tenjolaya/widgets/banner_widget.dart';
 import 'package:wisata_tenjolaya/widgets/rekreasi_widget.dart';
 import 'package:wisata_tenjolaya/widgets/situs_widget.dart';
 import '../widgets/big_app_text.dart';
@@ -306,12 +306,12 @@ class _HomeScreenState extends State<HomeScreen>
                   //   height: 10,
                   // ),
                   const SizedBox(
-                    height: 260,
-                    child: RekomendasiWidget(),
+                    height: 130,
+                    child: BannerWidget(),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: TabBar(
