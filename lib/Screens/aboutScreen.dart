@@ -9,7 +9,6 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   // const AboutScreen({Key? key}) : super(key: key);
-  var email = 'anggaeriansyah7527@gmail.com';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _AboutScreenState extends State<AboutScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 5),
             child: Image(
-              image: AssetImage("assets/images/WT.png"),
+              image: const AssetImage("assets/images/WT.png"),
               // fit: BoxFit.cover,
               // height: 150,
               height: MediaQuery.of(context).size.width * 0.3,
@@ -51,7 +50,7 @@ class _AboutScreenState extends State<AboutScreen> {
             padding: EdgeInsets.only(bottom: 20),
             child: Center(
                 child: Text(
-              "Versi : 1.0.1",
+              "Versi : 2.0.0",
               style: TextStyle(fontWeight: FontWeight.w700),
             )),
           ),

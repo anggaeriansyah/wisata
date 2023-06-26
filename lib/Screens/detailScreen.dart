@@ -12,6 +12,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:wisata_tenjolaya/Screens/mapsScreen.dart';
+// import 'package:wisata_tenjolaya/Screens/ruteScreen.dart';
 import 'package:wisata_tenjolaya/Screens/weatherScreen.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -678,6 +679,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   right: 30,
                   bottom: 10,
                   child: GestureDetector(
+                    // onTap: (() => Get.to(RuteScreen(
+                    //       nama: widget.wisata.data()['nama'],
+                    //       lat: widget.wisata.data()['latitude'],
+                    //       long: widget.wisata.data()['longitude'],
+                    //     ))),
                     onTap: () {
                       _marker.clear();
                       _marker.add(Marker(
@@ -734,6 +740,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       );
                     },
+
                     child: Stack(
                       children: <Widget>[
                         Container(
@@ -1188,12 +1195,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                       maxLines: 1,
                                       overflow: TextOverflow.fade,
                                       style: const TextStyle(
-                                          // color: widget.wisata.camping ==
-                                          //             'Tersedia' ||
-                                          //         widget.wisata.camping ==
-                                          //             'tersedia'
-                                          //     ? Colors.green
-                                          //     : Theme.of(context).primaryColor,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 18,

@@ -449,15 +449,20 @@ class _MapsScreenState extends State<MapsScreen> {
                                               ),
                                     wisata[i].data()['tempClosed']
                                         ? const Text('')
-                                        : Text(
-                                            today(i) == true
-                                                ? ' ⋅ ${closed(i)}'
-                                                : cek(i) == true
-                                                    ? ' ⋅ Buka pukul ${wisata[i].data()['jamOp'][now].toString().substring(0, 5)}'
-                                                    : " ⋅ ${open(i)}",
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 13,
+                                        : Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              today(i) == true
+                                                  ? ' ⋅ ${closed(i)}'
+                                                  : cek(i) == true
+                                                      ? ' ⋅ Buka pukul ${wisata[i].data()['jamOp'][now].toString().substring(0, 5)} WIB'
+                                                      : " ⋅ ${open(i)}",
+                                              overflow: TextOverflow.fade,
+                                              softWrap: false,
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 13,
+                                              ),
                                             ),
                                           ),
                                   ],
@@ -578,7 +583,8 @@ class _MapsScreenState extends State<MapsScreen> {
     if (wisata['jamOp'][now] == 'Buka 24 jam') {
       clsd = "Buka 24 jam";
     } else if ((wisata['hariOp'][now] == true && an >= bn) && (an < cn)) {
-      clsd = 'Tutup pukul ${wisata['jamOp'][now].toString().substring(8, 13)}';
+      clsd =
+          'Tutup pukul ${wisata['jamOp'][now].toString().substring(8, 13)} WIB';
     } else {
       clsd = '';
     }
@@ -622,7 +628,8 @@ class _MapsScreenState extends State<MapsScreen> {
     }
 
     if (wisata['hariOp'][nxt] == true) {
-      opn = 'Buka $hr pukul ${wisata['jamOp'][nxt].toString().substring(0, 5)}';
+      opn =
+          'Buka $hr pukul ${wisata['jamOp'][nxt].toString().substring(0, 5)} WIB';
     } else {
       opn = 'Buka segera';
     }
@@ -761,7 +768,6 @@ class _MapsScreenState extends State<MapsScreen> {
         actions: [
           PopupMenuButton(
               icon: const Icon(
-                // FontAwesomeIcons.layerGroup,
                 FontAwesomeIcons.ellipsisVertical,
                 color: Colors.black,
               ),

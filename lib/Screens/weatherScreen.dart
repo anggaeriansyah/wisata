@@ -189,22 +189,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height / 2.8,
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                  // color: Theme.of(context).primaryColor,
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.black26,
-                  //     offset: Offset(0, 3),
-                  //     blurRadius: 10,
-                  //   ),
-                  // ],
-                  // borderRadius: BorderRadius.only(
-                  //     bottomLeft: Radius.circular(20),
-                  //     bottomRight: Radius.circular(20))
-                  ),
               child: temp == null
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -297,7 +284,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       blurRadius: 7,
                     ),
                   ],
-                  // color: Theme.of(context).primaryColor,
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Column(
@@ -544,62 +530,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     );
                   }),
             ),
-            // ListView.builder(
-            //     physics: const NeverScrollableScrollPhysics(),
-            //     scrollDirection: Axis.vertical,
-            //     itemCount: 5,
-            //     shrinkWrap: true,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return Padding(
-            //           padding: const EdgeInsets.symmetric(horizontal: 20),
-            //           child: Column(
-            //             children: [
-            //               Container(
-            //                 margin: const EdgeInsets.only(bottom: 10),
-            //                 decoration: BoxDecoration(
-            //                     color: Theme.of(context).primaryColor,
-            //                     borderRadius: const BorderRadius.all(
-            //                         Radius.circular(20))),
-            //                 child: ListTile(
-            //                   leading: cuaca.isEmpty
-            //                       ? const SizedBox(
-            //                           height: 20,
-            //                           width: 20,
-            //                           child: CircularProgressIndicator(
-            //                             valueColor:
-            //                                 AlwaysStoppedAnimation<Color>(
-            //                                     Colors.white54),
-            //                           ),
-            //                         )
-            //                       : _cuacaIcons(index),
-            //                   title: Text(
-            //                     cuaca.isEmpty
-            //                         ? 'loading'
-            //                         // : '${DateFormat('EEEE').format(DateTime.parse(dt[index]))} ⋅ ${cuaca[index]}',
-            //                         : '${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))} ⋅ ${_cuacaId[index]}',
-            //                     style: const TextStyle(color: Colors.white),
-            //                   ),
-            //                   trailing: temp5.isEmpty
-            //                       ? const SizedBox(
-            //                           height: 20,
-            //                           width: 20,
-            //                           child: CircularProgressIndicator(
-            //                             valueColor:
-            //                                 AlwaysStoppedAnimation<Color>(
-            //                                     Colors.white54),
-            //                           ),
-            //                         )
-            //                       : Text(
-            //                           '${temp5[index].toString().substring(0, 2)}\u00B0'
-            //                           'C',
-            //                           style:
-            //                               const TextStyle(color: Colors.white),
-            //                         ),
-            //                 ),
-            //               )
-            //             ],
-            //           ));
-            //     })
           ],
         ),
       ),
