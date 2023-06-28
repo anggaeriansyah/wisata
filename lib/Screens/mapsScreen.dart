@@ -755,21 +755,21 @@ class _MapsScreenState extends State<MapsScreen> {
           },
           child: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
             // size: 30,
           ),
         ),
         title: const Text(
           'Peta Wisata',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         actions: [
           PopupMenuButton(
               icon: const Icon(
                 FontAwesomeIcons.ellipsisVertical,
-                color: Colors.black,
+                color: Colors.white,
               ),
               elevation: 5,
               position: PopupMenuPosition.under,

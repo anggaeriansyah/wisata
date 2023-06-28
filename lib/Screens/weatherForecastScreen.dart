@@ -121,6 +121,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -130,70 +131,67 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
           },
           child: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
         title: const Text(
           'Prakiraan Cuaca',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 10),
+      body: Padding(
+        // padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 15),
         child: ListView.builder(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemCount: dt.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 13),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20))),
-                    child: ListTile(
-                      leading: cuaca.isEmpty
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white54),
-                              ),
-                            )
-                          : _cuacaIcons(index),
-                      title: Text(
-                        cuaca.isEmpty
-                            ? 'loading'
-                            : '''${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))}
+              return Container(
+                margin: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+                child: ListTile(
+                  leading: cuaca.isEmpty
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white54),
+                          ),
+                        )
+                      : _cuacaIcons(index),
+                  title: Text(
+                    cuaca.isEmpty
+                        ? 'loading'
+                        : '''${_hari[index]} ${DateFormat('HH:mm').format(DateTime.parse(dt[index]))}
 ${desc5[index]}''',
-                        style: const TextStyle(
-                            color: Colors.white, overflow: TextOverflow.fade),
-                      ),
-                      trailing: temp5.isEmpty
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white54),
-                              ),
-                            )
-                          : Text(
-                              '${temp5[index].toString().substring(0, 2)}\u00B0'
-                              'C',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                    ),
-                  ));
+                    style: const TextStyle(
+                        color: Colors.white, overflow: TextOverflow.fade),
+                  ),
+                  trailing: temp5.isEmpty
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white54),
+                          ),
+                        )
+                      : Text(
+                          '${temp5[index].toString().substring(0, 2)}\u00B0'
+                          'C',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                ),
+              );
             }),
-      )),
+      ),
     );
   }
 }

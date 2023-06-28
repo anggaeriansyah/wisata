@@ -573,7 +573,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -581,13 +581,13 @@ class _DetailScreenState extends State<DetailScreen> {
           },
           child: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
         title: Text(
           widget.wisata.data()['nama'],
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.white),
           overflow: TextOverflow.fade,
         ),
         actions: [
@@ -607,7 +607,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 Iconsax.cloud,
                 // FontAwesomeIcons.cloudBolt,
                 size: 30,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           ),
@@ -651,7 +651,7 @@ class _DetailScreenState extends State<DetailScreen> {
             child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
+                  padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
                   child: Container(
                     height: MediaQuery.of(context).size.width / 1.2,
                     decoration: const BoxDecoration(
@@ -693,35 +693,60 @@ class _DetailScreenState extends State<DetailScreen> {
                       ));
                       showDialog(
                         // barrierDismissible: false,
+
                         context: context,
                         builder: (context) => AlertDialog(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(24.0, 20, 24.0, 5),
+                          actionsPadding:
+                              const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10), // Ubah nilai sesuai keinginan
                           ),
                           title: const Text('Maps'),
-                          content: SizedBox(
-                            height: MediaQuery.of(context).size.height / 2.2,
-                            width: MediaQuery.of(context).size.width,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: GoogleMap(
-                                initialCameraPosition: _kGooglePlex,
-                                markers: Set<Marker>.of(_marker),
-                                onMapCreated: (GoogleMapController controller) {
-                                  // _infoWindowController.googleMapController = controller;
-                                  controller.setMapStyle(mapTheme);
-                                  // _controller.complete(controller);
-                                },
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height / 2.2,
+                                width: MediaQuery.of(context).size.width,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: GoogleMap(
+                                    initialCameraPosition: _kGooglePlex,
+                                    markers: Set<Marker>.of(_marker),
+                                    onMapCreated:
+                                        (GoogleMapController controller) {
+                                      // _infoWindowController.googleMapController = controller;
+                                      controller.setMapStyle(mapTheme);
+                                      // _controller.complete(controller);
+                                    },
+                                  ),
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Lokasi : ${widget.wisata.data()['desa']}, ${widget.wisata.data()['kec']}',
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           actions: [
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              margin: const EdgeInsets.only(right: 15),
+                              // margin: const EdgeInsets.only(right: 15),
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                   backgroundColor:
@@ -733,7 +758,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text('kembali'),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text('kembali'),
+                                ),
                               ),
                             ),
                           ],

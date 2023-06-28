@@ -7,7 +7,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:wisata_tenjolaya/Screens/detailScreen.dart';
+import 'package:wisata_tenjolaya/Utils/shapeBorder.dart';
 import 'dart:math' show cos, sqrt, asin;
+
+import '../Utils/distance_calculator.dart.dart';
 
 class SearchScreen extends StatefulWidget {
   // const SearchScreen({Key? key}) : super(key: key);
@@ -121,36 +124,36 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  onGetNearby() {
-    if (_isActive) {
-      for (var i = 0; i < listItemOnSearch.length; i++) {
-        listItemOnSearch[i].data()['latitude'] = double.parse(nearby(
-            listItemOnSearch[i].data()['latitude'],
-            listItemOnSearch[i].data()['longitude']));
-      }
-    }
-    return;
-  }
+  // onGetNearby() {
+  //   if (_isActive) {
+  //     for (var i = 0; i < listItemOnSearch.length; i++) {
+  //       listItemOnSearch[i].data()['latitude'] = double.parse(nearby(
+  //           listItemOnSearch[i].data()['latitude'],
+  //           listItemOnSearch[i].data()['longitude']));
+  //     }
+  //   }
+  //   return;
+  // }
 
-  double calculateDistance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
-  }
+  // double calculateDistance(lat1, lon1, lat2, lon2) {
+  //   var p = 0.017453292519943295;
+  //   var c = cos;
+  //   var a = 0.5 -
+  //       c((lat2 - lat1) * p) / 2 +
+  //       c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+  //   return 12742 * asin(sqrt(a));
+  // }
 
-  String nearby(double vLat, double vLong) {
-    var distance;
-    if (_isActive) {
-      distance = calculateDistance(
-          _currentPosition!.latitude, _currentPosition!.longitude, vLat, vLong);
-    } else {
-      distance = 0;
-    }
-    return distance.toStringAsFixed(2);
-  }
+  // String nearby(double vLat, double vLong) {
+  //   var distance;
+  //   if (_isActive) {
+  //     distance = calculateDistance(
+  //         _currentPosition!.latitude, _currentPosition!.longitude, vLat, vLong);
+  //   } else {
+  //     distance = 0;
+  //   }
+  //   return distance.toStringAsFixed(2);
+  // }
 
   void _cekLokasi() async {
     bool serviceEnabled;
@@ -205,12 +208,12 @@ class _SearchScreenState extends State<SearchScreen> {
         );
         _getAddressFromLatLng(_currentPosition!);
         for (var i = 0; i < listItemOnSearch.length; i++) {
-          listItemOnSearch[i].distance = double.parse(calculateDistance(
-                  _currentPosition!.latitude,
-                  _currentPosition!.longitude,
-                  listItemOnSearch[i].data()['latitude'],
-                  listItemOnSearch[i].data()['longitude'])
-              .toStringAsFixed(2));
+          // listItemOnSearch[i].distance = double.parse(calculateDistance(
+          //         _currentPosition!.latitude,
+          //         _currentPosition!.longitude,
+          //         listItemOnSearch[i].data()['latitude'],
+          //         listItemOnSearch[i].data()['longitude'])
+          //     .toStringAsFixed(2));
         }
         _isActive = true;
       }).catchError((e) {
@@ -236,12 +239,12 @@ class _SearchScreenState extends State<SearchScreen> {
         );
         _getAddressFromLatLng(_currentPosition!);
         for (var i = 0; i < listItemOnSearch.length; i++) {
-          listItemOnSearch[i].distance = double.parse(calculateDistance(
-                  _currentPosition!.latitude,
-                  _currentPosition!.longitude,
-                  listItemOnSearch[i].data()['latitude'],
-                  listItemOnSearch[i].data()['longitude'])
-              .toStringAsFixed(2));
+          // listItemOnSearch[i].distance = double.parse(calculateDistance(
+          //         _currentPosition!.latitude,
+          //         _currentPosition!.longitude,
+          //         listItemOnSearch[i].data()['latitude'],
+          //         listItemOnSearch[i].data()['longitude'])
+          //     .toStringAsFixed(2));
         }
         listItemOnSearch.sort(
             (a, b) => a.data()['distance'].compareTo(b.data()['distance']));
@@ -269,7 +272,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
           automaticallyImplyLeading: false,
           elevation: 0,
           centerTitle: true,
@@ -277,90 +280,128 @@ class _SearchScreenState extends State<SearchScreen> {
             onTap: () => Get.back(),
             child: const Icon(
               Icons.arrow_back_ios_rounded,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           title: const Text(
             'Cari Wisata',
             style: TextStyle(
-                fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500),
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
             maxLines: 1,
             softWrap: false,
             overflow: TextOverflow.fade,
           ),
-          // actions: [
-          //   PopupMenuButton(
-          //     elevation: 3,
-          //     shape: const RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.all(Radius.circular(20)),
-          //     ),
-          //     position: PopupMenuPosition.under,
-          //     itemBuilder: (context) => [
-          //       PopupMenuItem(
-          //         height: kMinInteractiveDimension * 0.7,
-          //         child: const Text('A-Z',
-          //             style: TextStyle(
-          //               fontSize: 13,
-          //               color: Colors.black,
-          //               fontWeight: FontWeight.w500,
-          //             )),
-          //         onTap: () {
-          //           // listItemOnSearch.sort(
-          //           //     (a, b) => a.data()['nama'].compareTo(b.data()['nama']));
-          //           setState(() {});
-          //         },
-          //       ),
-          //       PopupMenuItem(
-          //         height: kMinInteractiveDimension * 0.7,
-          //         child: const Text('Z-A',
-          //             style: TextStyle(
-          //               fontSize: 13,
-          //               color: Colors.black,
-          //               fontWeight: FontWeight.w500,
-          //             )),
-          //         onTap: () {
-          //           listItemOnSearch.sort(
-          //               (a, b) => b.data()['nama'].compareTo(a.data()['nama']));
-          //           setState(() {});
-          //         },
-          //       ),
-          //       PopupMenuItem(
-          //           height: kMinInteractiveDimension * 0.7,
-          //           child: const Text('Jarak',
-          //               style: TextStyle(
-          //                 fontSize: 13,
-          //                 color: Colors.black,
-          //                 fontWeight: FontWeight.w500,
-          //               )),
-          //           onTap: () {
-          //             if (_isActive) {
-          //               setState(() {
-          //                 listItemOnSearch.sort((a, b) => a
-          //                     .data()['distance']
-          //                     .compareTo(b.data()['distance']));
-          //               });
-          //             } else {
-          //               _listTerdekat();
-          //             }
-          //           }),
-          //     ],
-          //     //
-          //     child: const Padding(
-          //       padding: EdgeInsets.symmetric(horizontal: 20),
-          //       child: Icon(
-          //         Iconsax.filter,
-          //         color: Colors.black,
-          //         size: 26,
-          //       ),
-          //     ),
-          //   ),
-          // ],
+          actions: [
+            PopupMenuButton(
+              elevation: 3,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              position: PopupMenuPosition.under,
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  height: kMinInteractiveDimension * 0.7,
+                  child: const Text('Urutkan data dari nama A-Z',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  onTap: () {
+                    setState(() {
+                      searchResults.sort((a, b) =>
+                          ((a.data() as Map<String, dynamic>)['nama'] as String)
+                              .toLowerCase()
+                              .compareTo(
+                                  ((b.data() as Map<String, dynamic>)['nama']
+                                          as String)
+                                      .toLowerCase()));
+                    });
+                  },
+                ),
+                PopupMenuItem(
+                  height: kMinInteractiveDimension * 0.7,
+                  child: const Text('Urutkan data dari nama Z-A',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  onTap: () {
+                    setState(() {
+                      searchResults.sort((a, b) =>
+                          ((b.data() as Map<String, dynamic>)['nama'] as String)
+                              .toLowerCase()
+                              .compareTo(
+                                  ((a.data() as Map<String, dynamic>)['nama']
+                                          as String)
+                                      .toLowerCase()));
+                    });
+                  },
+                ),
+                // PopupMenuItem(
+                //     height: kMinInteractiveDimension * 0.7,
+                //     child: const Text('Jarak',
+                //         style: TextStyle(
+                //           fontSize: 13,
+                //           color: Colors.black,
+                //           fontWeight: FontWeight.w500,
+                //         )),
+                //     onTap: () {
+                //       _cekLokasi();
+                //       if (_isActive) {
+                //         setState(() {
+                //           searchResults.sort((a, b) {
+                //             var locationAlat = (a.data()
+                //                 as Map<String, dynamic>)['latitude'] as double;
+                //             var locationAlong = (a.data()
+                //                 as Map<String, dynamic>)['longitude'] as double;
+                //             var locationBlat = (b.data()
+                //                 as Map<String, dynamic>)['latitude'] as double;
+                //             var locationBlong = (b.data()
+                //                 as Map<String, dynamic>)['longitude'] as double;
+
+                //             double distanceA = calculateDistance(
+                //                 _currentPosition!.latitude,
+                //                 _currentPosition!.longitude,
+                //                 locationAlat,
+                //                 locationAlong);
+
+                //             double distanceB = calculateDistance(
+                //                 _currentPosition!.latitude,
+                //                 _currentPosition!.longitude,
+                //                 locationBlat,
+                //                 locationBlong);
+
+                //             return distanceA.compareTo(distanceB);
+                //           });
+                //         });
+                //         print('aktif');
+                //       } else {
+                //         print('tidak');
+                //         _listTerdekat();
+                //       }
+                //     }),
+              ],
+              //
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(
+                  Iconsax.filter,
+                  color: Colors.white,
+                  size: 26,
+                ),
+              ),
+            ),
+          ],
         ),
         body: Scaffold(
+            extendBodyBehindAppBar: true,
             appBar: AppBar(
+              shape: const MyShapeBorder(),
               elevation: 0,
-              backgroundColor: Colors.white,
-              toolbarHeight: 60,
+              backgroundColor: Theme.of(context).primaryColor,
+              toolbarHeight: 80,
               titleSpacing: 0.0,
               automaticallyImplyLeading: false,
               title: Container(
@@ -388,7 +429,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(0),
                     filled: true,
-                    fillColor: Colors.grey.shade100,
+                    fillColor: Colors.white,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none),
@@ -419,8 +460,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 //     //     ),
                 //     //   )
                 //     :
-                Container(
-              padding: const EdgeInsets.only(top: 10, bottom: 0),
+                Padding(
+              padding: const EdgeInsets.only(top: 15),
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 physics: const BouncingScrollPhysics(),
@@ -438,11 +479,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(
-                          top: 4,
-                          left: 20,
-                          right: 20,
-                          bottom: 15,
-                        ),
+                            left: 20, right: 20, bottom: 15),
                         height: 80,
                         decoration: BoxDecoration(
                           color: Colors.white,

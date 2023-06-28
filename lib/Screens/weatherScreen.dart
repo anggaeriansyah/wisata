@@ -175,15 +175,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
           },
           child: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
         title: Text(
           widget.nama,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: SafeArea(
         child: ListView(

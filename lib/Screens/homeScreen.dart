@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen>
       body: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
           leading: GestureDetector(
             onTap: () => Get.to(AboutScreen()),
             child: Padding(
@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen>
               child: Icon(
                 Iconsax.search_normal,
                 size: 30,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           ),
@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Icon(
                           Iconsax.map,
                           size: 30,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ));
                 }),
@@ -316,11 +316,11 @@ class _HomeScreenState extends State<HomeScreen>
                     padding: const EdgeInsets.only(left: 5),
                     child: TabBar(
                         controller: _tabController,
-                        labelColor: Colors.black,
+                        labelColor: Theme.of(context).primaryColor,
                         unselectedLabelColor: Colors.grey,
                         isScrollable: true,
-                        indicator:
-                            CircleTabIndicator(color: Colors.black, radius: 4),
+                        indicator: CircleTabIndicator(
+                            color: Theme.of(context).primaryColor, radius: 4),
                         // UnderlineTabIndicator(
                         //   borderSide:
                         //   BorderSide(
