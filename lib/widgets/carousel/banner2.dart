@@ -27,7 +27,7 @@ class _Banner2State extends State<Banner2> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       child: Stack(
         alignment: Alignment.topCenter,
         children: <Widget>[

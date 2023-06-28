@@ -50,7 +50,7 @@ class _AboutScreenState extends State<AboutScreen> {
             padding: EdgeInsets.only(bottom: 20),
             child: Center(
                 child: Text(
-              "Versi : 2.0.0",
+              "Versi : 2.0.1",
               style: TextStyle(fontWeight: FontWeight.w700),
             )),
           ),

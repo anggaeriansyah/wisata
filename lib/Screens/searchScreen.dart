@@ -293,6 +293,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           actions: [
             PopupMenuButton(
+              tooltip: 'Filter data',
               elevation: 3,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -301,7 +302,7 @@ class _SearchScreenState extends State<SearchScreen> {
               itemBuilder: (context) => [
                 PopupMenuItem(
                   height: kMinInteractiveDimension * 0.7,
-                  child: const Text('Urutkan data dari nama A-Z',
+                  child: const Text('Urutkan dari nama A-Z',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.black,
@@ -321,7 +322,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 PopupMenuItem(
                   height: kMinInteractiveDimension * 0.7,
-                  child: const Text('Urutkan data dari nama Z-A',
+                  child: const Text('Urutkan dari nama Z-A',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.black,

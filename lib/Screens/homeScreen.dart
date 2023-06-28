@@ -279,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen>
           appBar: AppBar(
             toolbarHeight: 70,
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).canvasColor,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
@@ -315,6 +315,8 @@ class _HomeScreenState extends State<HomeScreen>
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: TabBar(
+                        // labelPadding: const EdgeInsets.symmetric(vertical: 4),
+                        // tabPadding: EdgeInsets.symmetric(horizontal: 8.0),
                         controller: _tabController,
                         labelColor: Theme.of(context).primaryColor,
                         unselectedLabelColor: Colors.grey,
