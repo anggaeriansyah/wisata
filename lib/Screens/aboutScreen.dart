@@ -178,7 +178,7 @@ class _AboutScreenState extends State<AboutScreen> {
           const Padding(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
             child: Text(
-              "bantuan atau dukungan",
+              "Bantuan atau Dukungan",
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),

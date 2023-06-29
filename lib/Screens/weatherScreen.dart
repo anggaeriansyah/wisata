@@ -169,7 +169,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        leading: InkWell(
+        leading: GestureDetector(
           onTap: () {
             Get.back();
           },
@@ -397,7 +397,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     internetConn == true ? 'Prakiraan Cuaca' : '',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       internetConn == true
                           ? Get.to(const WeatherForecastScreen())
@@ -408,11 +408,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     child: Visibility(
                       visible: internetConn == true ? true : false,
                       child: Container(
-                        color: Colors.white,
-                        child: const Text(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        // color: Colors.white,
+                        child: Text(
                           'Selengkapnya',
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w400),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).primaryColor),
                         ),
                       ),
                     ),

@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Icon(
                         Iconsax.map,
                         size: 30,
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                     );
                   }

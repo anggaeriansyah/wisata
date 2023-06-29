@@ -21,7 +21,7 @@ class SitusWidget extends StatelessWidget {
             return const Padding(
               padding: EdgeInsets.only(top: 50),
               child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black54)),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey)),
             );
           }
           if (snapshots.hasError) {
@@ -43,12 +43,6 @@ class SitusWidget extends StatelessWidget {
                   onTap: () {
                     Get.to(DetailScreen(wisata: wisata[i]),
                         transition: Transition.downToUp);
-                  },
-                  onLongPress: () {
-                    wisata[i]
-                        .reference
-                        .delete()
-                        .then((value) => print("Delete berhasil"));
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(

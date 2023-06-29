@@ -18,8 +18,8 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-Color _colorPrime = HexColor("#007273");
-// Color _colorPrime = HexColor("#1C6758");
+// Color _colorPrime = HexColor("#007273");
+Color _colorPrime = HexColor("#1C6758");
 Color _colorSec = HexColor("#F9F9F9");
 
 class MyApp extends StatelessWidget {

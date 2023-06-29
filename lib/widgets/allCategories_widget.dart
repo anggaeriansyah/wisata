@@ -17,7 +17,7 @@ class AllCategoriesWidget extends StatelessWidget {
             return const Padding(
               padding: EdgeInsets.only(top: 50),
               child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black54)),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey)),
             );
           }
           if (snapshots.hasError) {

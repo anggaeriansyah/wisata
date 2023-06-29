@@ -1206,7 +1206,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   children: [
                                     Text(
                                       widget.wisata.data()['kategori'] ==
-                                              'Rekreasi'
+                                              'rekreasi'
                                           ? 'Penginapan'
                                           : 'Camping',
                                       style: TextStyle(

@@ -125,7 +125,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        leading: InkWell(
+        leading: GestureDetector(
           onTap: () {
             Get.back();
           },

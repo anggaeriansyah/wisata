@@ -10,8 +10,6 @@ import 'package:wisata_tenjolaya/Screens/detailScreen.dart';
 import 'package:wisata_tenjolaya/Utils/shapeBorder.dart';
 import 'dart:math' show cos, sqrt, asin;
 
-import '../Utils/distance_calculator.dart.dart';
-
 class SearchScreen extends StatefulWidget {
   // const SearchScreen({Key? key}) : super(key: key);
 
